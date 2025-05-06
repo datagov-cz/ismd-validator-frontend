@@ -1,0 +1,34 @@
+{
+  "name": "ismd-validator-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint:next": "next lint",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "copy:icons": "copyfiles --flat ./node_modules/@gov-design-system-ce/icons/lib/components/* ./src/icons && copyfiles --flat ./node_modules/@gov-design-system-ce/icons/lib/complex/* ./src/icons",
+    "copy:fonts": "copyfiles --flat ./node_modules/@gov-design-system-ce/fonts/lib/* ./src/fonts"
+  },
+  "dependencies": {
+    "@gov-design-system-ce/react": "^2.3.1",
+    "next": "14.2.28",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "copyfiles": "^2.4.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.28",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.4.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "prettier": "^3.5.3",
+    "typescript": "^5"
+  }
+}
