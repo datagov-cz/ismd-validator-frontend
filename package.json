@@ -9,7 +9,7 @@
     "lint:next": "next lint",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "copy:icons": "copyfiles --flat ./node_modules/@gov-design-system-ce/icons/lib/components/* ./src/icons && copyfiles --flat ./node_modules/@gov-design-system-ce/icons/lib/complex/* ./src/icons",
+    "copy:icons": "copyfiles --flat ./node_modules/@gov-design-system-ce/icons/lib/components/* ./public/assets/icons/components && copyfiles --flat ./node_modules/@gov-design-system-ce/icons/lib/complex/* ./public/assets/icons/components",
     "copy:fonts": "copyfiles --flat ./node_modules/@gov-design-system-ce/fonts/lib/* ./src/fonts"
   },
   "dependencies": {
