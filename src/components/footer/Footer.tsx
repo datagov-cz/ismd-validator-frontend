@@ -4,14 +4,15 @@ import { GovButton, GovIcon, GovLink } from '@gov-design-system-ce/react';
 
 import { scrollTop } from '@/lib/windowUtils';
 
+import { FooterColumn } from './FooterColumn';
+
 export const Footer = () => {
   return (
     <footer className="bg-blue py-12 text-white mt-auto">
       <section className="max-w-[1200px] px-5 mx-auto space-y-8">
         <div className="flex justify-between">
-          <ul className="flex justify-between w-full flex-wrap flex-col md:flex-row gap-y-10">
-            <li className="space-y-5">
-              <h5 className="font-medium text-xl">Odkazy</h5>
+          <ul className="flex justify-between w-full flex-wrap flex-col md:flex-row gap-y-10 md:pr-28">
+            <FooterColumn title="Odkazy">
               <ul className="space-y-3">
                 <li>
                   <GovLink href="#">Portál o datech</GovLink>
@@ -28,18 +29,13 @@ export const Footer = () => {
                   </GovLink>
                 </li>
               </ul>
-            </li>
-            <li className="space-y-5">
-              <h5 className="font-medium text-xl">Kontakt</h5>
-              <ul className="space-y-4">
-                <li>
-                  <GovLink href="mailto:data@dia.gov.cz">
-                    <GovIcon slot="icon-start" name="envelope" />
-                    data@dia.gov.cz
-                  </GovLink>
-                </li>
-              </ul>
-            </li>
+            </FooterColumn>
+            <FooterColumn title="Kontakt">
+              <GovLink href="mailto:data@dia.gov.cz">
+                <GovIcon slot="icon-start" name="envelope" />
+                data@dia.gov.cz
+              </GovLink>
+            </FooterColumn>
           </ul>
           <GovButton
             slot="icon-start"
@@ -47,10 +43,10 @@ export const Footer = () => {
             aria-label="Na začátek stránky"
             type="solid"
             size="m"
-            color="neutral"
+            className="bg-white cursor-pointer"
             onGovClick={scrollTop}
           >
-            <GovIcon name="chevron-up" size="m" />
+            <GovIcon name="chevron-up" size="m" color="black" />
           </GovButton>
         </div>
         <div className="space-y-4">
@@ -78,7 +74,7 @@ export const Footer = () => {
             </li>
           </ul>
         </div>
-        <hr />
+        <hr className="!border-t-footer-separator" />
         <div className="flex justify-between flex-wrap gap-y-4 gap-x-8 text-secondary text-xs">
           <p>
             2025 © Digitální a informační agentura • Informace jsou poskytovány

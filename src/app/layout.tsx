@@ -3,7 +3,7 @@ import '../styles/globals.css';
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 
-import { Footer } from '@/components/Footer';
+import { Footer } from '@/components/footer/Footer';
 
 export const metadata: Metadata = {
   title: 'ISMD - Kontrola a převod slovníků',

@@ -6,6 +6,8 @@
 @theme {
   --color-blue: #1d3c5d;
   --color-secondary: #d1d1d1;
+  --color-link: #c5dbf2;
+  --color-footer-separator: #2362a2;
 }
 
 html,
