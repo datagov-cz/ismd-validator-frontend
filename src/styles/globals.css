@@ -8,6 +8,8 @@
   --color-secondary: #d1d1d1;
   --color-link: #c5dbf2;
   --color-footer-separator: #2362a2;
+  --breakpoint-desktop: 1200px;
+  --spacing-desktop: 1200px;
 }
 
 html,

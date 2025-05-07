@@ -9,7 +9,7 @@ import { FooterColumn } from './FooterColumn';
 export const Footer = () => {
   return (
     <footer className="bg-blue py-12 text-white mt-auto">
-      <section className="max-w-[1200px] px-5 mx-auto space-y-8">
+      <section className="max-w-desktop px-5 mx-auto space-y-8">
         <div className="flex justify-between">
           <ul className="flex justify-between w-full flex-wrap flex-col md:flex-row gap-y-10 md:pr-28">
             <FooterColumn title="Odkazy">
