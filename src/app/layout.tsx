@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 
 import { Footer } from '@/components/footer/Footer';
+import { Header } from '@/components/header/Header';
 
 export const metadata: Metadata = {
   title: 'ISMD - Kontrola a převod slovníků',
@@ -18,7 +19,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="cs">
-      <body>
+      <body className="relative">
+        <Header />
         {children}
         <Footer />
       </body>
