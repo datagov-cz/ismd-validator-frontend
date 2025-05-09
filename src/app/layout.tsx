@@ -2,6 +2,8 @@ import '../styles/globals.css';
 
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale } from 'next-intl/server';
 
 import { Footer } from '@/components/footer/Footer';
 import { Header } from '@/components/header/Header';
@@ -12,18 +14,22 @@ export const metadata: Metadata = {
     'Informační systém pro modelování dat - Kontrola a převod slovníků',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) {
+  const locale = await getLocale();
+
   return (
-    <html lang="cs">
-      <body className="relative">
-        <Header />
-        {children}
-        <Footer />
-      </body>
+    <html lang={locale}>
+      <NextIntlClientProvider>
+        <body>
+          <Header />
+          {children}
+          <Footer />
+        </body>
+      </NextIntlClientProvider>
     </html>
   );
 }

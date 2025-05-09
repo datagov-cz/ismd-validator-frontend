@@ -1,88 +1,107 @@
 'use client';
 
 import { GovButton, GovIcon, GovLink } from '@gov-design-system-ce/react';
+import { useTranslations } from 'next-intl';
 
 import { scrollTop } from '@/lib/windowUtils';
 
 import { FooterColumn } from './FooterColumn';
 
 export const Footer = () => {
+  const t = useTranslations('Footer');
+
   return (
     <footer className="bg-blue py-12 text-white mt-auto">
-      <section className="max-w-desktop px-5 mx-auto space-y-8">
+      <section className="max-w-desktop px-5 mx-auto space-y-12">
         <div className="flex justify-between">
           <ul className="flex justify-between w-full flex-wrap flex-col md:flex-row gap-y-10 md:pr-28">
-            <FooterColumn title="Odkazy">
+            <FooterColumn title={t('LinkColumn.Title')}>
               <ul className="space-y-3">
                 <li>
-                  <GovLink href="#">Portál o datech</GovLink>
+                  <GovLink href="#" size="s">
+                    {t('LinkColumn.Link1')}
+                  </GovLink>
                 </li>
                 <li>
-                  <GovLink href="#">Popis dat na portálu o datech</GovLink>
+                  <GovLink href="#" size="s">
+                    {t('LinkColumn.Link2')}
+                  </GovLink>
                 </li>
                 <li>
                   <GovLink
                     href="https://github.com/datagov-cz/ISMD_org"
                     external
+                    size="s"
                   >
-                    Repozitář na GitHubu
+                    {t('LinkColumn.Link3')}
                   </GovLink>
                 </li>
               </ul>
             </FooterColumn>
-            <FooterColumn title="Kontakt">
-              <GovLink href="mailto:data@dia.gov.cz">
+            <FooterColumn title={t('ContactColumn.Title')}>
+              <GovLink href={`mailto:${t('ContactColumn.Email')}`} size="s">
                 <GovIcon slot="icon-start" name="envelope" />
-                data@dia.gov.cz
+                {t('ContactColumn.Email')}
               </GovLink>
             </FooterColumn>
           </ul>
           <GovButton
             slot="icon-start"
-            name="chevron-up"
-            aria-label="Na začátek stránky"
+            name="arrow-up"
+            aria-label={t('BackToTopAria')}
             type="solid"
             size="m"
             className="bg-white cursor-pointer"
             onGovClick={scrollTop}
           >
-            <GovIcon name="chevron-up" size="m" color="black" />
+            <GovIcon name="arrow-up" />
           </GovButton>
         </div>
         <div className="space-y-4">
-          <h6 className="text-lg font-medium">Poděkování</h6>
-          <p className="text-sm">
-            Informační systém pro modelování dat vznikl v rámci projektu
-            Zajištění podmínek pro kvalitní správu datového fondu a zajištění
-            řízeného přístupu k datům, reg.č.: CZ.31.1.01/MV/23_62/0000062.
-          </p>
-          <div className="flex gap-4 flex-wrap"></div>
-        </div>
-        <div>
-          <ul className="flex gap-x-8 gap-y-4 flex-wrap">
+          <h6 className="text-lg font-medium">{t('ThanksSection.Title')}</h6>
+          <p className="text-sm">{t('ThanksSection.Text')}</p>
+          <ul className="flex gap-y-4 gap-x-6 flex-wrap">
             <li>
-              <GovLink href="#">Link</GovLink>
+              <GovIcon name="logo-eu" />
             </li>
             <li>
-              <GovLink href="#">Link</GovLink>
+              <GovIcon name="logo-npo" />
             </li>
             <li>
-              <GovLink href="#">Link</GovLink>
-            </li>
-            <li>
-              <GovLink href="#">Link</GovLink>
+              <GovIcon name="logo-dia" />
             </li>
           </ul>
         </div>
-        <hr className="!border-t-footer-separator" />
-        <div className="flex justify-between flex-wrap gap-y-4 gap-x-8 text-secondary text-xs">
-          <p>
-            2025 © Digitální a informační agentura • Informace jsou poskytovány
-            v souladu se zákonem č. 106/1999 Sb., o svobodném přístupu k
-            informacím.
-          </p>
-          <div className="flex gap-x-3">
-            <p>Verze 2.0.2105.9856</p>|<p>Využit Design system 4.0</p>
+        <div className="space-y-4">
+          <ul className="flex gap-x-8 gap-y-3 flex-wrap">
+            <li>
+              <GovLink href="#" size="s">
+                Link
+              </GovLink>
+            </li>
+            <li>
+              <GovLink href="#" size="s">
+                Link
+              </GovLink>
+            </li>
+            <li>
+              <GovLink href="#" size="s">
+                Link
+              </GovLink>
+            </li>
+            <li>
+              <GovLink href="#" size="s">
+                Link
+              </GovLink>
+            </li>
+          </ul>
+          <hr className="!border-t-footer-separator" />
+          <div className="flex justify-between flex-wrap gap-y-4 gap-x-8 text-secondary text-xs">
+            <p>{t('FooterCopySection.Copyright')}</p>
+            <div className="flex gap-x-3">
+              <p>{t('FooterCopySection.Version')}</p>|
+              <p>{t('FooterCopySection.DesignSystem')}</p>
+            </div>
           </div>
         </div>
       </section>
