@@ -16,6 +16,7 @@
     "@gov-design-system-ce/react": "^2.3.1",
     "@tailwindcss/postcss": "^4.1.5",
     "next": "14.2.28",
+    "next-intl": "^4.1.0",
     "postcss": "^8.5.3",
     "react": "^18",
     "react-dom": "^18",

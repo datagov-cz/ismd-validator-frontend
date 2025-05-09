@@ -1,0 +1,30 @@
+{
+  "Footer": {
+    "LinkColumn": {
+      "Title": "Odkazy",
+      "Link1": "Portál o datech",
+      "Link2": "Popis dat na portálu o datech",
+      "Link3": "Repozitář na GitHubu"
+    },
+    "ContactColumn": {
+      "Title": "Kontakt",
+      "Email": "data@dia.gov.cz"
+    },
+    "ThanksSection": {
+      "Title": "Poděkování",
+      "Text": "Informační systém pro modelování dat vznikl v rámci projektu Zajištění podmínek pro kvalitní správu datového fondu a zajištění řízeného přístupu k datům, reg.č.: CZ.31.1.01/MV/23_62/0000062."
+    },
+    "BottomLinksSection": {
+      "Link1": "Link",
+      "Link2": "Link",
+      "Link3": "Link",
+      "Link4": "Link"
+    },
+    "BackToTop": "Na začátek stránky",
+    "FooterCopySection": {
+      "Copyright": "2025 © Digitální a informační agentura • Informace jsou poskytovány v souladu se zákonem č. 106/1999 Sb., o svobodném přístupu k informacím.",
+      "Version": "Verze 2.0.2105.9856",
+      "DesignSystem": "Využit Design system 4.0"
+    }
+  }
+}

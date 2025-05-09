@@ -1,27 +1,30 @@
 'use client';
 
 import { GovButton, GovIcon, GovLink } from '@gov-design-system-ce/react';
+import { useTranslations } from 'next-intl';
 
 import { scrollTop } from '@/lib/windowUtils';
 
 import { FooterColumn } from './FooterColumn';
 
 export const Footer = () => {
+  const t = useTranslations('Footer');
+
   return (
     <footer className="bg-blue py-12 text-white mt-auto">
       <section className="max-w-desktop px-5 mx-auto space-y-12">
         <div className="flex justify-between">
           <ul className="flex justify-between w-full flex-wrap flex-col md:flex-row gap-y-10 md:pr-28">
-            <FooterColumn title="Odkazy">
+            <FooterColumn title={t('LinkColumn.Title')}>
               <ul className="space-y-3">
                 <li>
                   <GovLink href="#" size="s">
-                    Portál o datech
+                    {t('LinkColumn.Link1')}
                   </GovLink>
                 </li>
                 <li>
                   <GovLink href="#" size="s">
-                    Popis dat na portálu o datech
+                    {t('LinkColumn.Link2')}
                   </GovLink>
                 </li>
                 <li>
@@ -30,22 +33,22 @@ export const Footer = () => {
                     external
                     size="s"
                   >
-                    Repozitář na GitHubu
+                    {t('LinkColumn.Link3')}
                   </GovLink>
                 </li>
               </ul>
             </FooterColumn>
-            <FooterColumn title="Kontakt">
-              <GovLink href="mailto:data@dia.gov.cz" size="s">
+            <FooterColumn title={t('ContactColumn.Title')}>
+              <GovLink href={`mailto:${t('ContactColumn.Email')}`} size="s">
                 <GovIcon slot="icon-start" name="envelope" />
-                data@dia.gov.cz
+                {t('ContactColumn.Email')}
               </GovLink>
             </FooterColumn>
           </ul>
           <GovButton
             slot="icon-start"
             name="arrow-up"
-            aria-label="Na začátek stránky"
+            aria-label={t('BackToTopAria')}
             type="solid"
             size="m"
             className="bg-white cursor-pointer"
@@ -55,12 +58,8 @@ export const Footer = () => {
           </GovButton>
         </div>
         <div className="space-y-4">
-          <h6 className="text-lg font-medium">Poděkování</h6>
-          <p className="text-sm">
-            Informační systém pro modelování dat vznikl v rámci projektu
-            Zajištění podmínek pro kvalitní správu datového fondu a zajištění
-            řízeného přístupu k datům, reg.č.: CZ.31.1.01/MV/23_62/0000062.
-          </p>
+          <h6 className="text-lg font-medium">{t('ThanksSection.Title')}</h6>
+          <p className="text-sm">{t('ThanksSection.Text')}</p>
           <ul className="flex gap-y-4 gap-x-6 flex-wrap">
             <li>
               <GovIcon name="logo-eu" />
@@ -98,13 +97,10 @@ export const Footer = () => {
           </ul>
           <hr className="!border-t-footer-separator" />
           <div className="flex justify-between flex-wrap gap-y-4 gap-x-8 text-secondary text-xs">
-            <p>
-              2025 © Digitální a informační agentura • Informace jsou
-              poskytovány v souladu se zákonem č. 106/1999 Sb., o svobodném
-              přístupu k informacím.
-            </p>
+            <p>{t('FooterCopySection.Copyright')}</p>
             <div className="flex gap-x-3">
-              <p>Verze 2.0.2105.9856</p>|<p>Využit Design system 4.0</p>
+              <p>{t('FooterCopySection.Version')}</p>|
+              <p>{t('FooterCopySection.DesignSystem')}</p>
             </div>
           </div>
         </div>
