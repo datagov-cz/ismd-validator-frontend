@@ -20,11 +20,11 @@
       "Link3": "Link",
       "Link4": "Link"
     },
-    "BackToTop": "Na začátek stránky",
     "FooterCopySection": {
       "Copyright": "2025 © Digitální a informační agentura • Informace jsou poskytovány v souladu se zákonem č. 106/1999 Sb., o svobodném přístupu k informacím.",
       "Version": "Verze 2.0.2105.9856",
       "DesignSystem": "Využit Design system 4.0"
-    }
+    },
+    "BackToTopAria": "Na začátek stránky"
   }
 }
