@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { GovButton } from '@gov-design-system-ce/react';
 
 interface Props {
   href: string;
@@ -7,13 +8,10 @@ interface Props {
 
 export const NavItem = ({ href, children }: Props) => {
   return (
-    <li className="h-12">
-      <a
-        href={href}
-        className="flex h-full items-center no-underline px-2 font-medium text-text-primary cursor-pointer"
-      >
+    <li>
+      <GovButton color="primary" size="m" type="base" href={href}>
         {children}
-      </a>
+      </GovButton>
     </li>
   );
 };
