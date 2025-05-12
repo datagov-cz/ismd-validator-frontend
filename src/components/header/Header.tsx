@@ -8,7 +8,7 @@ import {
 } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
-import { NavItem } from './NavItem';
+import { NavItems } from './NavItems';
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -30,9 +30,7 @@ export const Header = () => {
           </a>
           <nav>
             <ul className="hidden gap-x-4 px-3 flex-col lg:flex-row flex-wrap items-center desktop:flex">
-              <NavItem href="">{t('Nav.Link1')}</NavItem>
-              <NavItem href="">{t('Nav.Link2')}</NavItem>
-              <NavItem href="">{t('Nav.Link3')}</NavItem>
+              <NavItems />
             </ul>
           </nav>
           <ul className="flex gap-x-4">
@@ -65,9 +63,7 @@ export const Header = () => {
       >
         <nav>
           <ul className="flex flex-col p-4 gap-3">
-            <NavItem href="">{t('Nav.Link1')}</NavItem>
-            <NavItem href="">{t('Nav.Link2')}</NavItem>
-            <NavItem href="">{t('Nav.Link3')}</NavItem>
+            <NavItems />
           </ul>
         </nav>
       </aside>

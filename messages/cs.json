@@ -4,7 +4,11 @@
     "Nav": {
       "Link1": "Nástroj na tvorbu slovníků",
       "Link2": "Dokumentace API",
-      "Link3": "Zpětná vazba"
+      "Dropdown": {
+        "Label": "Zpětná vazba",
+        "Link1": "Nahlásit chybu",
+        "Link2": "Navrhnout vylepšení"
+      }
     },
     "MenuButtonAria": "Otevřít navigaci"
   },
