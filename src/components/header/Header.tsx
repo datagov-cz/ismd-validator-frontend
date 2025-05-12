@@ -6,11 +6,13 @@ import {
   GovIcon,
   GovThemeSwitch,
 } from '@gov-design-system-ce/react';
+import { useTranslations } from 'next-intl';
 
 import { NavItem } from './NavItem';
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const t = useTranslations('Header');
 
   const handleToggleMenu = () => setIsMenuOpen((prev) => !prev);
   const handleCloseMenu = () => setIsMenuOpen(false);
@@ -24,14 +26,13 @@ export const Header = () => {
             className="h-12 no-underline flex items-center text-text-primary font-medium gap-2"
           >
             <GovIcon name="logo-lion" slot="icon-start" className="!size-10" />
-            Informační systém pro <br className="block sm:hidden" /> modelování
-            dat
+            {t('LogoTitle')}
           </a>
           <nav>
             <ul className="hidden gap-x-4 px-3 flex-col lg:flex-row flex-wrap items-center desktop:flex">
-              <NavItem href="">Nástroj na tvorbu slovníků</NavItem>
-              <NavItem href="">Dokumentace API</NavItem>
-              <NavItem href="">Zpětná vazba</NavItem>
+              <NavItem href="">{t('Nav.Link1')}</NavItem>
+              <NavItem href="">{t('Nav.Link2')}</NavItem>
+              <NavItem href="">{t('Nav.Link3')}</NavItem>
             </ul>
           </nav>
           <ul className="flex gap-x-4">
@@ -39,7 +40,7 @@ export const Header = () => {
             <GovButton
               size="m"
               type="outlined"
-              aria-label="Otevřít navigaci"
+              aria-label={t('MenuButtonAria')}
               color="primary"
               className="desktop:!hidden"
               onGovClick={handleToggleMenu}
@@ -49,6 +50,7 @@ export const Header = () => {
           </ul>
         </section>
       </header>
+
       {isMenuOpen && (
         <div
           className="fixed inset-0 bg-black/40 z-20"
@@ -63,9 +65,9 @@ export const Header = () => {
       >
         <nav>
           <ul className="flex flex-col p-4 gap-3">
-            <NavItem href="">Nástroj na tvorbu slovníků</NavItem>
-            <NavItem href="">Dokumentace API</NavItem>
-            <NavItem href="">Zpětná vazba</NavItem>
+            <NavItem href="">{t('Nav.Link1')}</NavItem>
+            <NavItem href="">{t('Nav.Link2')}</NavItem>
+            <NavItem href="">{t('Nav.Link3')}</NavItem>
           </ul>
         </nav>
       </aside>
