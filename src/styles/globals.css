@@ -5,7 +5,9 @@
 
 @theme {
   --color-blue: #1d3c5d;
+  --color-blue-subtle: #e5eef9;
   --color-secondary: #d1d1d1;
+  --color-text-primary: #262626;
   --color-link: #c5dbf2;
   --color-footer-separator: #2362a2;
   --breakpoint-desktop: 1200px;
