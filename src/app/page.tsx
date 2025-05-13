@@ -1,6 +1,8 @@
 import { GovBanner, GovButton, GovIcon } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
+import { InfoSection } from '@/components/infoSection/InfoSection';
+
 export default function Home() {
   const t = useTranslations('Home');
 
@@ -32,6 +34,7 @@ export default function Home() {
           </GovButton>
         </section>
       </div>
+      <InfoSection />
       <main></main>
     </div>
   );
