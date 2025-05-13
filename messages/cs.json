@@ -69,6 +69,25 @@
         "Title": "Portál o datech",
         "Description": "Poskytuje strukturované a standardizované informace o datech "
       }
+    },
+    "FaqSection": {
+      "Headline": "Časté dotazy",
+      "Item1": {
+        "Question": "Co jsou slovníky a jaké je jejich využití?",
+        "Answer": "Více informací najdete na stránce"
+      },
+      "Item2": {
+        "Question": "Co je to Otevřená formální norma?",
+        "Answer": "Více informací najdete na stránce"
+      },
+      "Item3": {
+        "Question": "Kdo je povinnen slovníky tvořit?",
+        "Answer": "Více informací najdete na stránce"
+      },
+      "Item4": {
+        "Question": "Co když slovník neprojde kontrolou?",
+        "Answer": "Více informací najdete na stránce"
+      }
     }
   }
 }

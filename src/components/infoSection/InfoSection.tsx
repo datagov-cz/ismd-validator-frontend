@@ -3,6 +3,8 @@
 import { GovIcon, GovTile } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
+import { SectionHeading } from '../shared/SectionHeading';
+
 const tiles = [
   { icon: 'info', titleKey: 'Item1.Title', textKey: 'Item1.Description' },
   { icon: 'portal', titleKey: 'Item2.Title', textKey: 'Item2.Description' },
@@ -15,7 +17,7 @@ export const InfoSection = () => {
 
   return (
     <section className="space-y-6">
-      <h2>{t('Headline')}</h2>
+      <SectionHeading>{t('Headline')}</SectionHeading>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-6">
         {tiles.map(({ icon, titleKey, textKey }) => (
           <GovTile key={titleKey} orientation="horizontal" href="#">

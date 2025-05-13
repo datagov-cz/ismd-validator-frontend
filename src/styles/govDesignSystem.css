@@ -24,7 +24,7 @@ gov-link .element:visited .gov-icon,
 .gov-link .element:visited > span,
 .gov-link .element:visited gov-icon,
 .gov-link .element:visited .gov-icon {
-  color: var(--color-text-primary);
+  color: var(--color-blue-primary);
 }
 
 footer gov-link .element:visited > span,
