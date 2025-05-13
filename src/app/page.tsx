@@ -1,6 +1,8 @@
 import { GovBanner, GovButton, GovIcon } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
+import { FaqSection } from '@/components/faq/FaqSection';
+
 export default function Home() {
   const t = useTranslations('Home');
 
@@ -14,7 +16,7 @@ export default function Home() {
             {t('Banner.Button')}
           </GovButton>
         </GovBanner>
-        <section className="relative flex items-center p-4 w-full bg-blue-subtle gap-x-3 text-text-primary">
+        <section className="relative flex items-center p-4 w-full bg-blue-subtle gap-x-3 text-blue-primary">
           <GovIcon name="lightbulb-fill" slot="icon" />
           <p>
             {t('Message.Content')}&nbsp;
@@ -31,6 +33,7 @@ export default function Home() {
             <GovIcon name="x" slot="icon-start" />
           </GovButton>
         </section>
+        <FaqSection />
       </div>
       <main></main>
     </div>
