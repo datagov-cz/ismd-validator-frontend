@@ -23,7 +23,7 @@ export const Header = () => {
         <section className="mx-auto max-w-desktop px-5 flex justify-between items-center gap-x-4">
           <a
             href="./"
-            className="h-12 no-underline flex items-center text-text-primary font-medium gap-2"
+            className="h-12 no-underline flex items-center text-blue-primary font-medium gap-2"
           >
             <GovIcon name="logo-lion" slot="icon-start" className="!size-10" />
             {t('LogoTitle')}
