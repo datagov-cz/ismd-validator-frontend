@@ -6,16 +6,47 @@
 /* Styles of individual components. */
 @import '@gov-design-system-ce/styles/lib/components.css';
 
-gov-link .element,
+gov-button[type='link'],
+gov-button[type='link'] .element,
+.gov-button[type='link'],
+.gov-button[type='link'] .element {
+  text-decoration: none;
+}
+
+footer gov-link .element,
 .gov-link .element {
   color: var(--color-link);
 }
 
-gov-link .element:visited > span,
+header gov-link .element:visited > span,
+gov-link .element:visited gov-icon,
+gov-link .element:visited .gov-icon,
+.gov-link .element:visited > span,
+.gov-link .element:visited gov-icon,
+.gov-link .element:visited .gov-icon {
+  color: var(--color-text-primary);
+}
+
+footer gov-link .element:visited > span,
 gov-link .element:visited gov-icon,
 gov-link .element:visited .gov-icon,
 .gov-link .element:visited > span,
 .gov-link .element:visited gov-icon,
 .gov-link .element:visited .gov-icon {
   color: var(--color-link);
+}
+
+gov-dropdown li gov-button[expanded=''] .element,
+gov-dropdown li gov-button[expanded='true' i] .element,
+gov-dropdown li gov-button[expanded='1'] .element,
+gov-dropdown li .gov-button[expanded=''] .element,
+gov-dropdown li .gov-button[expanded='true' i] .element,
+gov-dropdown li .gov-button[expanded='1'] .element,
+.gov-dropdown li gov-button[expanded=''] .element,
+.gov-dropdown li gov-button[expanded='true' i] .element,
+.gov-dropdown li gov-button[expanded='1'] .element,
+.gov-dropdown li .gov-button[expanded=''] .element,
+.gov-dropdown li .gov-button[expanded='true' i] .element,
+.gov-dropdown li .gov-button[expanded='1'] .element {
+  justify-content: start;
 }

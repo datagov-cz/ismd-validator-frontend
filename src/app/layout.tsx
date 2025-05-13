@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getLocale } from 'next-intl/server';
 
 import { Footer } from '@/components/footer/Footer';
+import { Header } from '@/components/header/Header';
 
 export const metadata: Metadata = {
   title: 'ISMD - Kontrola a převod slovníků',
@@ -24,6 +25,7 @@ export default async function RootLayout({
     <html lang={locale}>
       <NextIntlClientProvider>
         <body>
+          <Header />
           {children}
           <Footer />
         </body>

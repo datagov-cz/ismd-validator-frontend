@@ -1,4 +1,17 @@
 {
+  "Header": {
+    "LogoTitle": "Informační systém pro modelování dat",
+    "Nav": {
+      "Link1": "Nástroj na tvorbu slovníků",
+      "Link2": "Dokumentace API",
+      "Dropdown": {
+        "Label": "Zpětná vazba",
+        "Link1": "Nahlásit chybu",
+        "Link2": "Navrhnout vylepšení"
+      }
+    },
+    "MenuButtonAria": "Otevřít navigaci"
+  },
   "Footer": {
     "LinkColumn": {
       "Title": "Odkazy",

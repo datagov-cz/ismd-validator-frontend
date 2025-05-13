@@ -7,7 +7,9 @@
   --color-blue: #1d3c5d;
   --color-secondary: #d1d1d1;
   --color-link: #c5dbf2;
+  --color-text-primary: #1e5086;
   --color-footer-separator: #2362a2;
+  --color-page-background: #f6f6f6;
   --breakpoint-desktop: 1200px;
   --spacing-desktop: 1200px;
 }
@@ -19,7 +21,7 @@ body {
 }
 
 body {
-  background: white;
+  background: var(--color-page-background);
   font-family: Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
