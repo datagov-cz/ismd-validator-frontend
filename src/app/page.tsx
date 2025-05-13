@@ -34,9 +34,9 @@ export default function Home() {
             <GovIcon name="x" slot="icon-start" />
           </GovButton>
         </section>
+        <InfoSection />
         <FaqSection />
       </div>
-      <InfoSection />
       <main></main>
     </div>
   );
