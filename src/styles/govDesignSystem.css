@@ -35,3 +35,18 @@ gov-link .element:visited .gov-icon,
 .gov-link .element:visited .gov-icon {
   color: var(--color-link);
 }
+
+gov-dropdown li gov-button[expanded=''] .element,
+gov-dropdown li gov-button[expanded='true' i] .element,
+gov-dropdown li gov-button[expanded='1'] .element,
+gov-dropdown li .gov-button[expanded=''] .element,
+gov-dropdown li .gov-button[expanded='true' i] .element,
+gov-dropdown li .gov-button[expanded='1'] .element,
+.gov-dropdown li gov-button[expanded=''] .element,
+.gov-dropdown li gov-button[expanded='true' i] .element,
+.gov-dropdown li gov-button[expanded='1'] .element,
+.gov-dropdown li .gov-button[expanded=''] .element,
+.gov-dropdown li .gov-button[expanded='true' i] .element,
+.gov-dropdown li .gov-button[expanded='1'] .element {
+  justify-content: start;
+}
