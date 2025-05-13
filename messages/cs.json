@@ -39,5 +39,17 @@
       "DesignSystem": "Využit Design system 4.0"
     },
     "BackToTopAria": "Na začátek stránky"
+  },
+  "Home": {
+    "Banner": {
+      "Headline": "Kontrola a převod slovníků",
+      "Description": "Kontrola slovníků a jejich převod do formátu dle Otevřené formální normy.",
+      "Button": "Jak to funguje?"
+    },
+    "Message": {
+      "Content": "Nevíte, co jsou slovníky? Navštivte stránku",
+      "Link": "Popis dat.",
+      "CloseButtonAria": "Zavřít zprávu"
+    }
   }
 }

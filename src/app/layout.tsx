@@ -1,3 +1,8 @@
+export const dynamic = 'force-dynamic'; 
+// TODO: Fix useTranslation not gracefully handling missing localizations.
+// It breaks npm run build, specifically the optimization for static pages
+// Even more specifically, Layout is a server component, because it's an async function,
+// but it needs to be rendered dynamically because of the client components it uses
 import '../styles/globals.css';
 
 import { ReactNode } from 'react';
