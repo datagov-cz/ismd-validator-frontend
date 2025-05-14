@@ -51,6 +51,20 @@
       "Link": "Popis dat.",
       "CloseButtonAria": "Zavřít zprávu"
     },
+    "FormSection": {
+      "Step1": {
+        "Headline": "Vyberte slovník ke zkontrolování a převodu",
+        "Annotation": "Máte na výběr ze slovníku ze souboru na Vašem zařízení, z adresy URL, nebo ze Sémantického slovníku pojmů."
+      },
+      "Step2": {
+        "Headline": "Nahrát z URL",
+        "Annotation": "Klikněte na tlačítko 'Zkontrolovat a převést' a počkejte, až systém kontrolu a převod dokončí."
+      },
+      "Step3": {
+        "Headline": "Vybrat ze Sémantického slovníku pojmů",
+        "Annotation": "Přečtěte si podrobnosti níže."
+      }
+    },
     "InfoSection": {
       "Headline": "Mohlo by se vám hodit",
       "Item1": {
