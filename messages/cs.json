@@ -51,6 +51,25 @@
       "Link": "Popis dat.",
       "CloseButtonAria": "Zavřít zprávu"
     },
+    "InfoSection": {
+      "Headline": "Mohlo by se vám hodit",
+      "Item1": {
+        "Title": "Popis dat",
+        "Description": "Struktura a význam dat v informačních systémech dle metodických doporučení"
+      },
+      "Item2": {
+        "Title": "Informační systém pro modelování dat",
+        "Description": "Zajišťuje lepší propojení dat a systémů, zvyšuje kvalitu služeb"
+      },
+      "Item3": {
+        "Title": "Otevřené formální normy",
+        "Description": "Technická doporučení zaměřená na vybrané datové sady"
+      },
+      "Item4": {
+        "Title": "Portál o datech",
+        "Description": "Poskytuje strukturované a standardizované informace o datech "
+      }
+    },
     "FaqSection": {
       "Headline": "Časté dotazy",
       "Item1": {
