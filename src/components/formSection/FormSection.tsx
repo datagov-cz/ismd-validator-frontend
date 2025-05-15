@@ -26,30 +26,36 @@ export const FormSection = () => {
           <div className="text-dark-primary">
             <GovFormRadioGroup>
               <GovFormRadio value="file">
-                <GovFormLabel slot="label">Nahrát ze souboru</GovFormLabel>
+                <GovFormLabel slot="label">
+                  {t('Step1.FileForm.Label')}
+                </GovFormLabel>
               </GovFormRadio>
               <GovFormControl className="w-full max-w-[808px]">
-                <GovFormLabel slot="top">Přetáhněte soubor nebo</GovFormLabel>
+                <GovFormLabel slot="top">
+                  {t('Step1.FileForm.Placeholder')}
+                </GovFormLabel>
                 <GovFormGroup>
                   <GovFormFile accept=".xlsx,.xml,.ttl,.json" expanded>
-                    <span>Přetáhněte soubor nebo</span>
+                    <span>{t('Step1.FileForm.Placeholder')}</span>
                     <p>
                       <GovButton color="primary" size="m" type="outlined">
-                        Nahrát ze zařízení
+                        {t('Step1.FileForm.Button')}
                       </GovButton>
                     </p>
                     <span className="gov-form-file__note">
-                      Podporované formáty XLSX, XML, TTL, JSON-LD
+                      {t('Step1.FileForm.SupportedFormatsLabel')}
                     </span>
                   </GovFormFile>
                 </GovFormGroup>
               </GovFormControl>
               <GovFormRadio value="url">
-                <GovFormLabel slot="label">{t('Step2.Headline')}</GovFormLabel>
+                <GovFormLabel slot="label">
+                  {t('Step1.UrlForm.Label')}
+                </GovFormLabel>
               </GovFormRadio>
               <GovFormRadio value="dict">
                 <GovFormLabel slot="label">
-                  Vybrat ze Sémantického slovníku pojmů
+                  {t('Step1.DictForm.Label')}
                 </GovFormLabel>
               </GovFormRadio>
             </GovFormRadioGroup>
@@ -57,7 +63,7 @@ export const FormSection = () => {
         </GovWizardItem>
         <GovWizardItem color="primary" collapsible>
           <span slot="prefix">2</span>
-          <span slot="headline">Zkontrolujte a převeďte slovník</span>
+          <span slot="headline">{t('Step2.Headline')}</span>
           <span slot="annotation">{t('Step2.Annotation')}</span>
         </GovWizardItem>
         <GovWizardItem color="primary" collapsible>

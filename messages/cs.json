@@ -54,14 +54,26 @@
     "FormSection": {
       "Step1": {
         "Headline": "Vyberte slovník ke zkontrolování a převodu",
-        "Annotation": "Máte na výběr ze slovníku ze souboru na Vašem zařízení, z adresy URL, nebo ze Sémantického slovníku pojmů."
+        "Annotation": "Máte na výběr ze slovníku ze souboru na Vašem zařízení, z adresy URL, nebo ze Sémantického slovníku pojmů.",
+        "FileForm": {
+          "Label": "Nahrát ze souboru",
+          "Placeholder": "Přetáhněte soubor nebo",
+          "Button": "Nahrát ze zařízení",
+          "SupportedFormatsLabel": "Podporované formáty XLSX, XML, TTL, JSON-LD"
+        },
+        "UrlForm": {
+          "Label": "Nahrát z URL"
+        },
+        "DictForm": {
+          "Label": "Vybrat ze Sémantického slovníku pojmů"
+        }
       },
       "Step2": {
-        "Headline": "Nahrát z URL",
+        "Headline": "Zkontrolujte a převeďte slovník",
         "Annotation": "Klikněte na tlačítko 'Zkontrolovat a převést' a počkejte, až systém kontrolu a převod dokončí."
       },
       "Step3": {
-        "Headline": "Vybrat ze Sémantického slovníku pojmů",
+        "Headline": "Stáhněte si výstupy z převodu a kontroly",
         "Annotation": "Přečtěte si podrobnosti níže."
       }
     },
