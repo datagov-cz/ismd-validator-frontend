@@ -12,7 +12,7 @@ export const FileForm = () => {
   const t = useTranslations('Home.FormSection.Step1.FileForm');
 
   return (
-    <GovFormControl className="w-full max-w-[808px]">
+    <GovFormControl className="w-full">
       <GovFormLabel slot="top">{t('Placeholder')}</GovFormLabel>
       <GovFormGroup>
         <GovFormFile accept=".xlsx,.xml,.ttl,.json" expanded>
