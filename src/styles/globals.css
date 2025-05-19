@@ -13,6 +13,7 @@
   --color-blue-primary: #1e5086;
   --color-footer-separator: #2362a2;
   --color-page-background: #f6f6f6;
+  --color-border-grey: #e7e7e7;
   --breakpoint-desktop: 1200px;
   --spacing-desktop: 1200px;
 }
@@ -36,5 +37,16 @@ body {
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
+  }
+}
+
+@layer {
+  table {
+    @apply border-collapse;
+  }
+
+  table td,
+  table th {
+    @apply text-left py-2 pr-6 min-w-[180px] max-w-[130px] align-top;
   }
 }

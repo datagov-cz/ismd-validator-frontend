@@ -70,11 +70,20 @@
       },
       "Step2": {
         "Headline": "Zkontrolujte a převeďte slovník",
-        "Annotation": "Klikněte na tlačítko 'Zkontrolovat a převést' a počkejte, až systém kontrolu a převod dokončí."
+        "Annotation": "Klikněte na tlačítko 'Zkontrolovat a převést' a počkejte, až systém kontrolu a převod dokončí.",
+        "Button": "Zkontrolovat a převést"
       },
       "Step3": {
         "Headline": "Stáhněte si výstupy z převodu a kontroly",
-        "Annotation": "Přečtěte si podrobnosti níže."
+        "Annotation": "Přečtěte si podrobnosti níže.",
+        "Dialog": {
+          "Title": "Slovník zákona o silničním provozu",
+          "InfoTable": {
+            "AffectedConcepts": "Zjištění se týká",
+            "FindingDescription": "Popis zjištění",
+            "FindingType": "Typ zjištění"
+          }
+        }
       }
     },
     "InfoSection": {
