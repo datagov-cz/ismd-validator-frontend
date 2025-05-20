@@ -13,10 +13,10 @@ export const Step3 = () => {
       <span slot="headline">{t('Headline')}</span>
       <span slot="annotation">{t('Annotation')}</span>
       <Dialog
-        title="Slovník zákona o silničním provozu"
+        title={t('Dialog.Title')}
         infoBar={{
           status: 'success',
-          message: 'Skvělá práce! Ve slovníku nebyly nalezeny žádné chyby.',
+          message: t('Dialog.Message.Success'),
         }}
         infoTable={{
           affectedConcepts: '5 pojmů',

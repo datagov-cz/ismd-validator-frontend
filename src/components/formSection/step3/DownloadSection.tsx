@@ -1,36 +1,49 @@
+import { useTranslations } from 'next-intl';
+
 import { DownloadItemRow } from './DownloadItemRow';
 
 export const DownloadSection = () => {
+  const t = useTranslations('Home.FormSection.Step3.Dialog.DownloadSection');
+
   return (
     <section className="space-y-6">
       <DownloadItemRow
-        title="Pro další využití si slovník stáhněte do Vašeho zařízení."
-        tooltips={[
-          { title: 'Co mám dělat se staženým slovníkem?', description: '' },
-        ]}
-        govButton={{ text: 'Stáhnout slovník' }}
-      />
-      <DownloadItemRow
-        title="Podrobnosti zjištění jsou dostupné ve výpisu z kontroly."
-        tooltips={[
-          { title: 'Jaké typy zjištění se rozlišují?', description: '' },
-        ]}
-        govButton={{ text: 'Stáhnout výpis z kontroly', type: 'outlined' }}
-      />
-      <DownloadItemRow
-        title="Pro publikování slovníku je nezbytný katalogizační záznam."
+        title={t('Success-Warning.Row1.Title')}
         tooltips={[
           {
-            title: 'Co mám dělat s nekompletním katalogizačním záznamem?',
-            description: '',
+            title: t('Success-Warning.Row1.Tooltips.Title1'),
+            description: t('Success-Warning.Row1.Tooltips.Description1'),
           },
+        ]}
+        govButton={{ text: t('Success-Warning.Row1.ButtonText') }}
+      />
+      <DownloadItemRow
+        title={t('Success-Warning.Row2.Title')}
+        tooltips={[
           {
-            title: 'Proč je katalogizační záznam nekompletní?',
-            description: '',
+            title: t('Success-Warning.Row2.Tooltips.Title1'),
+            description: t('Success-Warning.Row2.Tooltips.Description1'),
           },
         ]}
         govButton={{
-          text: 'Stáhnout nekompletní katalogizační záznam',
+          text: t('Success-Warning.Row2.ButtonText'),
+          type: 'outlined',
+        }}
+      />
+      <DownloadItemRow
+        title={t('Success-Warning.Row3.Title')}
+        tooltips={[
+          {
+            title: t('Success-Warning.Row3.Tooltips.Title1'),
+            description: t('Success-Warning.Row3.Tooltips.Description1'),
+          },
+          {
+            title: t('Success-Warning.Row3.Tooltips.Title2'),
+            description: t('Success-Warning.Row3.Tooltips.Description2'),
+          },
+        ]}
+        govButton={{
+          text: t('Success-Warning.Row3.ButtonText'),
           type: 'outlined',
         }}
       />
