@@ -1,7 +1,8 @@
-import { GovButton, GovIcon, GovWizardItem } from '@gov-design-system-ce/react';
+import { GovWizardItem } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
 import { Dialog } from './Dialog';
+import { DownloadSection } from './DownloadSection';
 
 export const Step3 = () => {
   const t = useTranslations('Home.FormSection.Step3');
@@ -24,25 +25,7 @@ export const Step3 = () => {
           findingType: 'Informace',
         }}
       >
-        <div className="flex items-center w-full justify-between">
-          <div>
-            <p>Pro další využití si slovník stáhněte do Vašeho zařízení.</p>
-            <GovButton
-              color="primary"
-              size="s"
-              type="base"
-              onGovClick={() => {}}
-              className="!px-0"
-            >
-              <GovIcon name="info-circle-fill" slot="icon-start" />
-              Co mám dělat se staženým slovníkem?
-            </GovButton>
-          </div>
-          <GovButton color="primary" type="solid" onGovClick={() => {}}>
-            <GovIcon name="download" slot="icon-start" />
-            Stáhnout slovník
-          </GovButton>
-        </div>
+        <DownloadSection />
       </Dialog>
     </GovWizardItem>
   );
