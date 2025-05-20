@@ -28,6 +28,7 @@ ENV NODE_ENV=${NODE_ENV}
 COPY --from=build /app/package.json ./
 COPY --from=build /app/package-lock.json ./
 
+# Install dependencies, clean, only production ready
 RUN npm ci --only=production
 
 # Copy the built application
