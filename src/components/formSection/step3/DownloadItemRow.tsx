@@ -11,13 +11,17 @@ type GovButtonType = {
   disabled?: boolean;
 };
 
-interface Props {
+export interface DownloadItemRowProps {
   title: string;
   tooltips: TooltipType[];
   govButton: GovButtonType;
 }
 
-export const DownloadItemRow = ({ title, tooltips, govButton }: Props) => {
+export const DownloadItemRow = ({
+  title,
+  tooltips,
+  govButton,
+}: DownloadItemRowProps) => {
   return (
     <div className="space-y-3">
       <div className="flex flex-col lg:flex-row lg:items-center w-full justify-between gap-2.5">

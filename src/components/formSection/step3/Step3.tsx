@@ -1,10 +1,25 @@
 import { GovWizardItem } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
+import { DictProcessInfoStatusType } from '@/lib/appTypes';
+
 import { Dialog } from './Dialog';
 import { DownloadSection } from './DownloadSection';
 
-export const Step3 = () => {
+interface Props {
+  status: DictProcessInfoStatusType;
+}
+
+const statusMap: Record<
+  DictProcessInfoStatusType,
+  'success' | 'warning' | 'error'
+> = {
+  Success: 'success',
+  Warning: 'warning',
+  Error: 'error',
+};
+
+export const Step3 = ({ status }: Props) => {
   const t = useTranslations('Home.FormSection.Step3');
 
   return (
@@ -15,8 +30,8 @@ export const Step3 = () => {
       <Dialog
         title={t('Dialog.Title')}
         infoBar={{
-          status: 'success',
-          message: t('Dialog.Message.Success'),
+          status: statusMap[status],
+          message: t(`Dialog.Message.${status}`),
         }}
         infoTable={{
           affectedConcepts: '5 pojmů',
@@ -25,7 +40,7 @@ export const Step3 = () => {
           findingType: 'Informace',
         }}
       >
-        <DownloadSection />
+        <DownloadSection status={status} />
       </Dialog>
     </GovWizardItem>
   );
