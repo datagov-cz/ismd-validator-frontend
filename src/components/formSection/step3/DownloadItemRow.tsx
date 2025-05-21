@@ -1,4 +1,4 @@
-import { GovButton, GovIcon } from '@gov-design-system-ce/react';
+import { GovButton, GovIcon, GovTooltip } from '@gov-design-system-ce/react';
 
 type TooltipType = {
   title: string;
@@ -19,7 +19,7 @@ interface Props {
 
 export const DownloadItemRow = ({ title, tooltips, govButton }: Props) => {
   return (
-    <div>
+    <div className="space-y-3">
       <div className="flex flex-col lg:flex-row lg:items-center w-full justify-between gap-2.5">
         <p className="">{title}</p>
         <GovButton
@@ -32,18 +32,19 @@ export const DownloadItemRow = ({ title, tooltips, govButton }: Props) => {
           {govButton.text}
         </GovButton>
       </div>
-      <div className="space-y-2">
+      <div className="flex flex-col gap-y-2">
         {tooltips.map((tooltip) => (
-          <GovButton
+          <GovTooltip
             key={tooltip.title}
+            size="m"
             color="primary"
-            size="s"
-            type="base"
-            onGovClick={() => {}}
+            position="top"
+            message={tooltip.description}
+            className="max-w-max border-b-0! rounded-md hover:bg-blue-primary/10 transition-colors duration-200"
           >
-            <GovIcon name="info-circle-fill" slot="icon-start" />
-            {tooltip.title}
-          </GovButton>
+            <GovIcon name="info-circle-fill" />
+            <span className="pr-2">{tooltip.title}</span>
+          </GovTooltip>
         ))}
       </div>
     </div>

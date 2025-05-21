@@ -43,19 +43,20 @@ export const Dialog = ({ title, infoBar, infoTable, children }: Props) => {
 
         <div className="overflow-x-auto">
           <table className="text-dark-primary w-full">
-            <tr className="border-b border-border-grey">
-              <th>{t('InfoTable.AffectedConcepts')}</th>
-              <th>{t('InfoTable.FindingDescription')}</th>
-              <th>{t('InfoTable.FindingType')}</th>
-            </tr>
-            <tr>
-              <td>{infoTable.affectedConcepts}</td>
-              <td>{infoTable.findingDescription}</td>
-              <td>{infoTable.findingType}</td>
-            </tr>
+            <tbody>
+              <tr className="border-b border-border-grey">
+                <th>{t('InfoTable.AffectedConcepts')}</th>
+                <th>{t('InfoTable.FindingDescription')}</th>
+                <th>{t('InfoTable.FindingType')}</th>
+              </tr>
+              <tr>
+                <td>{infoTable.affectedConcepts}</td>
+                <td>{infoTable.findingDescription}</td>
+                <td>{infoTable.findingType}</td>
+              </tr>
+            </tbody>
           </table>
         </div>
-
         {children}
       </div>
     </div>
