@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   GovButton,
   GovFormControl,
@@ -15,7 +14,7 @@ export const FileForm = () => {
     <GovFormControl className="w-full">
       <GovFormLabel slot="top">{t('Placeholder')}</GovFormLabel>
       <GovFormGroup>
-        <GovFormFile accept=".xlsx,.xml,.ttl,.json" expanded>
+        <GovFormFile accept=".xlsx,.xml,.ttl,.json,.jsonld" expanded>
           <span>{t('Placeholder')}</span>
           <p>
             <GovButton color="primary" size="m" type="outlined">

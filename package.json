@@ -13,7 +13,7 @@
     "copy:fonts": "copyfiles --flat ./node_modules/@gov-design-system-ce/fonts/lib/* ./src/fonts"
   },
   "dependencies": {
-    "@gov-design-system-ce/react": "^2.3.1",
+    "@gov-design-system-ce/react": "^2.4.2",
     "@tailwindcss/postcss": "^4.1.5",
     "next": "14.2.28",
     "next-intl": "^4.1.0",

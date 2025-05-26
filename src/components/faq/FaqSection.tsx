@@ -1,3 +1,5 @@
+'use client';
+
 import { GovAccordion } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
