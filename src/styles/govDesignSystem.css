@@ -50,3 +50,17 @@ gov-dropdown li .gov-button[expanded='1'] .element,
 .gov-dropdown li .gov-button[expanded='1'] .element {
   justify-content: start;
 }
+
+gov-wizard-item,
+.gov-wizard-item {
+  background-color: transparent;
+}
+
+.gov-tooltip span {
+  @apply flex items-center gap-x-2;
+}
+
+gov-tooltip-content,
+.gov-tooltip-content {
+  visibility: visible;
+}
