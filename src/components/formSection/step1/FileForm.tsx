@@ -14,7 +14,7 @@ export const FileForm = () => {
     <GovFormControl className="w-full">
       <GovFormLabel slot="top">{t('Placeholder')}</GovFormLabel>
       <GovFormGroup>
-        <GovFormFile accept=".xlsx,.xml,.ttl,.json,.jsonld" expanded>
+        <GovFormFile accept=".xlsx,.xml,.ttl,.json,.json-ld" expanded>
           <span>{t('Placeholder')}</span>
           <p>
             <GovButton color="primary" size="m" type="outlined">
