@@ -11,6 +11,8 @@ module.exports = {
           path: './src/axios-instance.ts',
           name: 'axiosInstance',
         },
+        baseUrl: 'http://localhost:8080',
+        formData: true,
       },
     },
   },

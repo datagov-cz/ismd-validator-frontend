@@ -6,6 +6,7 @@
  */
 import type {
   MutationFunction,
+  QueryClient,
   UseMutationOptions,
   UseMutationResult,
 } from '@tanstack/react-query';
@@ -33,7 +34,6 @@ export const convertFile = (
     {
       url: `/api/convertor/convert`,
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: convertFileBody,
       params,
       signal,
@@ -86,15 +86,18 @@ export type ConvertFileMutationResult = NonNullable<
 export type ConvertFileMutationBody = ConvertFileBody;
 export type ConvertFileMutationError = unknown;
 
-export const useConvertFile = <TError = unknown, TContext = unknown>(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof convertFile>>,
-    TError,
-    { data: ConvertFileBody; params?: ConvertFileParams },
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationResult<
+export const useConvertFile = <TError = unknown, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof convertFile>>,
+      TError,
+      { data: ConvertFileBody; params?: ConvertFileParams },
+      TContext
+    >;
+    request?: SecondParameter<typeof axiosInstance>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
   Awaited<ReturnType<typeof convertFile>>,
   TError,
   { data: ConvertFileBody; params?: ConvertFileParams },
@@ -102,5 +105,5 @@ export const useConvertFile = <TError = unknown, TContext = unknown>(options?: {
 > => {
   const mutationOptions = getConvertFileMutationOptions(options);
 
-  return useMutation(mutationOptions);
+  return useMutation(mutationOptions, queryClient);
 };

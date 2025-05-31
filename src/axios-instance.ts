@@ -1,7 +1,7 @@
 import Axios, { AxiosRequestConfig } from 'axios';
 
 export const AXIOS_INSTANCE = Axios.create({
-  baseURL: 'http://localhost:8080/v3/api-docs',
+  baseURL: 'http://localhost:8080',
 });
 
 export const axiosInstance = <T>(
