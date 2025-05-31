@@ -6,8 +6,8 @@ type FormStoreType = {
 };
 
 type FormStoreActions = {
-  setFile: (file: File) => void;
-  setUrl: (url: string) => void;
+  setFile: (file?: File) => void;
+  setUrl: (url?: string) => void;
   reset: () => void;
 };
 
@@ -18,7 +18,7 @@ const initialState: FormStoreType = {
 
 export const useFormStore = create<FormStoreType & FormStoreActions>((set) => ({
   ...initialState,
-  setFile: (file?: File) => set({ file }),
-  setUrl: (url?: string) => set({ url }),
+  setFile: (file) => set({ file }),
+  setUrl: (url) => set({ url }),
   reset: () => set({ ...initialState }),
 }));
