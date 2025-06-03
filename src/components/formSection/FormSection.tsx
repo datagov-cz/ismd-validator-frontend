@@ -12,7 +12,7 @@ export const FormSection = () => {
       <GovWizard>
         <Step1 />
         <Step2 />
-        <Step3 status="Error" />
+        <Step3 />
       </GovWizard>
     </section>
   );

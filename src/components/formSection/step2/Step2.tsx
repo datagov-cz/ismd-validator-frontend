@@ -10,6 +10,8 @@ export const Step2 = () => {
   const formFile = useFormStore((state) => state.file);
   const formUrl = useFormStore((state) => state.url);
 
+  const setFormStatus = useFormStore((state) => state.setStatus);
+
   const convertMutation = useConvertFile();
 
   const handleConvert = () => {
@@ -18,9 +20,21 @@ export const Step2 = () => {
     const formData = new FormData();
     formData.append('file', formFile);
 
-    convertMutation.mutate({
-      data: formData as any,
-    });
+    convertMutation.mutate(
+      {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        data: formData as any,
+      },
+      {
+        onError: (error) => {
+          console.error('Error converting file:', error);
+          setFormStatus('Error');
+        },
+        onSuccess: () => {
+          setFormStatus('Success');
+        },
+      },
+    );
   };
 
   return (
