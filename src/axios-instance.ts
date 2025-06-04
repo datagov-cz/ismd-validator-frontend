@@ -1,7 +1,7 @@
 import Axios, { AxiosRequestConfig } from 'axios';
 
 export const AXIOS_INSTANCE = Axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: process.env.NEXT_PUBLIC_BE_URL,
 });
 
 export const axiosInstance = <T>(
