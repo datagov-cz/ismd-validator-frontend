@@ -1,5 +1,7 @@
 import { GovButton, GovIcon, GovTooltip } from '@gov-design-system-ce/react';
 
+import { useFormStore } from '@/store/formStore';
+
 type TooltipType = {
   title: string;
   description: string;
@@ -22,12 +24,30 @@ export const DownloadItemRow = ({
   tooltips,
   govButton,
 }: DownloadItemRowProps) => {
+  const downloadData = useFormStore((state) => state.downloadData);
+
+  const handleDownload = () => {
+    if (!downloadData) return;
+
+    const blob = new Blob([JSON.stringify(downloadData, null, 2)], {
+      type: 'application/json',
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'slovnik.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="space-y-3">
       <div className="flex flex-col lg:flex-row lg:items-center w-full justify-between gap-2.5">
         <p className="">{title}</p>
         <GovButton
-          onGovClick={() => {}}
+          onGovClick={handleDownload}
           color="primary"
           type={govButton.type ?? 'solid'}
           disabled={govButton.disabled}

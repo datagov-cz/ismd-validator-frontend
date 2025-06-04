@@ -11,6 +11,7 @@ export const Step2 = () => {
   const formUrl = useFormStore((state) => state.url);
 
   const setFormStatus = useFormStore((state) => state.setStatus);
+  const setDownloadData = useFormStore((state) => state.setDownloadData);
 
   const convertMutation = useConvertFile();
 
@@ -30,8 +31,14 @@ export const Step2 = () => {
           console.error('Error converting file:', error);
           setFormStatus('Error');
         },
-        onSuccess: () => {
-          setFormStatus('Success');
+        onSuccess: (data) => {
+          if (typeof data === 'object' && data !== null) {
+            setFormStatus('Success');
+            setDownloadData(data);
+          } else {
+            console.error('Unexpected data format', data);
+            setFormStatus('Error');
+          }
         },
       },
     );
