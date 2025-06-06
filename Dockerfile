@@ -23,8 +23,10 @@ WORKDIR /app
 # Set environment variables
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
-# Set default backend URL for Docker environments
-# This can be overridden at runtime with -e NEXT_PUBLIC_BE_URL=...
+
+# Default backend URL for Docker environments
+# Can be overridden at runtime with docker run -e NEXT_PUBLIC_BE_URL=...
+# (Works at runtime due to publicRuntimeConfig in next.config.mjs)
 ENV NEXT_PUBLIC_BE_URL=http://host.docker.internal:8080
 
 # Copy package files
