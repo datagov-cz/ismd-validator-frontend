@@ -20,16 +20,21 @@ RUN npm run build
 FROM node:18-alpine AS runtime
 WORKDIR /app
 
-# Set environment variable
+# Set environment variables
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
+
+# Default backend URL for Docker environments
+# Can be overridden at runtime with docker run -e NEXT_PUBLIC_BE_URL=...
+# (Works at runtime due to publicRuntimeConfig in next.config.mjs)
+ENV NEXT_PUBLIC_BE_URL=http://host.docker.internal:8080
 
 # Copy package files
 COPY --from=build /app/package.json ./
 COPY --from=build /app/package-lock.json ./
 
 # Install dependencies, clean, only production ready
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 # Copy the built application
 COPY --from=build /app/.next ./.next
