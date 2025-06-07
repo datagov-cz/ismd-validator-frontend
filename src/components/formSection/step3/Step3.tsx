@@ -18,11 +18,12 @@ const statusMap: Record<
 
 export const Step3 = () => {
   const t = useTranslations('Home.FormSection.Step3');
-
   const status = useFormStore((state) => state.status);
 
+  const statusMapped = status ? statusMap[status] : 'primary';
+
   return (
-    <GovWizardItem color="primary" collapsible>
+    <GovWizardItem color={statusMapped} isExpanded={!!status} collapsible>
       <span slot="prefix">3</span>
       <span slot="headline">{t('Headline')}</span>
       <span slot="annotation">{t('Annotation')}</span>

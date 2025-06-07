@@ -35,7 +35,7 @@ export const DownloadItemRow = ({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'slovnik.json';
+    a.download = 'slovnik.json-ld';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -45,7 +45,7 @@ export const DownloadItemRow = ({
   return (
     <div className="space-y-3">
       <div className="flex flex-col lg:flex-row lg:items-center w-full justify-between gap-2.5">
-        <p className="">{title}</p>
+        <p>{title}</p>
         <GovButton
           onGovClick={handleDownload}
           color="primary"
