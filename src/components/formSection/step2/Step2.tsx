@@ -43,6 +43,7 @@ export const Step2 = () => {
           console.error('Error converting file:', error);
           const errorMessage = (error as AxiosError).message || 'Unknown error';
           setConversionError(errorMessage);
+          setDictionaryStatus(null);
         },
         onSuccess: (data) => {
           if (typeof data === 'object' && data !== null) {

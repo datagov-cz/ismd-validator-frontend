@@ -24,12 +24,14 @@ export const Step3 = () => {
       <span slot="prefix">3</span>
       <span slot="headline">{t('Headline')}</span>
       <span slot="annotation">{t('Annotation')}</span>
-      {dictionaryStatus && statusMapped === 'success' && (
+      <div
+        className={`${dictionaryStatus && statusMapped === 'success' ? 'block' : 'hidden'}`}
+      >
         <Dialog
           title={t('Dialog.Title')}
           infoBar={{
-            status: STATUS_MAP[dictionaryStatus.status],
-            message: t(`Dialog.Message.${dictionaryStatus.status}`),
+            status: STATUS_MAP[dictionaryStatus?.status || 'Success'],
+            message: t(`Dialog.Message.${dictionaryStatus?.status}`),
           }}
           infoTable={{
             affectedConcepts: '5 pojmů',
@@ -38,9 +40,9 @@ export const Step3 = () => {
             findingType: 'Informace',
           }}
         >
-          <DownloadSection status={dictionaryStatus.status} />
+          <DownloadSection status={dictionaryStatus?.status || 'Success'} />
         </Dialog>
-      )}
+      </div>
     </GovWizardItem>
   );
 };
