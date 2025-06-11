@@ -13,29 +13,36 @@ import type {
 import { useMutation } from '@tanstack/react-query';
 
 import { axiosInstance } from '../axios-instance';
-export type ConvertFileParams = {
+export interface ConversionRequestDto {
+  file?: Blob;
   output?: string;
   removeInvalidSources?: boolean;
-};
+}
 
-export type ConvertFileBody = {
-  file: Blob;
+export interface ConversionResponseDto {
+  response?: string;
+  errorMessage?: string;
+}
+
+export type ConvertFileParams = {
+  conversionRequest: ConversionRequestDto;
 };
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 export const convertFile = (
-  convertFileBody: ConvertFileBody,
-  params?: ConvertFileParams,
+  formData: FormData,
   options?: SecondParameter<typeof axiosInstance>,
   signal?: AbortSignal,
 ) => {
-  return axiosInstance<string>(
+  return axiosInstance<ConversionResponseDto>(
     {
       url: `/api/convertor/convert`,
       method: 'POST',
-      data: convertFileBody,
-      params,
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
       signal,
     },
     options,
@@ -49,14 +56,14 @@ export const getConvertFileMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof convertFile>>,
     TError,
-    { data: ConvertFileBody; params?: ConvertFileParams },
+    FormData,
     TContext
   >;
   request?: SecondParameter<typeof axiosInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof convertFile>>,
   TError,
-  { data: ConvertFileBody; params?: ConvertFileParams },
+  FormData,
   TContext
 > => {
   const mutationKey = ['convertFile'];
@@ -70,11 +77,9 @@ export const getConvertFileMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof convertFile>>,
-    { data: ConvertFileBody; params?: ConvertFileParams }
-  > = (props) => {
-    const { data, params } = props ?? {};
-
-    return convertFile(data, params, requestOptions);
+    FormData
+  > = (formData) => {
+    return convertFile(formData, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -83,7 +88,7 @@ export const getConvertFileMutationOptions = <
 export type ConvertFileMutationResult = NonNullable<
   Awaited<ReturnType<typeof convertFile>>
 >;
-export type ConvertFileMutationBody = ConvertFileBody;
+
 export type ConvertFileMutationError = unknown;
 
 export const useConvertFile = <TError = unknown, TContext = unknown>(
@@ -91,7 +96,7 @@ export const useConvertFile = <TError = unknown, TContext = unknown>(
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof convertFile>>,
       TError,
-      { data: ConvertFileBody; params?: ConvertFileParams },
+      FormData,
       TContext
     >;
     request?: SecondParameter<typeof axiosInstance>;
@@ -100,7 +105,7 @@ export const useConvertFile = <TError = unknown, TContext = unknown>(
 ): UseMutationResult<
   Awaited<ReturnType<typeof convertFile>>,
   TError,
-  { data: ConvertFileBody; params?: ConvertFileParams },
+  FormData,
   TContext
 > => {
   const mutationOptions = getConvertFileMutationOptions(options);

@@ -33,35 +33,27 @@ export const Step2 = () => {
     const formData = new FormData();
     formData.append('file', formFile);
 
-    convertMutation.mutate(
-      {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        data: formData as any,
+    convertMutation.mutate(formData, {
+      onError: (error) => {
+        console.error('Error converting file:', error);
+        const errorMessage = (error as AxiosError).message || 'Unknown error';
+        setConversionError(errorMessage);
+        setDictionaryStatus(null);
       },
-      {
-        onError: (error) => {
-          console.error('Error converting file:', error);
-          const errorMessage = (error as AxiosError).message || 'Unknown error';
-          setConversionError(errorMessage);
-          setDictionaryStatus(null);
-        },
-        onSuccess: (data) => {
-          if (typeof data === 'object' && data !== null) {
-            // TODO: Set dictionary status based on the response from the server
-            setDictionaryStatus({
-              status: 'Success',
-              message: 'File converted successfully',
-            });
-            setDownloadData(data);
-          } else {
-            console.error('Unexpected data format', data);
-            setConversionError(
-              'Unexpected data format received from the server',
-            );
-          }
-        },
+      onSuccess: (data) => {
+        if (typeof data === 'object' && data !== null) {
+          // TODO: Set dictionary status based on the response from the server
+          setDictionaryStatus({
+            status: 'Success',
+            message: 'File converted successfully',
+          });
+          setDownloadData(data);
+        } else {
+          console.error('Unexpected data format', data);
+          setConversionError('Unexpected data format received from the server');
+        }
       },
-    );
+    });
   };
 
   return (
