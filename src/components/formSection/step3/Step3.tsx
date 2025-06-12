@@ -31,7 +31,9 @@ export const Step3 = () => {
           title={t('Dialog.Title')}
           infoBar={{
             status: STATUS_MAP[dictionaryStatus?.status || 'Success'],
-            message: t(`Dialog.Message.${dictionaryStatus?.status}`),
+            message: t(
+              `Dialog.Message.${dictionaryStatus?.status || 'Success'}`,
+            ),
           }}
           infoTable={{
             affectedConcepts: '5 pojmů',
