@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   GovButton,
   GovIcon,
@@ -8,7 +8,7 @@ import {
 import { AxiosError } from 'axios';
 import { useTranslations } from 'next-intl';
 
-import { useConvertFile } from '@/api/generated';
+import { ConversionResponseDto, useConvertFile } from '@/api/generated';
 import { useFormStore } from '@/store/formStore';
 
 export const Step2 = () => {
@@ -35,8 +35,10 @@ export const Step2 = () => {
 
     convertMutation.mutate(formData, {
       onError: (error) => {
-        console.error('Error converting file:', error);
-        const errorMessage = (error as AxiosError).message || 'Unknown error';
+        const axiosError = error as AxiosError<ConversionResponseDto>;
+        const errorMessage =
+          axiosError.response?.data?.errorMessage || 'Unknown error';
+        console.error('Error converting file:', errorMessage);
         setConversionError(errorMessage);
         setDictionaryStatus(null);
       },
@@ -55,6 +57,13 @@ export const Step2 = () => {
       },
     });
   };
+
+  useEffect(() => {
+    // TODO: Extend this condition for URL and Dictionary list options
+    if (formFile) {
+      setConversionError(null);
+    }
+  }, [formFile]);
 
   return (
     <GovWizardItem
