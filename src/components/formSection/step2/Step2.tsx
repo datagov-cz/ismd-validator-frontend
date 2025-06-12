@@ -37,7 +37,7 @@ export const Step2 = () => {
       onError: (error) => {
         const axiosError = error as AxiosError<ConversionResponseDto>;
         const errorMessage =
-          axiosError.response?.data?.errorMessage || 'Unknown error';
+          axiosError.response?.data?.errorMessage || t('ConversionUknownError');
         console.error('Error converting file:', errorMessage);
         setConversionError(errorMessage);
         setDictionaryStatus(null);
@@ -52,7 +52,7 @@ export const Step2 = () => {
           setDownloadData(data);
         } else {
           console.error('Unexpected data format', data);
-          setConversionError('Unexpected data format received from the server');
+          setConversionError(t('ConversionUknownError'));
         }
       },
     });

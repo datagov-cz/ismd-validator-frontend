@@ -71,7 +71,8 @@
       "Step2": {
         "Headline": "Zkontrolujte a převeďte slovník",
         "Annotation": "Klikněte na tlačítko 'Zkontrolovat a převést' a počkejte, až systém kontrolu a převod dokončí.",
-        "Button": "Zkontrolovat a převést"
+        "Button": "Zkontrolovat a převést",
+        "ConversionUknownError": "Nečekaná chyba"
       },
       "Step3": {
         "Headline": "Stáhněte si výstupy z převodu a kontroly",
