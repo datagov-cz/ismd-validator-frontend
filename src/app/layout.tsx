@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic'; 
+export const dynamic = 'force-dynamic';
 // TODO: Fix useTranslation not gracefully handling missing localizations.
 // It breaks npm run build, specifically the optimization for static pages
 // Even more specifically, Layout is a server component, because it's an async function,
@@ -12,6 +12,8 @@ import { getLocale } from 'next-intl/server';
 
 import { Footer } from '@/components/footer/Footer';
 import { Header } from '@/components/header/Header';
+
+import Providers from './providers';
 
 export const metadata: Metadata = {
   title: 'ISMD - Kontrola a převod slovníků',
@@ -31,7 +33,7 @@ export default async function RootLayout({
       <NextIntlClientProvider>
         <body>
           <Header />
-          {children}
+          <Providers>{children}</Providers>
           <Footer />
         </body>
       </NextIntlClientProvider>
