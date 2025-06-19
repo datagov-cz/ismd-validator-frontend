@@ -1,17 +1,9 @@
 import Axios, { AxiosRequestConfig } from 'axios';
-import getConfig from 'next/config';
 
-// Get runtime config
-const { publicRuntimeConfig } = getConfig() || { publicRuntimeConfig: {} };
+const DEFAULT_BE_URL = 'http://localhost:8080'
 
-// Log the configuration for debugging
-if (typeof window !== 'undefined') {
-  console.log('Backend URL from config:', publicRuntimeConfig?.backendUrl);
-}
-
-// Use the backend URL from config or fall back to environment variable or localhost
 export const AXIOS_INSTANCE = Axios.create({
-  baseURL: publicRuntimeConfig.backendUrl || 'http://localhost:8080',
+  baseURL: DEFAULT_BE_URL,
 });
 
 export const axiosInstance = <T>(
