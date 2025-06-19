@@ -10,6 +10,7 @@ import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale } from 'next-intl/server';
 
+import type { EnvironmentVariables } from '@/components/contexts/Environment';
 import { Footer } from '@/components/footer/Footer';
 import { Header } from '@/components/header/Header';
 
@@ -21,19 +22,31 @@ export const metadata: Metadata = {
     'Informační systém pro modelování dat - Kontrola a převod slovníků',
 };
 
+const loadEnvVariables = () => {
+  // define any variables to be loaded on the node server to be passed to the client
+  return {
+    NEXT_PUBLIC_BE_URL: process.env.NEXT_PUBLIC_BE_URL ?? undefined,
+    environment: process.env.environment ?? 'development',
+  }
+};
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) {
   const locale = await getLocale();
-
+  
+  const variables: EnvironmentVariables = {
+    ...loadEnvVariables(),
+  }
+  
   return (
     <html lang={locale}>
       <NextIntlClientProvider>
         <body>
           <Header />
-          <Providers>{children}</Providers>
+          <Providers environmentVariables={variables}>{children}</Providers>
           <Footer />
         </body>
       </NextIntlClientProvider>
