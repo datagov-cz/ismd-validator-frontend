@@ -33,7 +33,14 @@ export const NavItems = () => {
 
         <ul slot="list">
           <li>
-            <GovButton color="neutral" size="m" type="base" href="" expanded>
+            <GovButton
+              color="neutral"
+              size="m"
+              type="base"
+              href="https://github.com/datagov-cz/ismd-org/issues/new?template=bug_report.yml"
+              target="_blank"
+              expanded
+            >
               {t('Nav.Dropdown.Link1')}
               <GovIcon
                 type="components"
@@ -44,7 +51,14 @@ export const NavItems = () => {
             </GovButton>
           </li>
           <li>
-            <GovButton color="neutral" size="m" type="base" href="" expanded>
+            <GovButton
+              color="neutral"
+              size="m"
+              type="base"
+              href="https://github.com/datagov-cz/ismd-org/issues/new?template=feature_request.yml"
+              target="_blank"
+              expanded
+            >
               {t('Nav.Dropdown.Link2')}
               <GovIcon
                 type="components"
