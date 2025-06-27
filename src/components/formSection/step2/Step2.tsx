@@ -87,6 +87,7 @@ export const Step2 = () => {
           type="solid"
           disabled={!formFile}
           onGovClick={handleConvert}
+          loading={convertMutation.isPending.toString()}
         >
           {t('Button')}
         </GovButton>
