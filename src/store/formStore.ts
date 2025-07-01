@@ -1,12 +1,13 @@
 import { create } from 'zustand';
 
+import { ConversionResponseDto } from '@/api/generated';
 import { StatusType } from '@/lib/appTypes';
 
 type FormStoreType = {
   file?: File;
   url?: string;
   dictionaryStatus: StatusType | null;
-  downloadData: object | null;
+  downloadData: ConversionResponseDto | null;
 };
 
 type FormStoreActions = {

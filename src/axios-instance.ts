@@ -1,9 +1,7 @@
 import Axios, { AxiosRequestConfig } from 'axios';
 
-const DEFAULT_BE_URL = 'http://localhost:8080'
-
 export const AXIOS_INSTANCE = Axios.create({
-  baseURL: DEFAULT_BE_URL,
+  baseURL: process.env.NEXT_PUBLIC_BE_URL,
 });
 
 export const axiosInstance = <T>(
