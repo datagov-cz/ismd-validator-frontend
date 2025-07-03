@@ -47,6 +47,7 @@ export const NavItems = () => {
                 name="bug"
                 slot="icon-start"
                 size="l"
+                className="[&>svg>path]:fill-black dark:[&>svg>path]:fill-white"
               />
             </GovButton>
           </li>
@@ -65,6 +66,7 @@ export const NavItems = () => {
                 name="flag"
                 slot="icon-start"
                 size="l"
+                className="[&>svg>path]:fill-black dark:[&>svg>path]:fill-white"
               />
             </GovButton>
           </li>
