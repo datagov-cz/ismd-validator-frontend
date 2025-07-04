@@ -19,7 +19,7 @@ export const Header = () => {
 
   return (
     <>
-      <header className="bg-white py-3 z-50">
+      <header className="bg-white py-3 z-50 transition-colors duration-300">
         <section className="mx-auto max-w-desktop px-5 flex justify-between items-center gap-x-4">
           <a
             href="./"
@@ -57,7 +57,7 @@ export const Header = () => {
       )}
 
       <aside
-        className={`fixed top-[72px] left-0 h-full w-64 bg-white shadow-lg z-30 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-[72px] left-0 h-full w-64 bg-white shadow-lg z-30 transform transition-all duration-300 ease-in-out ${
           isMenuOpen ? 'translate-x-0' : '-translate-x-full'
         } desktop:hidden`}
       >

@@ -18,7 +18,7 @@ export default function Home() {
             {t('Banner.Button')}
           </GovButton>
         </GovBanner>
-        <section className="relative flex items-center p-4 w-full bg-blue-subtle gap-x-3 text-blue-primary">
+        <section className="relative flex items-center p-4 w-full bg-blue-subtle gap-x-3 text-blue-primary transition-colors duration-300">
           <GovIcon name="lightbulb-fill" slot="icon" />
           <p>
             {t('Message.Content')}&nbsp;

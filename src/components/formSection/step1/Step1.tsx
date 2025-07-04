@@ -22,7 +22,7 @@ export const Step1 = () => {
       <span slot="prefix">1</span>
       <span slot="headline">{t('Headline')}</span>
       <span slot="annotation">{t('Annotation')}</span>
-      <div className="text-dark-primary max-w-[808px]">
+      <div className="text-dark-primary max-w-[808px] transition-colors duration-300">
         <GovFormRadioGroup
           value={selectedOption}
           onGovChange={(val) =>
