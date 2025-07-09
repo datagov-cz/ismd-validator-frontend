@@ -30,6 +30,7 @@ export const FileForm = () => {
           accept=".xlsx,.xml,.ttl,.json,.json-ld"
           expanded
           onGovFiles={(e) => handleFileChange(e.detail.files?.[0].file)}
+          multiple={false}
         >
           <span>{t('Placeholder')}</span>
           <p>

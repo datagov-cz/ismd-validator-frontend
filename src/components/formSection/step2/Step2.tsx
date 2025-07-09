@@ -78,7 +78,16 @@ export const Step2 = () => {
         <div className={`${conversionError ? 'block' : 'hidden'}`}>
           <GovInfobar color="error" type="subtle">
             <GovIcon name="exclamation-circle-fill" slot="icon" />
-            <p className="text-lg">{conversionError ?? ''}</p>
+            <p className="text-lg">
+              {conversionError ?? t('ConversionUknownError')}{' '}
+              <a
+                href="https://github.com/datagov-cz/ismd-org/issues/new?template=bug_report.yml"
+                target="_blank"
+                className="underline"
+              >
+                {t('ConversionErrorLinkText')}
+              </a>
+            </p>
           </GovInfobar>
         </div>
         <GovButton

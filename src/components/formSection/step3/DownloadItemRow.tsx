@@ -1,5 +1,6 @@
 import { GovButton, GovIcon, GovTooltip } from '@gov-design-system-ce/react';
 
+import { DownloadItemButton } from '@/components/shared/DownloadItemButton';
 import { useFormStore } from '@/store/formStore';
 
 type TooltipType = {
@@ -29,7 +30,12 @@ export const DownloadItemRow = ({
   const handleDownload = () => {
     if (!downloadData) return;
 
-    const blob = new Blob([JSON.stringify(downloadData.output, null, 2)], {
+    const data =
+      typeof downloadData.output === 'string'
+        ? JSON.parse(downloadData.output)
+        : downloadData.output;
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
       type: 'application/json',
     });
     const url = URL.createObjectURL(blob);
@@ -46,15 +52,14 @@ export const DownloadItemRow = ({
     <div className="space-y-3">
       <div className="flex flex-col lg:flex-row lg:items-center w-full justify-between gap-2.5">
         <p>{title}</p>
-        <GovButton
-          onGovClick={handleDownload}
+        <DownloadItemButton
+          onClick={handleDownload}
           color="primary"
           type={govButton.type ?? 'solid'}
           disabled={govButton.disabled}
         >
-          <GovIcon name="download" slot="icon-start" />
           {govButton.text}
-        </GovButton>
+        </DownloadItemButton>
       </div>
       <div className="flex flex-col gap-y-2">
         {tooltips.map((tooltip) => (

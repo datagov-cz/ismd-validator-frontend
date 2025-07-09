@@ -72,7 +72,8 @@
         "Headline": "Zkontrolujte a převeďte slovník",
         "Annotation": "Klikněte na tlačítko 'Zkontrolovat a převést' a počkejte, až systém kontrolu a převod dokončí.",
         "Button": "Zkontrolovat a převést",
-        "ConversionUknownError": "Nečekaná chyba"
+        "ConversionUknownError": "Během převodu došlo k chybě: zaslaný vstup není podporovaný. Pokud problém přetrvává a máte pocit, že je problém na naší straně,",
+        "ConversionErrorLinkText": "nahlašte nám prosím chybu."
       },
       "Step3": {
         "Headline": "Stáhněte si výstupy z převodu a kontroly",
