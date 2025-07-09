@@ -1,6 +1,7 @@
 import { GovButton, GovIcon, GovTooltip } from '@gov-design-system-ce/react';
 
 import { DownloadItemButton } from '@/components/shared/DownloadItemButton';
+import { generateCatalogRecord } from '@/lib/catalogRecord';
 import { useFormStore } from '@/store/formStore';
 
 type TooltipType = {
@@ -12,6 +13,7 @@ type GovButtonType = {
   text: string;
   type?: 'base' | 'outlined' | 'solid';
   disabled?: boolean;
+  downloadType?: 'dictionary' | 'validation-check' | 'incomplete-catalog';
 };
 
 export interface DownloadItemRowProps {
@@ -30,18 +32,39 @@ export const DownloadItemRow = ({
   const handleDownload = () => {
     if (!downloadData) return;
 
-    const data =
-      typeof downloadData.output === 'string'
-        ? JSON.parse(downloadData.output)
-        : downloadData.output;
+    let data, filename;
+
+    if (govButton.downloadType === 'dictionary') {
+      data =
+        typeof downloadData.output === 'string'
+          ? JSON.parse(downloadData.output)
+          : downloadData.output;
+      filename = 'slovnik.json-ld';
+    } else if (govButton.downloadType === 'validation-check') {
+      // TODO: Implement validation check download logic
+      data =
+        typeof downloadData.output === 'string'
+          ? JSON.parse(downloadData.output)
+          : downloadData.output;
+      filename = 'validation-report.json';
+    } else if (govButton.downloadType === 'incomplete-catalog') {
+      data = generateCatalogRecord(
+        'Vocabulary Title',
+        'Vocabulary Description',
+      );
+      filename = 'catalog-record.json-ld';
+    } else {
+      return;
+    }
 
     const blob = new Blob([JSON.stringify(data, null, 2)], {
       type: 'application/json',
     });
+
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'slovnik.json-ld';
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
