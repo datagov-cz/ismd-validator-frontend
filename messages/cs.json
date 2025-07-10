@@ -59,7 +59,8 @@
           "Label": "Nahrát ze souboru",
           "Placeholder": "Přetáhněte soubor nebo",
           "Button": "Nahrát ze zařízení",
-          "SupportedFormatsLabel": "Podporované formáty XLSX, XML, TTL, JSON-LD"
+          "SupportedFormatsLabel": "Podporované formáty XLSX, XML, TTL, JSON-LD",
+          "MultipleFilesError": "Lze nahrát pouze jeden soubor najednou"
         },
         "UrlForm": {
           "Label": "Nahrát z URL"

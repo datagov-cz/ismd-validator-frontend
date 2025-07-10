@@ -1,4 +1,4 @@
-import { GovButton, GovIcon, GovTooltip } from '@gov-design-system-ce/react';
+import { GovIcon, GovTooltip } from '@gov-design-system-ce/react';
 
 import { DownloadItemButton } from '@/components/shared/DownloadItemButton';
 import { generateCatalogRecord } from '@/lib/catalogRecord';
@@ -52,7 +52,7 @@ export const DownloadItemRow = ({
         'Vocabulary Title',
         'Vocabulary Description',
       );
-      filename = 'catalog-record.json-ld';
+      filename = 'catalog-record.json';
     } else {
       return;
     }
