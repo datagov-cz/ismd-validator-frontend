@@ -33,6 +33,17 @@ export const Step2 = () => {
     const formData = new FormData();
     formData.append('file', formFile);
 
+    const outputFormat = process.env.NEXT_PUBLIC_CONVERT_FORMAT;
+    if (outputFormat) {
+      formData.append('output', outputFormat);
+    }
+
+    const removeInvalidSources =
+      process.env.NEXT_PUBLIC_CONVERT_REMOVE_INVALID_SOURCES;
+    if (removeInvalidSources === 'true') {
+      formData.append('removeInvalidSources', 'true');
+    }
+
     convertMutation.mutate(formData, {
       onError: (error) => {
         const axiosError = error as AxiosError<ConversionResponseDto>;
