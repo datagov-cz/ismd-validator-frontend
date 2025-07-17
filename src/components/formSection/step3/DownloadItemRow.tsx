@@ -1,7 +1,6 @@
 import { GovIcon, GovTooltip } from '@gov-design-system-ce/react';
 
 import { DownloadItemButton } from '@/components/shared/DownloadItemButton';
-import { generateCatalogRecord } from '@/lib/catalogRecord';
 import { useFormStore } from '@/store/formStore';
 
 type TooltipType = {
@@ -48,10 +47,7 @@ export const DownloadItemRow = ({
           : downloadData.output;
       filename = 'validation-report.json';
     } else if (govButton.downloadType === 'incomplete-catalog') {
-      data = generateCatalogRecord(
-        'Vocabulary Title',
-        'Vocabulary Description',
-      );
+      // TODO: get incomplete catalog from BE
       filename = 'catalog-record.json';
     } else {
       return;
