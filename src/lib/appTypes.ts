@@ -4,3 +4,5 @@ export type StatusType = {
   status: DictProcessInfoStatusType;
   message?: string;
 };
+
+export type OutputFormatType = 'json' | 'ttl';
