@@ -24,6 +24,9 @@ export const Step2 = () => {
     (state) => state.setDictionaryStatus,
   );
   const setDownloadData = useFormStore((state) => state.setDownloadData);
+  const setValidationResults = useFormStore(
+    (state) => state.setValidationResults,
+  );
 
   const convertMutation = useConvertFile();
 
@@ -57,7 +60,8 @@ export const Step2 = () => {
             status: 'Success',
             message: 'File converted successfully',
           });
-          setDownloadData(data);
+          setDownloadData(data.output);
+          setValidationResults(data.validationResults || null);
         } else {
           console.error('Unexpected data format', data);
           setConversionError(t('ConversionUknownError'));

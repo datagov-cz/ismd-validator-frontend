@@ -39,27 +39,27 @@ export const DownloadItemRow = ({
     if (govButton.downloadType === 'dictionary') {
       if (OUTPUT_FORMAT === 'json') {
         const jsonData =
-          typeof downloadData.output === 'string'
-            ? JSON.parse(downloadData.output)
-            : downloadData.output;
+          typeof downloadData === 'string'
+            ? JSON.parse(downloadData)
+            : downloadData;
 
         data = JSON.stringify(jsonData, null, 2);
         mimeType = 'application/json';
         filename = 'slovnik.json';
       } else if (OUTPUT_FORMAT === 'ttl') {
         data =
-          typeof downloadData.output === 'string'
-            ? downloadData.output
-            : String(downloadData.output);
+          typeof downloadData === 'string'
+            ? downloadData
+            : String(downloadData);
         mimeType = 'text/turtle';
         filename = 'slovnik.ttl';
       }
     } else if (govButton.downloadType === 'validation-check') {
       // TODO: Implement validation check download logic
       data =
-        typeof downloadData.output === 'string'
-          ? JSON.parse(downloadData.output)
-          : downloadData.output;
+        typeof downloadData === 'string'
+          ? JSON.parse(downloadData)
+          : downloadData;
       filename = 'validation-report.json';
     } else if (govButton.downloadType === 'incomplete-catalog') {
       // TODO: get incomplete catalog from BE
