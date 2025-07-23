@@ -43,13 +43,19 @@ export const Dialog = ({
         </GovInfobar>
 
         {validationResults && validationResults.severityGroups && (
-          <div className="overflow-x-auto">
-            <table className="text-dark-primary w-full">
+          <div className="overflow-auto max-h-[200px]">
+            <table className="text-dark-primary w-full relative">
               <tbody>
                 <tr className="border-b border-border-grey">
-                  <th>{t('InfoTable.AffectedConcepts')}</th>
-                  <th>{t('InfoTable.FindingDescription')}</th>
-                  <th>{t('InfoTable.FindingType')}</th>
+                  <th className="sticky top-0 bg-white">
+                    {t('InfoTable.AffectedConcepts')}
+                  </th>
+                  <th className="sticky top-0 bg-white">
+                    {t('InfoTable.FindingDescription')}
+                  </th>
+                  <th className="sticky top-0 bg-white">
+                    {t('InfoTable.FindingType')}
+                  </th>
                 </tr>
                 {validationResults.severityGroups.map(
                   ({ count, description, severity }) => (
