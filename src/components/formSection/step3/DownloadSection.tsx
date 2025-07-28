@@ -27,6 +27,7 @@ const getRowsConfig = (
       govButton: {
         text: t(`${basePath}.Row1.ButtonText`),
         disabled: sectionKey === 'Success-Warning' ? false : true,
+        downloadType: 'dictionary',
       },
     },
     {
@@ -40,6 +41,7 @@ const getRowsConfig = (
       govButton: {
         text: t(`${basePath}.Row2.ButtonText`),
         type: sectionKey === 'Success-Warning' ? 'outlined' : undefined,
+        downloadType: 'validation-check',
       },
     },
   ];
@@ -60,6 +62,7 @@ const getRowsConfig = (
       govButton: {
         text: t(`${basePath}.Row3.ButtonText`),
         type: 'outlined',
+        downloadType: 'incomplete-catalog',
       },
     });
   }

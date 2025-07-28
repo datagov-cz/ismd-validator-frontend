@@ -9,6 +9,7 @@ import { AxiosError } from 'axios';
 import { useTranslations } from 'next-intl';
 
 import { ConversionResponseDto, useConvertFile } from '@/api/generated';
+import { OUTPUT_FORMAT } from '@/lib/constants';
 import { useFormStore } from '@/store/formStore';
 
 export const Step2 = () => {
@@ -32,11 +33,7 @@ export const Step2 = () => {
 
     const formData = new FormData();
     formData.append('file', formFile);
-
-    const outputFormat = process.env.NEXT_PUBLIC_CONVERT_FORMAT;
-    if (outputFormat) {
-      formData.append('output', outputFormat);
-    }
+    formData.append('output', OUTPUT_FORMAT);
 
     const removeInvalidSources =
       process.env.NEXT_PUBLIC_CONVERT_REMOVE_INVALID_SOURCES;
