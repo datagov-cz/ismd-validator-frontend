@@ -10,6 +10,7 @@ import { DownloadSection } from './DownloadSection';
 export const Step3 = () => {
   const t = useTranslations('Home.FormSection.Step3');
   const dictionaryStatus = useFormStore((state) => state.dictionaryStatus);
+  const validationResults = useFormStore((state) => state.validationResults);
 
   const statusMapped = dictionaryStatus
     ? STATUS_MAP[dictionaryStatus.status]
@@ -35,12 +36,7 @@ export const Step3 = () => {
               `Dialog.Message.${dictionaryStatus?.status || 'Success'}`,
             ),
           }}
-          infoTable={{
-            affectedConcepts: '5 pojmů',
-            findingDescription:
-              'Pojem nemá vyplněné charakteristiky usnadňující evidenci údajů agendy do Registru práv a povinností',
-            findingType: 'Informace',
-          }}
+          validationResults={validationResults}
         >
           <DownloadSection status={dictionaryStatus?.status || 'Success'} />
         </Dialog>
