@@ -1,4 +1,4 @@
-import { DictProcessInfoStatusType } from './appTypes';
+import { DictProcessInfoStatusType, OutputFormatType } from './appTypes';
 
 export const STATUS_MAP: Record<
   DictProcessInfoStatusType,
@@ -8,3 +8,6 @@ export const STATUS_MAP: Record<
   Warning: 'warning',
   Error: 'error',
 };
+
+export const OUTPUT_FORMAT: OutputFormatType =
+  (process.env.NEXT_PUBLIC_CONVERT_FORMAT as OutputFormatType) ?? 'json';

@@ -2,25 +2,26 @@ import { ReactNode } from 'react';
 import { GovIcon, GovInfobar } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
+import { ValidationResultsDto } from '@/api/generated';
+
 interface InfoBarProps {
   status: 'success' | 'warning' | 'error';
   message: string;
 }
 
-interface InfoTableProps {
-  affectedConcepts: string;
-  findingDescription: string;
-  findingType: string;
-}
-
 interface Props {
   title: string;
   infoBar: InfoBarProps;
-  infoTable: InfoTableProps;
+  validationResults: ValidationResultsDto | null;
   children: ReactNode;
 }
 
-export const Dialog = ({ title, infoBar, infoTable, children }: Props) => {
+export const Dialog = ({
+  title,
+  infoBar,
+  validationResults,
+  children,
+}: Props) => {
   const t = useTranslations('Home.FormSection.Step3.Dialog');
 
   const iconName =
@@ -41,22 +42,35 @@ export const Dialog = ({ title, infoBar, infoTable, children }: Props) => {
           <p className="text-lg">{infoBar.message}</p>
         </GovInfobar>
 
-        <div className="overflow-x-auto">
-          <table className="text-dark-primary w-full">
-            <tbody>
-              <tr className="border-b border-border-grey">
-                <th>{t('InfoTable.AffectedConcepts')}</th>
-                <th>{t('InfoTable.FindingDescription')}</th>
-                <th>{t('InfoTable.FindingType')}</th>
-              </tr>
-              <tr>
-                <td>{infoTable.affectedConcepts}</td>
-                <td>{infoTable.findingDescription}</td>
-                <td>{infoTable.findingType}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        {validationResults && validationResults.severityGroups && (
+          <div className="overflow-auto max-h-[200px]">
+            <table className="text-dark-primary w-full relative">
+              <tbody>
+                <tr className="border-b border-border-grey">
+                  <th className="sticky top-0 bg-white">
+                    {t('InfoTable.AffectedConcepts')}
+                  </th>
+                  <th className="sticky top-0 bg-white">
+                    {t('InfoTable.FindingDescription')}
+                  </th>
+                  <th className="sticky top-0 bg-white">
+                    {t('InfoTable.FindingType')}
+                  </th>
+                </tr>
+                {validationResults.severityGroups.map(
+                  ({ count, description, severity }) => (
+                    <tr key={Math.random()}>
+                      <td>{count}</td>
+                      <td>{description}</td>
+                      <td>{severity}</td>
+                    </tr>
+                  ),
+                )}
+                <tr></tr>
+              </tbody>
+            </table>
+          </div>
+        )}
         {children}
       </div>
     </div>

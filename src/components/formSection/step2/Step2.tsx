@@ -9,6 +9,7 @@ import { AxiosError } from 'axios';
 import { useTranslations } from 'next-intl';
 
 import { ConversionResponseDto, useConvertFile } from '@/api/generated';
+import { OUTPUT_FORMAT } from '@/lib/constants';
 import { useFormStore } from '@/store/formStore';
 
 export const Step2 = () => {
@@ -26,6 +27,9 @@ export const Step2 = () => {
     (state) => state.setDictionaryStatus,
   );
   const setDownloadData = useFormStore((state) => state.setDownloadData);
+  const setValidationResults = useFormStore(
+    (state) => state.setValidationResults,
+  );
 
   const convertMutation = useConvertFile();
 
@@ -35,6 +39,13 @@ export const Step2 = () => {
 
     const formData = new FormData();
     formData.append('file', formFile);
+    formData.append('output', OUTPUT_FORMAT);
+
+    const removeInvalidSources =
+      process.env.NEXT_PUBLIC_CONVERT_REMOVE_INVALID_SOURCES;
+    if (removeInvalidSources === 'true') {
+      formData.append('removeInvalidSources', 'true');
+    }
 
     convertMutation.mutate(formData, {
       onError: (error) => {
@@ -52,7 +63,8 @@ export const Step2 = () => {
             status: 'Success',
             message: 'File converted successfully',
           });
-          setDownloadData(data);
+          setDownloadData(data.output);
+          setValidationResults(data.validationResults || null);
         } else {
           console.error('Unexpected data format', data);
           setConversionError(t('ConversionUknownError'));
