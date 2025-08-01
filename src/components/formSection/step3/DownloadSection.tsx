@@ -20,8 +20,13 @@ export const DownloadSection = ({ status }: Props) => {
   const basePath = `Home.FormSection.Step3.Dialog.DownloadSection.${sectionKey}`;
 
   const conversionResponse = useFormStore((state) => state.conversionResponse);
+  const file = useFormStore((state) => state.files[0]);
+
   const convertMutation = useDownloadDetailedValidationReportCSV();
   const [csvData, setCsvData] = useState<string | null>(null);
+
+  const baseFilename = file?.name ? file.name.split('.')[0] : 'slovnik';
+  const dictionaryFilename = `${baseFilename}.${OUTPUT_FORMAT}`;
 
   let dictionaryData: string | null = null;
   if (conversionResponse?.output) {
@@ -81,7 +86,7 @@ export const DownloadSection = ({ status }: Props) => {
           disabled: sectionKey === 'Success-Warning' ? false : true,
         }}
         data={dictionaryData}
-        filename={OUTPUT_FORMAT === 'json' ? 'slovnik.json' : 'slovnik.ttl'}
+        filename={dictionaryFilename}
         mimeType={OUTPUT_FORMAT === 'json' ? 'application/json' : 'text/turtle'}
       />
       <DownloadItemRow
