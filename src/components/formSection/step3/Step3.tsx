@@ -10,7 +10,9 @@ import { DownloadSection } from './DownloadSection';
 export const Step3 = () => {
   const t = useTranslations('Home.FormSection.Step3');
   const dictionaryStatus = useFormStore((state) => state.dictionaryStatus);
-  const validationResults = useFormStore((state) => state.validationResults);
+  const validationResults = useFormStore(
+    (state) => state.conversionResponse?.validationResults,
+  );
 
   const statusMapped = dictionaryStatus
     ? STATUS_MAP[dictionaryStatus.status]
@@ -36,7 +38,7 @@ export const Step3 = () => {
               `Dialog.Message.${dictionaryStatus?.status || 'Success'}`,
             ),
           }}
-          validationResults={validationResults}
+          validationResults={validationResults || null}
         >
           <DownloadSection status={dictionaryStatus?.status || 'Success'} />
         </Dialog>

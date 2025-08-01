@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { ValidationResultsDto } from '@/api/generated';
+import { ConversionResponseDto } from '@/api/generated';
 import { StatusType } from '@/lib/appTypes';
 
 type FormStoreType = {
@@ -8,8 +8,7 @@ type FormStoreType = {
   url?: string;
   fileError?: string;
   dictionaryStatus: StatusType | null;
-  downloadData: string | null;
-  validationResults: ValidationResultsDto | null;
+  conversionResponse: ConversionResponseDto | null;
 };
 
 type FormStoreActions = {
@@ -17,20 +16,17 @@ type FormStoreActions = {
   addFile: (file: File) => void;
   removeFile: (file: File) => void;
   setUrl: (url?: string) => void;
-  setFileError: (error?: string) => void;
+  setConversionResponse: (response: ConversionResponseDto) => void;
   setDictionaryStatus: (status: StatusType | null) => void;
-  setDownloadData: (data?: string) => void;
-  setValidationResults: (data: ValidationResultsDto | null) => void;
+  setFileError: (error?: string) => void;
   reset: () => void;
 };
 
 const initialState: FormStoreType = {
   files: [],
   url: undefined,
-  fileError: undefined,
-  downloadData: null,
   dictionaryStatus: null,
-  validationResults: null,
+  conversionResponse: null,
 };
 
 export const useFormStore = create<FormStoreType & FormStoreActions>((set) => ({
@@ -40,9 +36,8 @@ export const useFormStore = create<FormStoreType & FormStoreActions>((set) => ({
   removeFile: (file) =>
     set((state) => ({ files: state.files.filter((f) => f !== file) })),
   setUrl: (url) => set({ url }),
-  setFileError: (fileError) => set({ fileError }),
+  setConversionResponse: (data) => set({ conversionResponse: data }),
   setDictionaryStatus: (dictionaryStatus) => set({ dictionaryStatus }),
-  setDownloadData: (data) => set({ downloadData: data }),
-  setValidationResults: (data) => set({ validationResults: data }),
+  setFileError: (error) => set({ fileError: error }),
   reset: () => set({ ...initialState }),
 }));
