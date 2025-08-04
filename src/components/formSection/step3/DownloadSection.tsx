@@ -49,12 +49,16 @@ export const DownloadSection = ({ status }: Props) => {
     if (!conversionResponse) return;
 
     const formData = new FormData();
-    formData.append('data', conversionResponse as string);
+    formData.append(
+      'detailedReport',
+      new Blob([JSON.stringify(conversionResponse.validationReport)], {
+        type: 'application/json',
+      }),
+    );
 
     convertMutation.mutate(formData, {
       onSuccess: (data) => {
         setCsvData(data);
-        // Trigger download immediately
         const blob = new Blob([data], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -103,7 +107,7 @@ export const DownloadSection = ({ status }: Props) => {
           disabled: convertMutation.isPending,
         }}
         data={csvData}
-        filename="validation-report.csv"
+        filename="validation-report-detailed.csv"
         mimeType="text/csv"
         onCustomClick={handleRow2Download}
       />

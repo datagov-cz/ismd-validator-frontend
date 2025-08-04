@@ -13,34 +13,6 @@ import type {
 import { useMutation } from '@tanstack/react-query';
 
 import { axiosInstance } from '../axios-instance';
-export type CatalogReportDtoPopis = { [key: string]: string };
-
-export type CatalogReportDtoNázev = { [key: string]: string };
-
-export type CatalogReportDtoKlíčovéSlovo = { [key: string]: string[] };
-
-export type CatalogReportDtoKontaktníBod = {
-  [key: string]: { [key: string]: unknown };
-};
-
-export interface CatalogReportDto {
-  iri?: string;
-  typ?: string;
-  popis?: CatalogReportDtoPopis;
-  specifikace?: string[];
-  distribuce?: DistribuceDto[];
-  '@context'?: string;
-  název?: CatalogReportDtoNázev;
-  prvek_rúian?: string[];
-  geografické_území?: string[];
-  prostorové_pokrytí?: string[];
-  klíčové_slovo?: CatalogReportDtoKlíčovéSlovo;
-  periodicita_aktualizace?: string;
-  téma?: string[];
-  koncept_euroVoc?: string[];
-  kontaktní_bod?: CatalogReportDtoKontaktníBod;
-}
-
 export type ConceptValidationDtoViolations = {
   [key: string]: RuleViolationDto;
 };
@@ -55,7 +27,6 @@ export interface ConversionResponseDto {
   errorMessage?: string;
   validationResults?: ValidationResultsDto;
   validationReport?: DetailedValidationReportDto;
-  catalogReport?: CatalogReportDto;
 }
 
 export type DetailedValidationReportDtoValidation = {
@@ -67,16 +38,6 @@ export interface DetailedValidationReportDto {
   validation?: DetailedValidationReportDtoValidation;
 }
 
-export interface DistribuceDto {
-  typ?: string;
-  podmínky_užití?: PodminkyUzitiDto;
-  soubor_ke_stažení?: string;
-  přístupové_url?: string;
-  typ_média?: string;
-  formát?: string;
-  schéma?: string;
-}
-
 export type OntologyInfoDtoName = { [key: string]: string };
 
 export type OntologyInfoDtoDescription = { [key: string]: string };
@@ -84,14 +45,6 @@ export type OntologyInfoDtoDescription = { [key: string]: string };
 export interface OntologyInfoDto {
   name?: OntologyInfoDtoName;
   description?: OntologyInfoDtoDescription;
-}
-
-export interface PodminkyUzitiDto {
-  typ?: string;
-  autorské_dílo?: string;
-  databáze_jako_autorské_dílo?: string;
-  databáze_chráněná_zvláštními_právy?: string;
-  osobní_údaje?: string;
 }
 
 export interface RuleViolationDto {
@@ -116,7 +69,6 @@ export type ConvertFileParams = {
   output?: string;
   removeInvalidSources?: boolean;
   includeDetailedReport?: boolean;
-  includeCatalogRecord?: boolean;
 };
 
 export type ConvertFileBody = {
@@ -124,10 +76,6 @@ export type ConvertFileBody = {
 };
 
 export type DownloadDetailedValidationReportCSVParams = {
-  filename?: string;
-};
-
-export type DownloadCatalogRecordJSONParams = {
   filename?: string;
 };
 
@@ -215,7 +163,7 @@ export const useConvertFile = <TError = unknown, TContext = unknown>(
 };
 
 export const downloadDetailedValidationReportCSV = (
-  formData: FormData, // ConversionResponseDto & DownloadDetailedValidationReportCSVParams
+  formData: FormData, // DetailedValidationReportDto & DownloadDetailedValidationReportCSVParams
   options?: SecondParameter<typeof axiosInstance>,
   signal?: AbortSignal,
 ) => {
@@ -223,7 +171,7 @@ export const downloadDetailedValidationReportCSV = (
     {
       url: `/api/converter/convert/detailed-report/csv`,
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'multipart/form-data' },
       data: formData,
       signal,
     },
@@ -238,14 +186,14 @@ export const getDownloadDetailedValidationReportCSVMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof downloadDetailedValidationReportCSV>>,
     TError,
-    FormData, // ConversionResponseDto & DownloadDetailedValidationReportCSVParams
+    FormData, // DetailedValidationReportDto & DownloadDetailedValidationReportCSVParams
     TContext
   >;
   request?: SecondParameter<typeof axiosInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof downloadDetailedValidationReportCSV>>,
   TError,
-  FormData, // ConversionResponseDto & DownloadDetailedValidationReportCSVParams
+  FormData, // DetailedValidationReportDto & DownloadDetailedValidationReportCSVParams
   TContext
 > => {
   const mutationKey = ['downloadDetailedValidationReportCSV'];
@@ -259,7 +207,7 @@ export const getDownloadDetailedValidationReportCSVMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof downloadDetailedValidationReportCSV>>,
-    FormData // ConversionResponseDto & DownloadDetailedValidationReportCSVParams
+    FormData // DetailedValidationReportDto & DownloadDetailedValidationReportCSVParams
   > = (formData) => {
     return downloadDetailedValidationReportCSV(formData, requestOptions);
   };
@@ -271,7 +219,7 @@ export type DownloadDetailedValidationReportCSVMutationResult = NonNullable<
   Awaited<ReturnType<typeof downloadDetailedValidationReportCSV>>
 >;
 export type DownloadDetailedValidationReportCSVMutationBody =
-  ConversionResponseDto;
+  DetailedValidationReportDto;
 export type DownloadDetailedValidationReportCSVMutationError = unknown;
 
 export const useDownloadDetailedValidationReportCSV = <
@@ -282,7 +230,7 @@ export const useDownloadDetailedValidationReportCSV = <
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof downloadDetailedValidationReportCSV>>,
       TError,
-      FormData, // ConversionResponseDto & DownloadDetailedValidationReportCSVParams
+      FormData, // DetailedValidationReportDto & DownloadDetailedValidationReportCSVParams
       TContext
     >;
     request?: SecondParameter<typeof axiosInstance>;
@@ -291,95 +239,11 @@ export const useDownloadDetailedValidationReportCSV = <
 ): UseMutationResult<
   Awaited<ReturnType<typeof downloadDetailedValidationReportCSV>>,
   TError,
-  FormData, // ConversionResponseDto & DownloadDetailedValidationReportCSVParams
+  FormData, // DetailedValidationReportDto & DownloadDetailedValidationReportCSVParams
   TContext
 > => {
   const mutationOptions =
     getDownloadDetailedValidationReportCSVMutationOptions(options);
-
-  return useMutation(mutationOptions, queryClient);
-};
-
-export const downloadCatalogRecordJSON = (
-  formData: FormData, // ConversionResponseDto & DownloadCatalogRecordJSONParams
-  options?: SecondParameter<typeof axiosInstance>,
-  signal?: AbortSignal,
-) => {
-  return axiosInstance<string>(
-    {
-      url: `/api/converter/convert/catalog-record/json`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: formData,
-      signal,
-    },
-    options,
-  );
-};
-
-export const getDownloadCatalogRecordJSONMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof downloadCatalogRecordJSON>>,
-    TError,
-    FormData, // ConversionResponseDto & DownloadCatalogRecordJSONParams
-    TContext
-  >;
-  request?: SecondParameter<typeof axiosInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof downloadCatalogRecordJSON>>,
-  TError,
-  FormData, // ConversionResponseDto & DownloadCatalogRecordJSONParams
-  TContext
-> => {
-  const mutationKey = ['downloadCatalogRecordJSON'];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof downloadCatalogRecordJSON>>,
-    FormData // ConversionResponseDto & DownloadCatalogRecordJSONParams
-  > = (formData) => {
-    return downloadCatalogRecordJSON(formData, requestOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type DownloadCatalogRecordJSONMutationResult = NonNullable<
-  Awaited<ReturnType<typeof downloadCatalogRecordJSON>>
->;
-export type DownloadCatalogRecordJSONMutationBody = ConversionResponseDto;
-export type DownloadCatalogRecordJSONMutationError = unknown;
-
-export const useDownloadCatalogRecordJSON = <
-  TError = unknown,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof downloadCatalogRecordJSON>>,
-      TError,
-      FormData, // ConversionResponseDto & DownloadCatalogRecordJSONParams
-      TContext
-    >;
-    request?: SecondParameter<typeof axiosInstance>;
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof downloadCatalogRecordJSON>>,
-  TError,
-  FormData, // ConversionResponseDto & DownloadCatalogRecordJSONParams
-  TContext
-> => {
-  const mutationOptions = getDownloadCatalogRecordJSONMutationOptions(options);
 
   return useMutation(mutationOptions, queryClient);
 };

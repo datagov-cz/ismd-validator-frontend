@@ -18,7 +18,7 @@ export const Step2 = () => {
   const files = useFormStore((state) => state.files);
   const formUrl = useFormStore((state) => state.url);
   const fileError = useFormStore((state) => state.fileError);
-  
+
   const formFile = files.length === 1 ? files[0] : undefined;
 
   const [conversionError, setConversionError] = useState<string | null>(null);
@@ -44,6 +44,12 @@ export const Step2 = () => {
       process.env.NEXT_PUBLIC_CONVERT_REMOVE_INVALID_SOURCES;
     if (removeInvalidSources === 'true') {
       formData.append('removeInvalidSources', 'true');
+    }
+
+    const includeDetailedReport =
+      process.env.NEXT_PUBLIC_INCLUDE_DETAILED_REPORT;
+    if (includeDetailedReport === 'true') {
+      formData.append('includeDetailedReport', 'true');
     }
 
     convertMutation.mutate(formData, {
