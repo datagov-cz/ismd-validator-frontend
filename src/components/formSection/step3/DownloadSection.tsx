@@ -1,10 +1,13 @@
-import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 
-import { useDownloadDetailedValidationReportCSV } from '@/api/generated';
+import {
+  useDownloadCatalogRecordJSON,
+  useDownloadDetailedValidationReportCSV,
+} from '@/api/generated';
 import { DictProcessInfoStatusType } from '@/lib/appTypes';
 import { OUTPUT_FORMAT } from '@/lib/constants';
 import { getDownloadSectionTranslationKey } from '@/lib/contentUtils';
+import { handleDownload } from '@/lib/downloadUtils';
 import { useFormStore } from '@/store/formStore';
 
 import { DownloadItemRow } from './DownloadItemRow';
@@ -22,8 +25,9 @@ export const DownloadSection = ({ status }: Props) => {
   const conversionResponse = useFormStore((state) => state.conversionResponse);
   const file = useFormStore((state) => state.files[0]);
 
-  const convertMutation = useDownloadDetailedValidationReportCSV();
-  const [csvData, setCsvData] = useState<string | null>(null);
+  const downloadDetailedValidationReportMutation =
+    useDownloadDetailedValidationReportCSV();
+  const downloadCatalogRecordMutation = useDownloadCatalogRecordJSON();
 
   const baseFilename = file?.name ? file.name.split('.')[0] : 'slovnik';
   const dictionaryFilename = `${baseFilename}.${OUTPUT_FORMAT}`;
@@ -56,21 +60,41 @@ export const DownloadSection = ({ status }: Props) => {
       }),
     );
 
-    convertMutation.mutate(formData, {
+    downloadDetailedValidationReportMutation.mutate(formData, {
       onSuccess: (data) => {
-        setCsvData(data);
-        const blob = new Blob([data], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'validation-report.csv';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        handleDownload({
+          data,
+          filename: 'validation-report-detailed.csv',
+          mimeType: 'text/csv',
+        });
       },
       onError: (error) => {
         console.error('Error downloading CSV:', error);
+      },
+    });
+  };
+
+  const handleRow3Download = () => {
+    if (!conversionResponse) return;
+
+    const formData = new FormData();
+    formData.append(
+      'catalogRecord',
+      new Blob([JSON.stringify(conversionResponse.catalogReport)], {
+        type: 'application/json',
+      }),
+    );
+
+    downloadCatalogRecordMutation.mutate(formData, {
+      onSuccess: (data) => {
+        handleDownload({
+          data: data,
+          filename: 'catalog-record.json',
+          mimeType: 'application/json',
+        });
+      },
+      onError: (error) => {
+        console.error('Error downloading catalog record:', error);
       },
     });
   };
@@ -89,9 +113,14 @@ export const DownloadSection = ({ status }: Props) => {
           text: t(`${basePath}.Row1.ButtonText`),
           disabled: sectionKey === 'Success-Warning' ? false : true,
         }}
-        data={dictionaryData}
-        filename={dictionaryFilename}
-        mimeType={OUTPUT_FORMAT === 'json' ? 'application/json' : 'text/turtle'}
+        onClick={() =>
+          handleDownload({
+            data: dictionaryData,
+            filename: dictionaryFilename,
+            mimeType:
+              OUTPUT_FORMAT === 'json' ? 'application/json' : 'text/turtle',
+          })
+        }
       />
       <DownloadItemRow
         title={t(`${basePath}.Row2.Title`)}
@@ -104,12 +133,9 @@ export const DownloadSection = ({ status }: Props) => {
         govButton={{
           text: t(`${basePath}.Row2.ButtonText`),
           type: sectionKey === 'Success-Warning' ? 'outlined' : undefined,
-          disabled: convertMutation.isPending,
+          disabled: downloadDetailedValidationReportMutation.isPending,
         }}
-        data={csvData}
-        filename="validation-report-detailed.csv"
-        mimeType="text/csv"
-        onCustomClick={handleRow2Download}
+        onClick={handleRow2Download}
       />
       {sectionKey === 'Success-Warning' && (
         <DownloadItemRow
@@ -127,10 +153,9 @@ export const DownloadSection = ({ status }: Props) => {
           govButton={{
             text: t(`${basePath}.Row3.ButtonText`),
             type: 'outlined',
+            disabled: downloadCatalogRecordMutation.isPending,
           }}
-          data={dictionaryData}
-          filename="validation-report-detailed.csv"
-          mimeType="text/csv"
+          onClick={handleRow3Download}
         />
       )}
     </section>
