@@ -59,13 +59,20 @@ export const Step2 = () => {
           axiosError.response?.data?.errorMessage || t('ConversionUknownError');
         console.error('Error converting file:', errorMessage);
         setConversionError(errorMessage);
-        setDictionaryStatus(null);
+        setDictionaryStatus({
+          status: 'Error',
+          message: errorMessage,
+        });
       },
       onSuccess: (data) => {
         if (typeof data === 'object' && data !== null) {
-          // TODO: Set dictionary status based on the response from the server
+          const allValidationsInformative =
+            data.validationResults?.severityGroups?.find(
+              (group) => group.severity?.toLowerCase() !== 'informace',
+            );
+
           setDictionaryStatus({
-            status: 'Success',
+            status: allValidationsInformative ? 'Warning' : 'Success',
             message: 'File converted successfully',
           });
           setConversionResponse(data);
