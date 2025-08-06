@@ -32,6 +32,8 @@ export const DownloadSection = ({ status }: Props) => {
   const baseFilename = file?.name ? file.name.split('.')[0] : 'slovnik';
   const dictionaryFilename = `${baseFilename}.${OUTPUT_FORMAT}`;
 
+  const isSuccessWarning = sectionKey === 'Success-Warning';
+
   let dictionaryData: string | null = null;
   if (conversionResponse?.output) {
     if (OUTPUT_FORMAT === 'json') {
@@ -49,7 +51,7 @@ export const DownloadSection = ({ status }: Props) => {
     }
   }
 
-  const handleRow2Download = () => {
+  const handleValidationReportDownload = () => {
     if (!conversionResponse) return;
 
     const formData = new FormData();
@@ -74,7 +76,7 @@ export const DownloadSection = ({ status }: Props) => {
     });
   };
 
-  const handleRow3Download = () => {
+  const handleCatalogReportDownload = () => {
     if (!conversionResponse) return;
 
     const formData = new FormData();
@@ -111,7 +113,7 @@ export const DownloadSection = ({ status }: Props) => {
         ]}
         govButton={{
           text: t(`${basePath}.Row1.ButtonText`),
-          disabled: sectionKey === 'Success-Warning' ? false : true,
+          disabled: !isSuccessWarning,
         }}
         onClick={() =>
           handleDownload({
@@ -132,12 +134,12 @@ export const DownloadSection = ({ status }: Props) => {
         ]}
         govButton={{
           text: t(`${basePath}.Row2.ButtonText`),
-          type: sectionKey === 'Success-Warning' ? 'outlined' : undefined,
+          type: isSuccessWarning ? 'outlined' : undefined,
           disabled: downloadDetailedValidationReportMutation.isPending,
         }}
-        onClick={handleRow2Download}
+        onClick={handleValidationReportDownload}
       />
-      {sectionKey === 'Success-Warning' && (
+      {isSuccessWarning && (
         <DownloadItemRow
           title={t(`${basePath}.Row3.Title`)}
           tooltips={[
@@ -155,7 +157,7 @@ export const DownloadSection = ({ status }: Props) => {
             type: 'outlined',
             disabled: downloadCatalogRecordMutation.isPending,
           }}
-          onClick={handleRow3Download}
+          onClick={handleCatalogReportDownload}
         />
       )}
     </section>
