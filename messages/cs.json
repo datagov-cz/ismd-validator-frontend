@@ -63,7 +63,8 @@
           "MultipleFilesError": "Lze nahrát pouze jeden soubor najednou"
         },
         "UrlForm": {
-          "Label": "Nahrát z URL"
+          "Label": "Nahrát z URL",
+          "UrlError": "Neplatná adresa"
         },
         "DictForm": {
           "Label": "Vybrat ze Sémantického slovníku pojmů"

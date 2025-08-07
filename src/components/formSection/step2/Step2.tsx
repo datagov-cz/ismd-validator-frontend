@@ -33,11 +33,16 @@ export const Step2 = () => {
   const convertMutation = useConvertFile();
 
   const handleConvert = () => {
-    if (!formFile) return;
     setConversionError(null);
 
     const formData = new FormData();
-    formData.append('file', formFile);
+
+    if (formUrl) {
+      formData.append('urlString', formUrl);
+    } else if (formFile) {
+      formData.append('file', formFile);
+    }
+
     formData.append('output', OUTPUT_FORMAT);
 
     const removeInvalidSources =
@@ -92,7 +97,7 @@ export const Step2 = () => {
   }, [formFile]);
 
   const hasError = !!conversionError || !!fileError;
-  const isDisabled = !formFile || !!fileError;
+  const isDisabled = !formUrl && (!formFile || !!fileError);
 
   return (
     <GovWizardItem
