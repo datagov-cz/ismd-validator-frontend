@@ -6,9 +6,6 @@ on:
     workflows: ["Build Docker on Main", "Build Docker on Dev"]
     types:
       - completed
-    branches:
-      - main
-      - dev
   
   # Manual trigger with environment and version selection
   workflow_dispatch:
@@ -26,6 +23,11 @@ on:
         description: 'Image version to deploy (leave empty for latest)'
         required: false
         type: string
+
+permissions:
+  contents: read
+  deployments: write
+  actions: read
 
 env:
   INFRA_REPO: ${{ github.repository_owner }}/infrastructure
