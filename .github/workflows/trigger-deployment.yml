@@ -3,9 +3,9 @@ name: Trigger Deployment
 on:
   # Triggered when a new image is published
   workflow_run:
-    workflows: ["Build Docker on Main", "Build Docker on Dev"]
-    types:
-      - completed
+    workflows: [Build Docker on Main, Build Docker on Dev]
+    types: [completed]
+    branches: [main, dev]
   
   # Manual trigger with environment and version selection
   workflow_dispatch:
