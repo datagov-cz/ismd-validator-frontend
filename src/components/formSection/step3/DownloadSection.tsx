@@ -1,90 +1,165 @@
 import { useTranslations } from 'next-intl';
 
+import {
+  useDownloadCatalogRecordJSON,
+  useDownloadDetailedValidationReportCSV,
+} from '@/api/generated';
 import { DictProcessInfoStatusType } from '@/lib/appTypes';
+import { OUTPUT_FORMAT } from '@/lib/constants';
 import { getDownloadSectionTranslationKey } from '@/lib/contentUtils';
+import { handleDownload } from '@/lib/downloadUtils';
+import { useFormStore } from '@/store/formStore';
 
-import { DownloadItemRow, DownloadItemRowProps } from './DownloadItemRow';
+import { DownloadItemRow } from './DownloadItemRow';
 
 interface Props {
   status: DictProcessInfoStatusType;
 }
 
-const getRowsConfig = (
-  t: ReturnType<typeof useTranslations>,
-  sectionKey: string,
-) => {
-  const basePath = `Home.FormSection.Step3.Dialog.DownloadSection.${sectionKey}`;
-
-  const rows: DownloadItemRowProps[] = [
-    {
-      title: t(`${basePath}.Row1.Title`),
-      tooltips: [
-        {
-          title: t(`${basePath}.Row1.Tooltips.Title1`),
-          description: t(`${basePath}.Row1.Tooltips.Description1`),
-        },
-      ],
-      govButton: {
-        text: t(`${basePath}.Row1.ButtonText`),
-        disabled: sectionKey === 'Success-Warning' ? false : true,
-        downloadType: 'dictionary',
-      },
-    },
-    {
-      title: t(`${basePath}.Row2.Title`),
-      tooltips: [
-        {
-          title: t(`${basePath}.Row2.Tooltips.Title1`),
-          description: t(`${basePath}.Row2.Tooltips.Description1`),
-        },
-      ],
-      govButton: {
-        text: t(`${basePath}.Row2.ButtonText`),
-        type: sectionKey === 'Success-Warning' ? 'outlined' : undefined,
-        downloadType: 'validation-check',
-      },
-    },
-  ];
-
-  if (sectionKey === 'Success-Warning') {
-    rows.push({
-      title: t(`${basePath}.Row3.Title`),
-      tooltips: [
-        {
-          title: t(`${basePath}.Row3.Tooltips.Title1`),
-          description: t(`${basePath}.Row3.Tooltips.Description1`),
-        },
-        {
-          title: t(`${basePath}.Row3.Tooltips.Title2`),
-          description: t(`${basePath}.Row3.Tooltips.Description2`),
-        },
-      ],
-      govButton: {
-        text: t(`${basePath}.Row3.ButtonText`),
-        type: 'outlined',
-        downloadType: 'incomplete-catalog',
-      },
-    });
-  }
-
-  return rows;
-};
-
 export const DownloadSection = ({ status }: Props) => {
   const t = useTranslations();
   const sectionKey = getDownloadSectionTranslationKey(status);
-  const rows = getRowsConfig(t, sectionKey);
+
+  const basePath = `Home.FormSection.Step3.Dialog.DownloadSection.${sectionKey}`;
+
+  const conversionResponse = useFormStore((state) => state.conversionResponse);
+  const file = useFormStore((state) => state.files[0]);
+
+  const downloadDetailedValidationReportMutation =
+    useDownloadDetailedValidationReportCSV();
+  const downloadCatalogRecordMutation = useDownloadCatalogRecordJSON();
+
+  const baseFilename = file?.name ? file.name.split('.')[0] : 'slovnik';
+  const dictionaryFilename = `${baseFilename}.${OUTPUT_FORMAT}`;
+
+  const isSuccessWarning = sectionKey === 'Success-Warning';
+
+  let dictionaryData: string | null = null;
+  if (conversionResponse?.output) {
+    if (OUTPUT_FORMAT === 'json') {
+      const jsonData =
+        typeof conversionResponse?.output === 'string'
+          ? JSON.parse(conversionResponse.output)
+          : conversionResponse.output;
+
+      dictionaryData = JSON.stringify(jsonData, null, 2);
+    } else if (OUTPUT_FORMAT === 'ttl') {
+      dictionaryData =
+        typeof conversionResponse.output === 'string'
+          ? conversionResponse.output
+          : String(conversionResponse.output);
+    }
+  }
+
+  const handleValidationReportDownload = () => {
+    if (!conversionResponse) return;
+
+    const formData = new FormData();
+    formData.append(
+      'detailedReport',
+      new Blob([JSON.stringify(conversionResponse.validationReport)], {
+        type: 'application/json',
+      }),
+    );
+
+    downloadDetailedValidationReportMutation.mutate(formData, {
+      onSuccess: (data) => {
+        handleDownload({
+          data,
+          filename: 'validation-report-detailed.csv',
+          mimeType: 'text/csv',
+        });
+      },
+      onError: (error) => {
+        console.error('Error downloading CSV:', error);
+      },
+    });
+  };
+
+  const handleCatalogReportDownload = () => {
+    if (!conversionResponse) return;
+
+    const formData = new FormData();
+    formData.append(
+      'catalogRecord',
+      new Blob([JSON.stringify(conversionResponse.catalogReport)], {
+        type: 'application/json',
+      }),
+    );
+
+    downloadCatalogRecordMutation.mutate(formData, {
+      onSuccess: (data) => {
+        handleDownload({
+          data: data,
+          filename: 'catalog-record.json',
+          mimeType: 'application/json',
+        });
+      },
+      onError: (error) => {
+        console.error('Error downloading catalog record:', error);
+      },
+    });
+  };
 
   return (
     <section className="space-y-6">
-      {rows.map((row, index) => (
+      <DownloadItemRow
+        title={t(`${basePath}.Row1.Title`)}
+        tooltips={[
+          {
+            title: t(`${basePath}.Row1.Tooltips.Title1`),
+            description: t(`${basePath}.Row1.Tooltips.Description1`),
+          },
+        ]}
+        govButton={{
+          text: t(`${basePath}.Row1.ButtonText`),
+          disabled: !isSuccessWarning,
+        }}
+        onClick={() =>
+          handleDownload({
+            data: dictionaryData,
+            filename: dictionaryFilename,
+            mimeType:
+              OUTPUT_FORMAT === 'json' ? 'application/json' : 'text/turtle',
+          })
+        }
+      />
+      <DownloadItemRow
+        title={t(`${basePath}.Row2.Title`)}
+        tooltips={[
+          {
+            title: t(`${basePath}.Row2.Tooltips.Title1`),
+            description: t(`${basePath}.Row2.Tooltips.Description1`),
+          },
+        ]}
+        govButton={{
+          text: t(`${basePath}.Row2.ButtonText`),
+          type: isSuccessWarning ? 'outlined' : undefined,
+          disabled: downloadDetailedValidationReportMutation.isPending,
+        }}
+        onClick={handleValidationReportDownload}
+      />
+      {isSuccessWarning && (
         <DownloadItemRow
-          key={index}
-          title={row.title}
-          tooltips={row.tooltips}
-          govButton={row.govButton}
+          title={t(`${basePath}.Row3.Title`)}
+          tooltips={[
+            {
+              title: t(`${basePath}.Row3.Tooltips.Title1`),
+              description: t(`${basePath}.Row3.Tooltips.Description1`),
+            },
+            {
+              title: t(`${basePath}.Row3.Tooltips.Title2`),
+              description: t(`${basePath}.Row3.Tooltips.Description2`),
+            },
+          ]}
+          govButton={{
+            text: t(`${basePath}.Row3.ButtonText`),
+            type: 'outlined',
+            disabled: downloadCatalogRecordMutation.isPending,
+          }}
+          onClick={handleCatalogReportDownload}
         />
-      ))}
+      )}
     </section>
   );
 };

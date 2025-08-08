@@ -59,7 +59,8 @@
           "Label": "Nahrát ze souboru",
           "Placeholder": "Přetáhněte soubor nebo",
           "Button": "Nahrát ze zařízení",
-          "SupportedFormatsLabel": "Podporované formáty XLSX, XML, TTL, JSON-LD"
+          "SupportedFormatsLabel": "Podporované formáty XLSX, XML, TTL, JSON-LD",
+          "MultipleFilesError": "Lze nahrát pouze jeden soubor najednou"
         },
         "UrlForm": {
           "Label": "Nahrát z URL"
@@ -72,7 +73,8 @@
         "Headline": "Zkontrolujte a převeďte slovník",
         "Annotation": "Klikněte na tlačítko 'Zkontrolovat a převést' a počkejte, až systém kontrolu a převod dokončí.",
         "Button": "Zkontrolovat a převést",
-        "ConversionUknownError": "Nečekaná chyba"
+        "ConversionUknownError": "Během převodu došlo k chybě: zaslaný vstup není podporovaný. Pokud problém přetrvává a máte pocit, že je problém na naší straně,",
+        "ConversionErrorLinkText": "nahlašte nám prosím chybu."
       },
       "Step3": {
         "Headline": "Stáhněte si výstupy z převodu a kontroly",

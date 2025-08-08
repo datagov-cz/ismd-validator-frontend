@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   GovButton,
   GovFormControl,
@@ -12,15 +13,35 @@ import { useFormStore } from '@/store/formStore';
 export const FileForm = () => {
   const t = useTranslations('Home.FormSection.Step1.FileForm');
 
-  const setFile = useFormStore((state) => state.setFile);
-  const resetForm = useFormStore((state) => state.reset);
+  const files = useFormStore((state) => state.files);
+  const addFile = useFormStore((state) => state.addFile);
+  const removeFile = useFormStore((state) => state.removeFile);
+  const setFileError = useFormStore((state) => state.setFileError);
 
-  const handleFileChange = (file?: File) => {
-    resetForm();
+  const handleFileAdd = (e: CustomEvent) => {
+    const file = e.detail.file?.file;
     if (file) {
-      setFile(file);
+      addFile(file);
+      if (files.length >= 1) {
+        setFileError(t('MultipleFilesError'));
+      } else {
+        setFileError(undefined);
+      }
     }
   };
+
+  const handleFileRemove = (e: CustomEvent) => {
+    const file = e.detail.file?.file;
+    if (file) {
+      removeFile(file);
+    }
+  };
+
+  useEffect(() => {
+    if (files.length < 2) {
+      setFileError(undefined);
+    }
+  }, [files, setFileError]);
 
   return (
     <GovFormControl className="w-full">
@@ -29,7 +50,9 @@ export const FileForm = () => {
         <GovFormFile
           accept=".xlsx,.xml,.ttl,.json,.json-ld"
           expanded
-          onGovFiles={(e) => handleFileChange(e.detail.files?.[0].file)}
+          onGovAddFile={handleFileAdd}
+          onGovRemoveFile={handleFileRemove}
+          multiple={false}
         >
           <span>{t('Placeholder')}</span>
           <p>

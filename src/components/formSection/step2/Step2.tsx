@@ -15,17 +15,19 @@ import { useFormStore } from '@/store/formStore';
 export const Step2 = () => {
   const t = useTranslations('Home.FormSection.Step2');
 
-  const formFile = useFormStore((state) => state.file);
+  const files = useFormStore((state) => state.files);
   const formUrl = useFormStore((state) => state.url);
+  const fileError = useFormStore((state) => state.fileError);
+
+  const formFile = files.length === 1 ? files[0] : undefined;
 
   const [conversionError, setConversionError] = useState<string | null>(null);
 
   const setDictionaryStatus = useFormStore(
     (state) => state.setDictionaryStatus,
   );
-  const setDownloadData = useFormStore((state) => state.setDownloadData);
-  const setValidationResults = useFormStore(
-    (state) => state.setValidationResults,
+  const setConversionResponse = useFormStore(
+    (state) => state.setConversionResponse,
   );
 
   const convertMutation = useConvertFile();
@@ -44,6 +46,12 @@ export const Step2 = () => {
       formData.append('removeInvalidSources', 'true');
     }
 
+    const includeDetailedReport =
+      process.env.NEXT_PUBLIC_INCLUDE_DETAILED_REPORT;
+    if (includeDetailedReport === 'true') {
+      formData.append('includeDetailedReport', 'true');
+    }
+
     convertMutation.mutate(formData, {
       onError: (error) => {
         const axiosError = error as AxiosError<ConversionResponseDto>;
@@ -51,17 +59,23 @@ export const Step2 = () => {
           axiosError.response?.data?.errorMessage || t('ConversionUknownError');
         console.error('Error converting file:', errorMessage);
         setConversionError(errorMessage);
-        setDictionaryStatus(null);
+        setDictionaryStatus({
+          status: 'Error',
+          message: errorMessage,
+        });
       },
       onSuccess: (data) => {
         if (typeof data === 'object' && data !== null) {
-          // TODO: Set dictionary status based on the response from the server
+          const allValidationsInformative =
+            data.validationResults?.severityGroups?.find(
+              (group) => group.severity?.toLowerCase() !== 'informace',
+            );
+
           setDictionaryStatus({
-            status: 'Success',
+            status: allValidationsInformative ? 'Warning' : 'Success',
             message: 'File converted successfully',
           });
-          setDownloadData(data.output);
-          setValidationResults(data.validationResults || null);
+          setConversionResponse(data);
         } else {
           console.error('Unexpected data format', data);
           setConversionError(t('ConversionUknownError'));
@@ -77,27 +91,44 @@ export const Step2 = () => {
     }
   }, [formFile]);
 
+  const hasError = !!conversionError || !!fileError;
+  const isDisabled = !formFile || !!fileError;
+
   return (
     <GovWizardItem
-      color={conversionError ? 'error' : 'primary'}
+      color={hasError ? 'error' : 'primary'}
       collapsible
-      isExpanded={!!formFile || !!formUrl}
+      isExpanded={files.length > 0 || !!formUrl}
     >
       <span slot="prefix">2</span>
       <span slot="headline">{t('Headline')}</span>
       <span slot="annotation">{t('Annotation')}</span>
       <div className="space-y-5">
-        <div className={`${conversionError ? 'block' : 'hidden'}`}>
+        <div className={`${hasError ? 'block' : 'hidden'}`}>
           <GovInfobar color="error" type="subtle">
             <GovIcon name="exclamation-circle-fill" slot="icon" />
-            <p className="text-lg">{conversionError ?? ''}</p>
+            <p className="text-lg">
+              {fileError || conversionError || t('ConversionUknownError')}
+              {conversionError && (
+                <>
+                  {' '}
+                  <a
+                    href="https://github.com/datagov-cz/ismd-org/issues/new?template=bug_report.yml"
+                    target="_blank"
+                    className="underline"
+                  >
+                    {t('ConversionErrorLinkText')}
+                  </a>
+                </>
+              )}
+            </p>
           </GovInfobar>
         </div>
         <GovButton
           color="primary"
           size="l"
           type="solid"
-          disabled={!formFile}
+          disabled={isDisabled}
           onGovClick={handleConvert}
           loading={convertMutation.isPending.toString()}
         >
