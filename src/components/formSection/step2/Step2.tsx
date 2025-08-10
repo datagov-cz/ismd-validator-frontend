@@ -128,7 +128,7 @@ export const Step2 = () => {
     <GovWizardItem
       color={hasError ? 'error' : 'primary'}
       collapsible
-      isExpanded={files.length > 0 || !!formUrl}
+      isExpanded={files.length > 0 || !!formUrl || !!sspDictionaryIri}
     >
       <span slot="prefix">2</span>
       <span slot="headline">{t('Headline')}</span>
