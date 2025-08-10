@@ -147,12 +147,18 @@ export type DownloadCatalogRecordJSONParams = {
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 export const convertSSPFromIRI = (
-  params: ConvertSSPFromIRIParams,
+  formData: FormData, // ConvertSSPFromIRIParams
   options?: SecondParameter<typeof axiosInstance>,
   signal?: AbortSignal,
 ) => {
   return axiosInstance<ConversionResponseDto>(
-    { url: `/api/converter/ssp/convert`, method: 'POST', params, signal },
+    {
+      url: `/api/converter/ssp/convert`,
+      method: 'POST',
+      headers: { 'Content-Type': 'multipart/form-data' },
+      data: formData,
+      signal,
+    },
     options,
   );
 };
@@ -164,14 +170,14 @@ export const getConvertSSPFromIRIMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof convertSSPFromIRI>>,
     TError,
-    { params: ConvertSSPFromIRIParams },
+    FormData, // ConvertSSPFromIRIParams
     TContext
   >;
   request?: SecondParameter<typeof axiosInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof convertSSPFromIRI>>,
   TError,
-  { params: ConvertSSPFromIRIParams },
+  FormData, // ConvertSSPFromIRIParams
   TContext
 > => {
   const mutationKey = ['convertSSPFromIRI'];
@@ -185,11 +191,9 @@ export const getConvertSSPFromIRIMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof convertSSPFromIRI>>,
-    { params: ConvertSSPFromIRIParams }
-  > = (props) => {
-    const { params } = props ?? {};
-
-    return convertSSPFromIRI(params, requestOptions);
+    FormData // ConvertSSPFromIRIParams
+  > = (formData) => {
+    return convertSSPFromIRI(formData, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -206,7 +210,7 @@ export const useConvertSSPFromIRI = <TError = unknown, TContext = unknown>(
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof convertSSPFromIRI>>,
       TError,
-      { params: ConvertSSPFromIRIParams },
+      FormData, // ConvertSSPFromIRIParams
       TContext
     >;
     request?: SecondParameter<typeof axiosInstance>;
@@ -215,7 +219,7 @@ export const useConvertSSPFromIRI = <TError = unknown, TContext = unknown>(
 ): UseMutationResult<
   Awaited<ReturnType<typeof convertSSPFromIRI>>,
   TError,
-  { params: ConvertSSPFromIRIParams },
+  FormData, // ConvertSSPFromIRIParams
   TContext
 > => {
   const mutationOptions = getConvertSSPFromIRIMutationOptions(options);

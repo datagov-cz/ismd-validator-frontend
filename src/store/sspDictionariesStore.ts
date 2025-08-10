@@ -25,24 +25,16 @@ type DictionaryResponse = {
   nazev_slovniku: SparqlBindingValue;
 };
 
-type Dictionary = {
-  uri: string;
-  nazev_slovniku: string;
-};
-
 type SSPDictionaryStoreType = {
   dictionaries: DictionaryResponse[];
-  selectedDictionary: Dictionary | null;
 };
 
 type SSPDictionaryStoreActions = {
   setDictionaries: (dictionaries: DictionaryResponse[]) => void;
-  setSelectedDictionary: (dictionary: Dictionary) => void;
 };
 
 const initialState: SSPDictionaryStoreType = {
   dictionaries: [],
-  selectedDictionary: null,
 };
 
 export const useSSPDictionariesStore = create<
@@ -50,5 +42,4 @@ export const useSSPDictionariesStore = create<
 >((set) => ({
   ...initialState,
   setDictionaries: (dictionaries) => set({ dictionaries }),
-  setSelectedDictionary: (selectedDictionary) => set({ selectedDictionary }),
 }));
