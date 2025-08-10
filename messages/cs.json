@@ -67,7 +67,8 @@
           "UrlError": "Neplatná adresa"
         },
         "DictForm": {
-          "Label": "Vybrat ze Sémantického slovníku pojmů"
+          "Label": "Vybrat ze Sémantického slovníku pojmů",
+          "SelectDictPlaceholder": "Vyberte slovník z Výrobní linky..."
         }
       },
       "Step2": {

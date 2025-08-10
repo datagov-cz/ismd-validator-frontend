@@ -121,6 +121,7 @@ export type ConvertSSPFromIRIParams = {
 };
 
 export type ConvertFileParams = {
+  fileUrl?: string;
   output?: string;
   removeInvalidSources?: boolean;
   includeDetailedReport?: boolean;

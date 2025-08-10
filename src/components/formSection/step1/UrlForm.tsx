@@ -45,9 +45,9 @@ export const UrlForm = () => {
           invalid={!!error}
         />
       </GovFormGroup>
-      {error && (
-        <div className="text-error mt-1 pl-5">{t('UrlForm.UrlError')}</div>
-      )}
+      <div className={`text-error mt-1 pl-5 ${error ? 'block' : 'hidden'}`}>
+        {t('UrlForm.UrlError')}
+      </div>
     </GovFormControl>
   );
 };

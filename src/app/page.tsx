@@ -1,12 +1,66 @@
+'use client';
+
 import { GovBanner, GovButton, GovIcon } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
 import { FaqSection } from '@/components/faq/FaqSection';
 import { FormSection } from '@/components/formSection/FormSection';
 import { InfoSection } from '@/components/infoSection/InfoSection';
+import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
+import {
+  SparqlResponse,
+  useSSPDictionariesStore,
+} from '@/store/sspDictionariesStore';
+import { useEffect } from 'react';
+
+const query = `
+PREFIX dct: <http://purl.org/dc/terms/>
+SELECT DISTINCT ?slovnik ?nazev_slovniku
+WHERE {
+  ?slovnik a <http://onto.fel.cvut.cz/ontologies/slovník/agendový/popis-dat/pojem/slovník> .
+  ?slovnik dct:title ?nazev_slovniku .
+  FILTER (lang(?nazev_slovniku) = "cs")
+}
+ORDER BY DESC(?slovnik) DESC(?nazev_slovniku)
+`;
+
+const getDictionaries = async () => {
+  const response = await axios.get('https://xn--slovnk-7va.gov.cz/sparql', {
+    params: {
+      query,
+      format: 'application/sparql-results+json',
+    },
+  });
+  return response.data;
+};
 
 export default function Home() {
   const t = useTranslations('Home');
+
+  const {
+    data: sparqlResponse,
+    error,
+    isLoading,
+  } = useQuery<SparqlResponse>({
+    queryKey: ['ssp-dicts'],
+    queryFn: getDictionaries,
+  });
+
+  const setDictionaries = useSSPDictionariesStore(
+    (state) => state.setDictionaries,
+  );
+
+  useEffect(() => {
+    if (sparqlResponse) {
+      setDictionaries(
+        sparqlResponse.results.bindings.map((binding) => ({
+          slovnik: binding.slovnik,
+          nazev_slovniku: binding.nazev_slovniku,
+        })),
+      );
+    }
+  }, [sparqlResponse, setDictionaries]);
 
   return (
     <div className="w-full max-w-desktop mx-auto px-3 py-6">
