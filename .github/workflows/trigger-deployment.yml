@@ -140,7 +140,7 @@ jobs:
         with:
           token: ${{ secrets.INFRA_REPO_TOKEN }}
           repository: ${{ env.INFRA_REPO }}
-          event-type: new-image-DEV
+          event-type: new-image-dev
           client-payload: |
             {
               "component": "${{ env.COMPONENT_NAME }}",
@@ -202,7 +202,7 @@ jobs:
         with:
           token: ${{ secrets.INFRA_REPO_TOKEN }}
           repository: ${{ env.INFRA_REPO }}
-          event-type: new-image-TEST
+          event-type: new-image-test
           client-payload: |
             {
               "component": "${{ env.COMPONENT_NAME }}",
@@ -264,7 +264,7 @@ jobs:
         with:
           token: ${{ secrets.INFRA_REPO_TOKEN }}
           repository: ${{ env.INFRA_REPO }}
-          event-type: new-image-PROD
+          event-type: new-image-prod
           client-payload: |
             {
               "component": "${{ env.COMPONENT_NAME }}",
