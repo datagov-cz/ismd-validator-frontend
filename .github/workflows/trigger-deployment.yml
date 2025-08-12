@@ -30,7 +30,7 @@ permissions:
   actions: read
 
 env:
-  INFRA_REPO: ${{ github.repository_owner }}/infrastructure
+  INFRA_REPO: ${{ github.repository_owner }}/ismd-infrastructure
   COMPONENT_NAME: frontend
 
 jobs:
