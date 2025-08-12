@@ -72,7 +72,7 @@ export const Step2 = () => {
         if (!formUrl) {
           return;
         }
-        formData.append('urlString', formUrl);
+        formData.append('fileUrl', formUrl);
         break;
       case 'dict':
         if (!sspDictionaryIri) {
