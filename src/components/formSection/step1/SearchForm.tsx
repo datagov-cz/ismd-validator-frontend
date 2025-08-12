@@ -1,8 +1,9 @@
-import { useFormStore } from '@/store/formStore';
-import { useSSPDictionariesStore } from '@/store/sspDictionariesStore';
 import { GovFormControl, GovFormGroup } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 import Select from 'react-select';
+
+import { useFormStore } from '@/store/formStore';
+import { useSSPDictionariesStore } from '@/store/sspDictionariesStore';
 
 export const SearchForm = () => {
   const t = useTranslations('Home.FormSection.Step1');

@@ -6,11 +6,12 @@ import {
 } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
+import { ConversionType } from '@/lib/appTypes';
+import { useFormStore } from '@/store/formStore';
+
 import { FileForm } from './FileForm';
 import { SearchForm } from './SearchForm';
 import { UrlForm } from './UrlForm';
-import { useFormStore } from '@/store/formStore';
-import { ConversionType } from '@/lib/appTypes';
 
 export const Step1 = () => {
   const t = useTranslations('Home.FormSection.Step1');
