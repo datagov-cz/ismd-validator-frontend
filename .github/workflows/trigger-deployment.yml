@@ -43,6 +43,8 @@ jobs:
       environment: ${{ steps.determine_params.outputs.environment }}
       image_tag: ${{ steps.determine_params.outputs.image_tag }}
       repo_name: ${{ steps.determine_params.outputs.repo_name }}
+      workflow_run_id: ${{ steps.determine_params.outputs.workflow_run_id }}
+      ref: ${{ steps.determine_params.outputs.ref }}
     
     steps:
       - name: Checkout code
@@ -60,8 +62,14 @@ jobs:
             if [ -n "${{ github.event.inputs.version }}" ]; then
               IMAGE_TAG="${{ github.event.inputs.version }}"
             else
-              # Use latest tag
-              IMAGE_TAG="latest"
+              # Derive a non-latest tag to force updates in Terraform
+              PKG_VERSION=$(node -p "require('./package.json').version")
+              if [ "$ENVIRONMENT" = "DEV" ]; then
+                SHORT_SHA=${GITHUB_SHA:0:7}
+                IMAGE_TAG="${PKG_VERSION}-${SHORT_SHA}"
+              else
+                IMAGE_TAG="$PKG_VERSION"
+              fi
             fi
           else
             # For automated triggers, determine environment from branch
@@ -71,8 +79,28 @@ jobs:
               ENVIRONMENT="DEV"
             fi
             
-            # Always use latest tag for automated triggers
-            IMAGE_TAG="latest"
+            # Derive tag from package.json and head SHA (for DEV)
+            PKG_VERSION=$(node -p "require('./package.json').version")
+            if [ "$ENVIRONMENT" = "DEV" ]; then
+              SHORT_SHA=$(echo "${{ github.event.workflow_run.head_sha }}" | cut -c1-7)
+              IMAGE_TAG="${PKG_VERSION}-${SHORT_SHA}"
+            else
+              IMAGE_TAG="$PKG_VERSION"
+            fi
+          fi
+          
+          # Determine the correct ref for the deployment
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            REF="${{ github.event.workflow_run.head_sha }}"
+          else
+            REF="${GITHUB_SHA}"
+          fi
+          
+          # Safe workflow_run_id extraction
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            WORKFLOW_RUN_ID="${{ github.event.workflow_run.id }}"
+          else
+            WORKFLOW_RUN_ID=""
           fi
           
           # Set the correct repository name based on environment
@@ -90,11 +118,15 @@ jobs:
           echo "Environment: ${ENVIRONMENT}"
           echo "Image tag: ${IMAGE_TAG}"
           echo "Repository: ${REPO_NAME}"
+          echo "Ref: ${REF}"
+          echo "Workflow Run ID: ${WORKFLOW_RUN_ID}"
           
           # Set outputs for later steps
           echo "environment=${ENVIRONMENT}" >> $GITHUB_OUTPUT
           echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
           echo "repo_name=${REPO_NAME}" >> $GITHUB_OUTPUT
+          echo "workflow_run_id=${WORKFLOW_RUN_ID}" >> $GITHUB_OUTPUT
+          echo "ref=${REF}" >> $GITHUB_OUTPUT
       
   # Deploy to dev environment
   deploy-to-dev:
@@ -115,7 +147,7 @@ jobs:
         with:
           token: ${{ github.token }}
           environment: DEV
-          ref: ${{ github.sha }}
+          ref: ${{ needs.determine-params.outputs.ref }}
           description: 'Deployment of ${{ env.COMPONENT_NAME }} image ${{ needs.determine-params.outputs.image_tag }} to DEV'
           auto-merge: false
           payload: |
@@ -124,7 +156,7 @@ jobs:
               "component": "${{ env.COMPONENT_NAME }}",
               "triggered_by": "${{ github.actor }}",
               "timestamp": "${{ github.event.repository.updated_at }}",
-              "workflow_run_id": "${{ github.event.workflow_run.id || '' }}"
+              "workflow_run_id": "${{ needs.determine-params.outputs.workflow_run_id }}"
             }
 
       - name: Update Deployment Status
@@ -177,7 +209,7 @@ jobs:
         with:
           token: ${{ github.token }}
           environment: TEST
-          ref: ${{ github.sha }}
+          ref: ${{ needs.determine-params.outputs.ref }}
           description: 'Deployment of ${{ env.COMPONENT_NAME }} image ${{ needs.determine-params.outputs.image_tag }} to TEST'
           auto-merge: false
           payload: |
@@ -186,7 +218,7 @@ jobs:
               "component": "${{ env.COMPONENT_NAME }}",
               "triggered_by": "${{ github.actor }}",
               "timestamp": "${{ github.event.repository.updated_at }}",
-              "workflow_run_id": "${{ github.event.workflow_run.id || '' }}"
+              "workflow_run_id": "${{ needs.determine-params.outputs.workflow_run_id }}"
             }
 
       - name: Update Deployment Status
@@ -239,7 +271,7 @@ jobs:
         with:
           token: ${{ github.token }}
           environment: PROD
-          ref: ${{ github.sha }}
+          ref: ${{ needs.determine-params.outputs.ref }}
           description: 'Deployment of ${{ env.COMPONENT_NAME }} image ${{ needs.determine-params.outputs.image_tag }} to PROD'
           auto-merge: false
           payload: |
@@ -248,7 +280,7 @@ jobs:
               "component": "${{ env.COMPONENT_NAME }}",
               "triggered_by": "${{ github.actor }}",
               "timestamp": "${{ github.event.repository.updated_at }}",
-              "workflow_run_id": "${{ github.event.workflow_run.id || '' }}"
+              "workflow_run_id": "${{ needs.determine-params.outputs.workflow_run_id }}"
             }
 
       - name: Update Deployment Status
