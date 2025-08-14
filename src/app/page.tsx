@@ -9,16 +9,15 @@ import { useTranslations } from 'next-intl';
 import { FaqSection } from '@/components/faq/FaqSection';
 import { FormSection } from '@/components/formSection/FormSection';
 import { InfoSection } from '@/components/infoSection/InfoSection';
-import { SSP_QUERY } from '@/lib/constants';
+import { SSP_FETCH_URL } from '@/lib/constants';
 import {
   SparqlResponse,
   useSSPDictionariesStore,
 } from '@/store/sspDictionariesStore';
 
 const getDictionaries = async () => {
-  const response = await axios.get('https://xn--slovnk-7va.gov.cz/sparql', {
+  const response = await axios.get(SSP_FETCH_URL, {
     params: {
-      SSP_QUERY,
       format: 'application/sparql-results+json',
     },
   });
