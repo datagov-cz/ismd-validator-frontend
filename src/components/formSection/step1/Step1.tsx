@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   GovFormLabel,
   GovFormRadio,
@@ -7,15 +6,20 @@ import {
 } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
+import { ConversionType } from '@/lib/appTypes';
+import { useFormStore } from '@/store/formStore';
+
 import { FileForm } from './FileForm';
 import { SearchForm } from './SearchForm';
 import { UrlForm } from './UrlForm';
 
-type OptionType = 'file' | 'url' | 'dict';
-
 export const Step1 = () => {
   const t = useTranslations('Home.FormSection.Step1');
-  const [selectedOption, setSelectedOption] = useState<OptionType>('file');
+
+  const typeOfConversion = useFormStore((state) => state.typeOfConversion);
+  const setTypeOfConversion = useFormStore(
+    (state) => state.setTypeOfConversion,
+  );
 
   return (
     <GovWizardItem color="primary" collapsible isExpanded>
@@ -24,23 +28,29 @@ export const Step1 = () => {
       <span slot="annotation">{t('Annotation')}</span>
       <div className="text-dark-primary max-w-[808px] transition-colors duration-300">
         <GovFormRadioGroup
-          value={selectedOption}
+          value={typeOfConversion}
           onGovChange={(val) =>
-            setSelectedOption(val.detail.value as OptionType)
+            setTypeOfConversion(val.detail.value as ConversionType)
           }
         >
-          <GovFormRadio value="file">
-            <GovFormLabel slot="label">{t('FileForm.Label')}</GovFormLabel>
-          </GovFormRadio>
-          {selectedOption === 'file' && <FileForm />}
-          <GovFormRadio value="url">
-            <GovFormLabel slot="label">{t('UrlForm.Label')}</GovFormLabel>
-          </GovFormRadio>
-          {selectedOption === 'url' && <UrlForm />}
-          <GovFormRadio value="dict">
-            <GovFormLabel slot="label">{t('DictForm.Label')}</GovFormLabel>
-          </GovFormRadio>
-          {selectedOption === 'dict' && <SearchForm />}
+          <div className="w-full">
+            <GovFormRadio value="file">
+              <GovFormLabel slot="label">{t('FileForm.Label')}</GovFormLabel>
+            </GovFormRadio>
+            {typeOfConversion === 'file' && <FileForm />}
+          </div>
+          <div className="w-full">
+            <GovFormRadio value="url">
+              <GovFormLabel slot="label">{t('UrlForm.Label')}</GovFormLabel>
+            </GovFormRadio>
+            {typeOfConversion === 'url' && <UrlForm />}
+          </div>
+          <div className="w-full">
+            <GovFormRadio value="dict">
+              <GovFormLabel slot="label">{t('DictForm.Label')}</GovFormLabel>
+            </GovFormRadio>
+            {typeOfConversion === 'dict' && <SearchForm />}
+          </div>
         </GovFormRadioGroup>
       </div>
     </GovWizardItem>

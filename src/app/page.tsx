@@ -1,12 +1,51 @@
+'use client';
+
+import { useEffect } from 'react';
 import { GovBanner, GovButton, GovIcon } from '@gov-design-system-ce/react';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { useTranslations } from 'next-intl';
 
 import { FaqSection } from '@/components/faq/FaqSection';
 import { FormSection } from '@/components/formSection/FormSection';
 import { InfoSection } from '@/components/infoSection/InfoSection';
+import { SSP_FETCH_URL } from '@/lib/constants';
+import {
+  SparqlResponse,
+  useSSPDictionariesStore,
+} from '@/store/sspDictionariesStore';
+
+const getDictionaries = async () => {
+  const response = await axios.get(SSP_FETCH_URL, {
+    params: {
+      format: 'application/sparql-results+json',
+    },
+  });
+  return response.data;
+};
 
 export default function Home() {
   const t = useTranslations('Home');
+
+  const { data: sparqlResponse } = useQuery<SparqlResponse>({
+    queryKey: ['ssp-dicts'],
+    queryFn: getDictionaries,
+  });
+
+  const setDictionaries = useSSPDictionariesStore(
+    (state) => state.setDictionaries,
+  );
+
+  useEffect(() => {
+    if (sparqlResponse) {
+      setDictionaries(
+        sparqlResponse.results.bindings.map((binding) => ({
+          slovnik: binding.slovnik,
+          nazev_slovniku: binding.nazev_slovniku,
+        })),
+      );
+    }
+  }, [sparqlResponse, setDictionaries]);
 
   return (
     <div className="w-full max-w-desktop mx-auto px-3 py-6">

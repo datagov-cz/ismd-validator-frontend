@@ -6,3 +6,5 @@ export type StatusType = {
 };
 
 export type OutputFormatType = 'json' | 'ttl';
+
+export type ConversionType = 'file' | 'url' | 'dict';

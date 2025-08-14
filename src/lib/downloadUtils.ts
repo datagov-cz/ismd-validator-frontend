@@ -9,6 +9,11 @@ export const handleDownload = ({
   filename,
   mimeType,
 }: DownloadItemRowProps) => {
+  console.log({
+    data,
+    filename,
+    mimeType,
+  });
   if (!data) return;
 
   const content =
