@@ -1,7 +1,7 @@
 export interface DownloadItemRowProps {
   data: string | null;
   filename: string;
-  mimeType: string;
+  mimeType: 'application/json' | 'text/csv' | 'text/turtle';
 }
 
 export const handleDownload = ({
@@ -9,11 +9,6 @@ export const handleDownload = ({
   filename,
   mimeType,
 }: DownloadItemRowProps) => {
-  console.log({
-    data,
-    filename,
-    mimeType,
-  });
   if (!data) return;
 
   const content =
@@ -29,4 +24,38 @@ export const handleDownload = ({
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+};
+
+export const fetchFileFromUrl = async (url: string): Promise<string | null> => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok)
+      throw new Error(`Failed to fetch file: ${response.statusText}`);
+    return await response.text();
+  } catch (error) {
+    console.error('Error fetching file from URL:', error);
+    return null;
+  }
+};
+
+export const getFilenameAndExtension = (
+  url: string,
+): { filename: string; extension: string } => {
+  try {
+    const pathname = new URL(url).pathname;
+    const lastSegment = pathname.split('/').pop() || '';
+
+    const dotIndex = lastSegment.lastIndexOf('.');
+    if (dotIndex === -1) {
+      return { filename: lastSegment, extension: '' };
+    }
+
+    const filename = lastSegment.substring(0, dotIndex);
+    const extension = lastSegment.substring(dotIndex + 1);
+
+    return { filename, extension };
+  } catch (error) {
+    console.error('Invalid URL:', error);
+    return { filename: 'download', extension: '' };
+  }
 };

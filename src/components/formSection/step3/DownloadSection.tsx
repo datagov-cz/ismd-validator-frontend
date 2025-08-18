@@ -7,7 +7,11 @@ import {
 import { DictProcessInfoStatusType } from '@/lib/appTypes';
 import { OUTPUT_FORMAT } from '@/lib/constants';
 import { getDownloadSectionTranslationKey } from '@/lib/contentUtils';
-import { handleDownload } from '@/lib/downloadUtils';
+import {
+  fetchFileFromUrl,
+  getFilenameAndExtension,
+  handleDownload,
+} from '@/lib/downloadUtils';
 import { useFormStore } from '@/store/formStore';
 
 import { DownloadItemRow } from './DownloadItemRow';
@@ -24,6 +28,7 @@ export const DownloadSection = ({ status }: Props) => {
 
   const conversionResponse = useFormStore((state) => state.conversionResponse);
   const file = useFormStore((state) => state.files[0]);
+  const url = useFormStore((state) => state.url);
 
   const downloadDetailedValidationReportMutation =
     useDownloadDetailedValidationReportCSV();
@@ -35,21 +40,53 @@ export const DownloadSection = ({ status }: Props) => {
   const isSuccessWarning = sectionKey === 'Success-Warning';
 
   let dictionaryData: string | null = null;
-  if (conversionResponse?.output) {
-    if (OUTPUT_FORMAT === 'json') {
-      const jsonData =
-        typeof conversionResponse?.output === 'string'
-          ? JSON.parse(conversionResponse.output)
-          : conversionResponse.output;
 
-      dictionaryData = JSON.stringify(jsonData, null, 2);
-    } else if (OUTPUT_FORMAT === 'ttl') {
-      dictionaryData =
-        typeof conversionResponse.output === 'string'
-          ? conversionResponse.output
-          : String(conversionResponse.output);
+  const handleDictDownload = async () => {
+    if (conversionResponse?.output) {
+      if (OUTPUT_FORMAT === 'json') {
+        const jsonData =
+          typeof conversionResponse?.output === 'string'
+            ? JSON.parse(conversionResponse.output)
+            : conversionResponse.output;
+
+        dictionaryData = JSON.stringify(jsonData, null, 2);
+      } else if (OUTPUT_FORMAT === 'ttl') {
+        dictionaryData =
+          typeof conversionResponse.output === 'string'
+            ? conversionResponse.output
+            : String(conversionResponse.output);
+      }
+
+      handleDownload({
+        data: dictionaryData,
+        filename: dictionaryFilename,
+        mimeType: OUTPUT_FORMAT === 'json' ? 'application/json' : 'text/turtle',
+      });
+    } else {
+      if (url) {
+        const { filename, extension } = getFilenameAndExtension(url);
+
+        if (
+          extension !== 'ttl' &&
+          extension !== 'csv' &&
+          extension !== 'json'
+        ) {
+          console.error('Wrong extension provided: ', extension);
+          return;
+        }
+
+        const data = await fetchFileFromUrl(url);
+
+        if (data) {
+          handleDownload({
+            data,
+            filename: filename + '.' + extension,
+            mimeType: extension === 'json' ? 'application/json' : 'text/turtle',
+          });
+        }
+      }
     }
-  }
+  };
 
   const handleValidationReportDownload = () => {
     if (!conversionResponse) return;
@@ -115,14 +152,7 @@ export const DownloadSection = ({ status }: Props) => {
           text: t(`${basePath}.Row1.ButtonText`),
           disabled: !isSuccessWarning,
         }}
-        onClick={() =>
-          handleDownload({
-            data: dictionaryData,
-            filename: dictionaryFilename,
-            mimeType:
-              OUTPUT_FORMAT === 'json' ? 'application/json' : 'text/turtle',
-          })
-        }
+        onClick={handleDictDownload}
       />
       <DownloadItemRow
         title={t(`${basePath}.Row2.Title`)}

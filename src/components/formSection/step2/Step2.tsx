@@ -49,10 +49,9 @@ export const Step2 = () => {
 
     formData.append('output', OUTPUT_FORMAT);
 
-    const removeInvalidSources =
-      process.env.NEXT_PUBLIC_CONVERT_REMOVE_INVALID_SOURCES;
-    if (removeInvalidSources === 'true') {
-      formData.append('removeInvalidSources', 'true');
+    const includeCatalogRecord = process.env.NEXT_PUBLIC_INCLUDE_CATALOG_REPORT;
+    if (includeCatalogRecord === 'true') {
+      formData.append('includeCatalogRecord', 'true');
     }
 
     const includeDetailedReport =
