@@ -8,7 +8,11 @@ import {
 import { AxiosError } from 'axios';
 import { useTranslations } from 'next-intl';
 
-import { ConversionResponseDto, useConvertFile } from '@/api/generated';
+import {
+  ConversionResponseDto,
+  useConvertFile,
+  useConvertSSPFromIRI,
+} from '@/api/generated';
 import { OUTPUT_FORMAT } from '@/lib/constants';
 import { useFormStore } from '@/store/formStore';
 
@@ -17,7 +21,9 @@ export const Step2 = () => {
 
   const files = useFormStore((state) => state.files);
   const formUrl = useFormStore((state) => state.url);
+  const sspDictionaryIri = useFormStore((state) => state.sspDictionaryIri);
   const fileError = useFormStore((state) => state.fileError);
+  const typeOfConversion = useFormStore((state) => state.typeOfConversion);
 
   const formFile = files.length === 1 ? files[0] : undefined;
 
@@ -30,26 +36,49 @@ export const Step2 = () => {
     (state) => state.setConversionResponse,
   );
 
-  const convertMutation = useConvertFile();
+  const convertFileMutation = useConvertFile();
+  const convertSspDictMutation = useConvertSSPFromIRI();
+
+  const convertMutation =
+    typeOfConversion === 'dict' ? convertSspDictMutation : convertFileMutation;
 
   const handleConvert = () => {
-    if (!formFile) return;
     setConversionError(null);
 
     const formData = new FormData();
-    formData.append('file', formFile);
+
     formData.append('output', OUTPUT_FORMAT);
 
-    const removeInvalidSources =
-      process.env.NEXT_PUBLIC_CONVERT_REMOVE_INVALID_SOURCES;
-    if (removeInvalidSources === 'true') {
-      formData.append('removeInvalidSources', 'true');
+    const includeCatalogRecord = process.env.NEXT_PUBLIC_INCLUDE_CATALOG_REPORT;
+    if (includeCatalogRecord === 'true') {
+      formData.append('includeCatalogRecord', 'true');
     }
 
     const includeDetailedReport =
       process.env.NEXT_PUBLIC_INCLUDE_DETAILED_REPORT;
     if (includeDetailedReport === 'true') {
       formData.append('includeDetailedReport', 'true');
+    }
+
+    switch (typeOfConversion) {
+      case 'file':
+        if (!formFile) {
+          return;
+        }
+        formData.append('file', formFile);
+        break;
+      case 'url':
+        if (!formUrl) {
+          return;
+        }
+        formData.append('fileUrl', formUrl);
+        break;
+      case 'dict':
+        if (!sspDictionaryIri) {
+          return;
+        }
+        formData.append('iri', sspDictionaryIri);
+        break;
     }
 
     convertMutation.mutate(formData, {
@@ -85,20 +114,20 @@ export const Step2 = () => {
   };
 
   useEffect(() => {
-    // TODO: Extend this condition for URL and Dictionary list options
-    if (formFile) {
+    if (formUrl || formFile || sspDictionaryIri) {
       setConversionError(null);
     }
-  }, [formFile]);
+  }, [formUrl, formFile, sspDictionaryIri]);
 
   const hasError = !!conversionError || !!fileError;
-  const isDisabled = !formFile || !!fileError;
+  const isDisabled =
+    !formUrl && (!formFile || !!fileError) && !sspDictionaryIri;
 
   return (
     <GovWizardItem
       color={hasError ? 'error' : 'primary'}
       collapsible
-      isExpanded={files.length > 0 || !!formUrl}
+      isExpanded={files.length > 0 || !!formUrl || !!sspDictionaryIri}
     >
       <span slot="prefix">2</span>
       <span slot="headline">{t('Headline')}</span>

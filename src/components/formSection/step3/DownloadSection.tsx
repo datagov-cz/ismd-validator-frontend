@@ -7,7 +7,14 @@ import {
 import { DictProcessInfoStatusType } from '@/lib/appTypes';
 import { OUTPUT_FORMAT } from '@/lib/constants';
 import { getDownloadSectionTranslationKey } from '@/lib/contentUtils';
-import { handleDownload } from '@/lib/downloadUtils';
+import {
+  fetchFileFromUrl,
+  getFilenameAndExtension,
+  getMimeType,
+  handleDownload,
+  handleReportDownload,
+  prepareDictionaryData,
+} from '@/lib/downloadUtils';
 import { useFormStore } from '@/store/formStore';
 
 import { DownloadItemRow } from './DownloadItemRow';
@@ -24,6 +31,7 @@ export const DownloadSection = ({ status }: Props) => {
 
   const conversionResponse = useFormStore((state) => state.conversionResponse);
   const file = useFormStore((state) => state.files[0]);
+  const url = useFormStore((state) => state.url);
 
   const downloadDetailedValidationReportMutation =
     useDownloadDetailedValidationReportCSV();
@@ -34,70 +42,57 @@ export const DownloadSection = ({ status }: Props) => {
 
   const isSuccessWarning = sectionKey === 'Success-Warning';
 
-  let dictionaryData: string | null = null;
-  if (conversionResponse?.output) {
-    if (OUTPUT_FORMAT === 'json') {
-      const jsonData =
-        typeof conversionResponse?.output === 'string'
-          ? JSON.parse(conversionResponse.output)
-          : conversionResponse.output;
-
-      dictionaryData = JSON.stringify(jsonData, null, 2);
-    } else if (OUTPUT_FORMAT === 'ttl') {
-      dictionaryData =
-        typeof conversionResponse.output === 'string'
-          ? conversionResponse.output
-          : String(conversionResponse.output);
+  const handleDictDownload = async () => {
+    if (conversionResponse?.output) {
+      const dictionaryData = prepareDictionaryData(
+        conversionResponse.output,
+        OUTPUT_FORMAT,
+      );
+      if (dictionaryData) {
+        handleDownload({
+          data: dictionaryData,
+          filename: dictionaryFilename,
+          mimeType: getMimeType(OUTPUT_FORMAT),
+        });
+      }
+      return;
     }
-  }
+
+    if (url) {
+      const { filename, extension } = getFilenameAndExtension(url);
+
+      const data = await fetchFileFromUrl(url);
+      if (!data) return;
+
+      handleDownload({
+        data,
+        filename: `${filename}.${extension}`,
+        mimeType: getMimeType(extension),
+      });
+    }
+  };
 
   const handleValidationReportDownload = () => {
     if (!conversionResponse) return;
 
-    const formData = new FormData();
-    formData.append(
-      'detailedReport',
-      new Blob([JSON.stringify(conversionResponse.validationReport)], {
-        type: 'application/json',
-      }),
-    );
-
-    downloadDetailedValidationReportMutation.mutate(formData, {
-      onSuccess: (data) => {
-        handleDownload({
-          data,
-          filename: 'validation-report-detailed.csv',
-          mimeType: 'text/csv',
-        });
-      },
-      onError: (error) => {
-        console.error('Error downloading CSV:', error);
-      },
+    handleReportDownload({
+      data: conversionResponse.validationReport,
+      key: 'detailedReport',
+      mutation: downloadDetailedValidationReportMutation,
+      filename: 'validation-report-detailed.csv',
+      mimeType: 'text/csv',
     });
   };
 
   const handleCatalogReportDownload = () => {
     if (!conversionResponse) return;
 
-    const formData = new FormData();
-    formData.append(
-      'catalogRecord',
-      new Blob([JSON.stringify(conversionResponse.catalogReport)], {
-        type: 'application/json',
-      }),
-    );
-
-    downloadCatalogRecordMutation.mutate(formData, {
-      onSuccess: (data) => {
-        handleDownload({
-          data: data,
-          filename: 'catalog-record.json',
-          mimeType: 'application/json',
-        });
-      },
-      onError: (error) => {
-        console.error('Error downloading catalog record:', error);
-      },
+    handleReportDownload({
+      data: conversionResponse.catalogReport,
+      key: 'catalogRecord',
+      mutation: downloadCatalogRecordMutation,
+      filename: 'catalog-record.json',
+      mimeType: getMimeType('json'),
     });
   };
 
@@ -115,14 +110,7 @@ export const DownloadSection = ({ status }: Props) => {
           text: t(`${basePath}.Row1.ButtonText`),
           disabled: !isSuccessWarning,
         }}
-        onClick={() =>
-          handleDownload({
-            data: dictionaryData,
-            filename: dictionaryFilename,
-            mimeType:
-              OUTPUT_FORMAT === 'json' ? 'application/json' : 'text/turtle',
-          })
-        }
+        onClick={handleDictDownload}
       />
       <DownloadItemRow
         title={t(`${basePath}.Row2.Title`)}
