@@ -1,7 +1,12 @@
+import {
+  useDownloadCatalogRecordJSON,
+  useDownloadDetailedValidationReportCSV,
+} from '@/api/generated';
+
 export interface DownloadItemRowProps {
   data: string | null;
   filename: string;
-  mimeType: 'application/json' | 'text/csv' | 'text/turtle';
+  mimeType: string;
 }
 
 export const handleDownload = ({
@@ -58,4 +63,68 @@ export const getFilenameAndExtension = (
     console.error('Invalid URL:', error);
     return { filename: 'download', extension: '' };
   }
+};
+
+export const getMimeType = (extension: string): string => {
+  switch (extension) {
+    case 'json':
+      return 'application/json';
+    case 'csv':
+      return 'text/csv';
+    case 'ttl':
+      return 'text/turtle';
+    default:
+      return 'application/octet-stream';
+  }
+};
+
+export const prepareDictionaryData = (
+  output: unknown,
+  format: string,
+): string | null => {
+  if (!output) return null;
+
+  if (format === 'json') {
+    const jsonData = typeof output === 'string' ? JSON.parse(output) : output;
+    return JSON.stringify(jsonData, null, 2);
+  }
+
+  if (format === 'ttl') {
+    return typeof output === 'string' ? output : String(output);
+  }
+
+  return null;
+};
+
+interface HandleReportDownloadParams {
+  data: unknown;
+  key: string;
+  mutation:
+    | ReturnType<typeof useDownloadCatalogRecordJSON>
+    | ReturnType<typeof useDownloadDetailedValidationReportCSV>;
+  filename: string;
+  mimeType: string;
+}
+
+export const handleReportDownload = ({
+  data,
+  key,
+  mutation,
+  filename,
+  mimeType,
+}: HandleReportDownloadParams) => {
+  const formData = new FormData();
+  formData.append(
+    key,
+    new Blob([JSON.stringify(data)], { type: 'application/json' }),
+  );
+
+  mutation.mutate(formData, {
+    onSuccess: (downloaded) => {
+      handleDownload({ data: downloaded, filename, mimeType });
+    },
+    onError: (error) => {
+      console.error(`Error downloading ${filename}:`, error);
+    },
+  });
 };
