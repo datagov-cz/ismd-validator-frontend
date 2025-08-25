@@ -48,7 +48,7 @@ export const FileForm = () => {
       <GovFormLabel slot="top">{t('Placeholder')}</GovFormLabel>
       <GovFormGroup>
         <GovFormFile
-          accept=".xlsx,.xml,.ttl,.json,.json-ld"
+          accept=".xlsx,.xml,.ttl,.json-ld"
           expanded
           onGovAddFile={handleFileAdd}
           onGovRemoveFile={handleFileRemove}

@@ -67,8 +67,8 @@ export const getFilenameAndExtension = (
 
 export const getMimeType = (extension: string): string => {
   switch (extension) {
-    case 'json':
-      return 'application/json';
+    case 'jsonld':
+      return 'application/ld+json';
     case 'csv':
       return 'text/csv';
     case 'ttl':
@@ -84,7 +84,7 @@ export const prepareDictionaryData = (
 ): string | null => {
   if (!output) return null;
 
-  if (format === 'json') {
+  if (format === 'jsonld' || format === 'json') {
     const jsonData = typeof output === 'string' ? JSON.parse(output) : output;
     return JSON.stringify(jsonData, null, 2);
   }
