@@ -21,12 +21,11 @@ export const FileForm = () => {
   const handleFileAdd = (e: CustomEvent) => {
     const file = e.detail.file?.file;
     if (file) {
-      addFile(file);
-      if (files.length >= 1) {
-        setFileError(t('MultipleFilesError'));
-      } else {
-        setFileError(undefined);
+      if (files.length > 0) {
+        removeFile(files[0]);
       }
+      addFile(file);
+      setFileError(undefined);
     }
   };
 
@@ -36,12 +35,6 @@ export const FileForm = () => {
       removeFile(file);
     }
   };
-
-  useEffect(() => {
-    if (files.length < 2) {
-      setFileError(undefined);
-    }
-  }, [files, setFileError]);
 
   return (
     <GovFormControl className="w-full">

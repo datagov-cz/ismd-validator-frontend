@@ -32,12 +32,17 @@ export const DownloadSection = ({ status }: Props) => {
   const conversionResponse = useFormStore((state) => state.conversionResponse);
   const file = useFormStore((state) => state.files[0]);
   const url = useFormStore((state) => state.url);
+  const sspDictionary = useFormStore((state) => state.sspDictionary);
 
   const downloadDetailedValidationReportMutation =
     useDownloadDetailedValidationReportCSV();
   const downloadCatalogRecordMutation = useDownloadCatalogRecordJSON();
 
-  const baseFilename = file?.name ? file.name.split('.')[0] : 'slovnik';
+  const baseFilename = file?.name
+    ? file.name.split('.')[0]
+    : sspDictionary?.label
+      ? sspDictionary.label
+      : 'slovnik';
   const dictionaryFileExtension =
     OUTPUT_FORMAT === 'json' ? 'jsonld' : OUTPUT_FORMAT;
   const dictionaryFilename = `${baseFilename}.${dictionaryFileExtension}`;

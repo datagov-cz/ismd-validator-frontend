@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 import { ConversionResponseDto } from '@/api/generated';
-import { ConversionType, StatusType } from '@/lib/appTypes';
+import { ConversionType, SSPDictionaryType, StatusType } from '@/lib/appTypes';
 
 type FormStoreType = {
   files: File[];
@@ -9,7 +9,7 @@ type FormStoreType = {
   fileError?: string;
   dictionaryStatus: StatusType | null;
   conversionResponse: ConversionResponseDto | null;
-  sspDictionaryIri: string | null;
+  sspDictionary: SSPDictionaryType | null;
   typeOfConversion: ConversionType;
 };
 
@@ -20,7 +20,7 @@ type FormStoreActions = {
   setConversionResponse: (response: ConversionResponseDto) => void;
   setDictionaryStatus: (status: StatusType | null) => void;
   setFileError: (error?: string) => void;
-  setSspDictionaryIri: (iri: string) => void;
+  setSspDictionary: (sspDictionary: SSPDictionaryType | null) => void;
   setTypeOfConversion: (type: ConversionType) => void;
   reset: () => void;
 };
@@ -30,7 +30,7 @@ const initialState: FormStoreType = {
   url: undefined,
   dictionaryStatus: null,
   conversionResponse: null,
-  sspDictionaryIri: null,
+  sspDictionary: null,
   typeOfConversion: 'file',
 };
 
@@ -43,7 +43,7 @@ export const useFormStore = create<FormStoreType & FormStoreActions>((set) => ({
   setConversionResponse: (data) => set({ conversionResponse: data }),
   setDictionaryStatus: (dictionaryStatus) => set({ dictionaryStatus }),
   setFileError: (error) => set({ fileError: error }),
-  setSspDictionaryIri: (iri) => set({ sspDictionaryIri: iri }),
+  setSspDictionary: (dictionary) => set({ sspDictionary: dictionary }),
   setTypeOfConversion: (type) => set({ typeOfConversion: type }),
   reset: () => set({ ...initialState }),
 }));

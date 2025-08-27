@@ -8,3 +8,8 @@ export type StatusType = {
 export type OutputFormatType = 'json' | 'ttl';
 
 export type ConversionType = 'file' | 'url' | 'dict';
+
+export type SSPDictionaryType = {
+  label: string;
+  iri: string;
+};
