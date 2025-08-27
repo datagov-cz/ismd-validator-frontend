@@ -12,6 +12,7 @@ import { useFormStore } from '@/store/formStore';
 
 export const FileForm = () => {
   const t = useTranslations('Home.FormSection.Step1.FileForm');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const fileInputRef = useRef<any>(null);
 
   const files = useFormStore((state) => state.files);
