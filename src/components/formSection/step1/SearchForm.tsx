@@ -12,9 +12,7 @@ export const SearchForm = () => {
     (state) => state.dictionaries,
   );
 
-  const setSspDictionaryIri = useFormStore(
-    (state) => state.setSspDictionaryIri,
-  );
+  const setSspDictionary = useFormStore((state) => state.setSspDictionary);
 
   const dictionariesMapped = sspDictionaries.map((dictionary) => ({
     value: dictionary.slovnik.value,
@@ -28,7 +26,12 @@ export const SearchForm = () => {
           className="h-10 w-full rounded-lg"
           options={dictionariesMapped}
           placeholder={t('DictForm.SelectDictPlaceholder')}
-          onChange={(option) => setSspDictionaryIri(option?.value ?? '')}
+          onChange={(option) =>
+            setSspDictionary({
+              label: option?.label ?? '',
+              iri: option?.value ?? '',
+            })
+          }
           styles={{
             control: (provided) => ({
               ...provided,

@@ -21,7 +21,7 @@ export const Step2 = () => {
 
   const files = useFormStore((state) => state.files);
   const formUrl = useFormStore((state) => state.url);
-  const sspDictionaryIri = useFormStore((state) => state.sspDictionaryIri);
+  const sspDictionary = useFormStore((state) => state.sspDictionary);
   const fileError = useFormStore((state) => state.fileError);
   const typeOfConversion = useFormStore((state) => state.typeOfConversion);
 
@@ -74,10 +74,10 @@ export const Step2 = () => {
         formData.append('fileUrl', formUrl);
         break;
       case 'dict':
-        if (!sspDictionaryIri) {
+        if (!sspDictionary) {
           return;
         }
-        formData.append('iri', sspDictionaryIri);
+        formData.append('iri', sspDictionary.iri);
         break;
     }
 
@@ -114,20 +114,19 @@ export const Step2 = () => {
   };
 
   useEffect(() => {
-    if (formUrl || formFile || sspDictionaryIri) {
+    if (formUrl || formFile || sspDictionary) {
       setConversionError(null);
     }
-  }, [formUrl, formFile, sspDictionaryIri]);
+  }, [formUrl, formFile, sspDictionary]);
 
   const hasError = !!conversionError || !!fileError;
-  const isDisabled =
-    !formUrl && (!formFile || !!fileError) && !sspDictionaryIri;
+  const isDisabled = !formUrl && (!formFile || !!fileError) && !sspDictionary;
 
   return (
     <GovWizardItem
       color={hasError ? 'error' : 'primary'}
       collapsible
-      isExpanded={files.length > 0 || !!formUrl || !!sspDictionaryIri}
+      isExpanded={files.length > 0 || !!formUrl || !!sspDictionary}
     >
       <span slot="prefix">2</span>
       <span slot="headline">{t('Headline')}</span>

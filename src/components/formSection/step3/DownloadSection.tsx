@@ -32,13 +32,27 @@ export const DownloadSection = ({ status }: Props) => {
   const conversionResponse = useFormStore((state) => state.conversionResponse);
   const file = useFormStore((state) => state.files[0]);
   const url = useFormStore((state) => state.url);
+  const sspDictionary = useFormStore((state) => state.sspDictionary);
+  const typeOfConversion = useFormStore((state) => state.typeOfConversion);
 
   const downloadDetailedValidationReportMutation =
     useDownloadDetailedValidationReportCSV();
   const downloadCatalogRecordMutation = useDownloadCatalogRecordJSON();
 
-  const baseFilename = file?.name ? file.name.split('.')[0] : 'slovnik';
-  const dictionaryFilename = `${baseFilename}.${OUTPUT_FORMAT}`;
+  const getBaseFilename = () => {
+    if (typeOfConversion === 'file' && file?.name) {
+      return file.name.split('.')[0];
+    }
+    if (typeOfConversion === 'dict' && sspDictionary?.label) {
+      return sspDictionary.label;
+    }
+    return 'slovnik';
+  };
+
+  const baseFilename = getBaseFilename();
+  const dictionaryFileExtension =
+    OUTPUT_FORMAT === 'json' ? 'jsonld' : OUTPUT_FORMAT;
+  const dictionaryFilename = `${baseFilename}.${dictionaryFileExtension}`;
 
   const isSuccessWarning = sectionKey === 'Success-Warning';
 
@@ -52,7 +66,7 @@ export const DownloadSection = ({ status }: Props) => {
         handleDownload({
           data: dictionaryData,
           filename: dictionaryFilename,
-          mimeType: getMimeType(OUTPUT_FORMAT),
+          mimeType: getMimeType('jsonld'),
         });
       }
       return;
@@ -79,20 +93,20 @@ export const DownloadSection = ({ status }: Props) => {
       data: conversionResponse.validationReport,
       key: 'detailedReport',
       mutation: downloadDetailedValidationReportMutation,
-      filename: 'validation-report-detailed.csv',
+      filename: baseFilename + '-report.csv',
       mimeType: 'text/csv',
     });
   };
 
-  const handleCatalogReportDownload = () => {
+  const handleIncompleteCatalogRecordDownload = () => {
     if (!conversionResponse) return;
 
     handleReportDownload({
       data: conversionResponse.catalogReport,
       key: 'catalogRecord',
       mutation: downloadCatalogRecordMutation,
-      filename: 'catalog-record.json',
-      mimeType: getMimeType('json'),
+      filename: baseFilename + '-záznam.jsonld',
+      mimeType: getMimeType('jsonld'),
     });
   };
 
@@ -145,7 +159,7 @@ export const DownloadSection = ({ status }: Props) => {
             type: 'outlined',
             disabled: downloadCatalogRecordMutation.isPending,
           }}
-          onClick={handleCatalogReportDownload}
+          onClick={handleIncompleteCatalogRecordDownload}
         />
       )}
     </section>

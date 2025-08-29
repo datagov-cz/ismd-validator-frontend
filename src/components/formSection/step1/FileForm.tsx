@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useRef } from 'react';
 import {
   GovButton,
   GovFormControl,
@@ -12,6 +12,8 @@ import { useFormStore } from '@/store/formStore';
 
 export const FileForm = () => {
   const t = useTranslations('Home.FormSection.Step1.FileForm');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const fileInputRef = useRef<any>(null);
 
   const files = useFormStore((state) => state.files);
   const addFile = useFormStore((state) => state.addFile);
@@ -21,12 +23,19 @@ export const FileForm = () => {
   const handleFileAdd = (e: CustomEvent) => {
     const file = e.detail.file?.file;
     if (file) {
-      addFile(file);
-      if (files.length >= 1) {
-        setFileError(t('MultipleFilesError'));
-      } else {
-        setFileError(undefined);
+      if (files.length > 0) {
+        removeFile(files[0]);
+        if (fileInputRef.current) {
+          const firstAttachment = fileInputRef.current.querySelector(
+            '.gov-attachments-item__file button',
+          );
+          if (firstAttachment) {
+            firstAttachment.click();
+          }
+        }
       }
+      addFile(file);
+      setFileError(undefined);
     }
   };
 
@@ -37,18 +46,13 @@ export const FileForm = () => {
     }
   };
 
-  useEffect(() => {
-    if (files.length < 2) {
-      setFileError(undefined);
-    }
-  }, [files, setFileError]);
-
   return (
     <GovFormControl className="w-full">
       <GovFormLabel slot="top">{t('Placeholder')}</GovFormLabel>
       <GovFormGroup>
         <GovFormFile
-          accept=".xlsx,.xml,.ttl,.json,.json-ld"
+          ref={fileInputRef}
+          accept=".xlsx,.xml,.ttl,.json-ld"
           expanded
           onGovAddFile={handleFileAdd}
           onGovRemoveFile={handleFileRemove}
