@@ -33,16 +33,23 @@ export const DownloadSection = ({ status }: Props) => {
   const file = useFormStore((state) => state.files[0]);
   const url = useFormStore((state) => state.url);
   const sspDictionary = useFormStore((state) => state.sspDictionary);
+  const typeOfConversion = useFormStore((state) => state.typeOfConversion);
 
   const downloadDetailedValidationReportMutation =
     useDownloadDetailedValidationReportCSV();
   const downloadCatalogRecordMutation = useDownloadCatalogRecordJSON();
 
-  const baseFilename = file?.name
-    ? file.name.split('.')[0]
-    : sspDictionary?.label
-      ? sspDictionary.label
-      : 'slovnik';
+  const getBaseFilename = () => {
+    if (typeOfConversion === 'file' && file?.name) {
+      return file.name.split('.')[0];
+    }
+    if (typeOfConversion === 'dict' && sspDictionary?.label) {
+      return sspDictionary.label;
+    }
+    return 'slovnik';
+  };
+
+  const baseFilename = getBaseFilename();
   const dictionaryFileExtension =
     OUTPUT_FORMAT === 'json' ? 'jsonld' : OUTPUT_FORMAT;
   const dictionaryFilename = `${baseFilename}.${dictionaryFileExtension}`;
