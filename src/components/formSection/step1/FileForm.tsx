@@ -18,7 +18,6 @@ export const FileForm = () => {
   const files = useFormStore((state) => state.files);
   const addFile = useFormStore((state) => state.addFile);
   const removeFile = useFormStore((state) => state.removeFile);
-  const setFileError = useFormStore((state) => state.setFileError);
 
   const handleFileAdd = (e: CustomEvent) => {
     const file = e.detail.file?.file;
@@ -35,7 +34,6 @@ export const FileForm = () => {
         }
       }
       addFile(file);
-      setFileError(undefined);
     }
   };
 

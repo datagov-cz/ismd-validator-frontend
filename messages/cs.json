@@ -73,16 +73,21 @@
       },
       "Step2": {
         "Headline": "Zkontrolujte a převeďte slovník",
-        "Annotation": "Klikněte na tlačítko 'Zkontrolovat a převést' a počkejte, až systém kontrolu a převod dokončí.",
+        "Annotation": "Klikněte na tlačítko \"Zkontrolovat a převést\" a počkejte, až systém kontrolu a převod dokončí.",
         "Button": "Zkontrolovat a převést",
         "ConversionUknownError": "Během převodu došlo k chybě: zaslaný vstup není podporovaný. Pokud problém přetrvává a máte pocit, že je problém na naší straně,",
-        "ConversionErrorLinkText": "nahlašte nám prosím chybu."
+        "ConversionErrorLinkText": "nahlašte nám prosím chybu.",
+        "WarningBeforeNextConversion": "Stisknutím tlačítka přijdete o výsledek kontroly a převodu níže."
       },
       "Step3": {
-        "Headline": "Stáhněte si výstupy z převodu a kontroly",
+        "Headline": {
+          "Success": "Stáhněte si výstupy z převodu a kontroly",
+          "Warning": "Zvažte upravení slovníku",
+          "Error": "Upravte slovník"
+        },
         "Annotation": "Přečtěte si podrobnosti níže.",
         "Dialog": {
-          "Title": "Slovník zákona o silničním provozu",
+          "TitleFallback": "Slovník",
           "Message": {
             "Success": "Skvělá práce! Ve slovníku nebyly nalezeny žádné chyby.",
             "Warning": "Ve slovníku byly nalezeny přípustné chyby. Slovník si ale přesto můžete stáhnout.",
@@ -91,7 +96,9 @@
           "InfoTable": {
             "AffectedConcepts": "Zjištění se týká",
             "FindingDescription": "Popis zjištění",
-            "FindingType": "Typ zjištění"
+            "FindingType": "Typ zjištění",
+            "AffectedConceptUnit": "pojmu",
+            "AffectedConceptUnitMultiple": "pojmů"
           },
           "DownloadSection": {
             "Success-Warning": {

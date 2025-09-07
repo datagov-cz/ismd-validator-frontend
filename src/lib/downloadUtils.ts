@@ -43,26 +43,29 @@ export const fetchFileFromUrl = async (url: string): Promise<string | null> => {
   }
 };
 
-export const getFilenameAndExtension = (
-  url: string,
-): { filename: string; extension: string } => {
+export const getFileExtension = (url: string): string => {
   try {
     const pathname = new URL(url).pathname;
     const lastSegment = pathname.split('/').pop() || '';
 
     const dotIndex = lastSegment.lastIndexOf('.');
     if (dotIndex === -1) {
-      return { filename: lastSegment, extension: '' };
+      return '';
     }
 
-    const filename = lastSegment.substring(0, dotIndex);
     const extension = lastSegment.substring(dotIndex + 1);
 
-    return { filename, extension };
+    return extension;
   } catch (error) {
     console.error('Invalid URL:', error);
-    return { filename: 'download', extension: '' };
+    return '';
   }
+};
+
+export const getFileNameFromUrl = (url: string): string => {
+  const encodedFilename = url.substring(url.lastIndexOf('/') + 1);
+  const decodedFilename = decodeURIComponent(encodedFilename);
+  return decodedFilename.replace(/\.[^/.]+$/, '');
 };
 
 export const getMimeType = (extension: string): string => {

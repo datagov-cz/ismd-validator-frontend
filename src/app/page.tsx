@@ -65,14 +65,6 @@ export default function Home() {
               {t('Message.Link')}
             </a>
           </p>
-          <GovButton
-            type="solid"
-            size="m"
-            className="absolute top-1/2 -translate-y-1/2 right-0"
-            aria-label={t('Message.CloseButtonAria')}
-          >
-            <GovIcon name="x" slot="icon-start" />
-          </GovButton>
         </section>
         <FormSection />
         <InfoSection />
