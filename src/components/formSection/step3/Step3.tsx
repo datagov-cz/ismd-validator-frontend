@@ -13,6 +13,7 @@ export const Step3 = () => {
   const validationResults = useFormStore(
     (state) => state.conversionResponse?.validationResults,
   );
+  const dictionaryName = useFormStore((state) => state.dictionaryName);
 
   const statusMapped = dictionaryStatus
     ? STATUS_MAP[dictionaryStatus.status]
@@ -25,13 +26,15 @@ export const Step3 = () => {
       collapsible
     >
       <span slot="prefix">3</span>
-      <span slot="headline">{t('Headline')}</span>
+      <span slot="headline">
+        {t(`Headline.${dictionaryStatus?.status ?? 'Success'}`)}
+      </span>
       <span slot="annotation">{t('Annotation')}</span>
       <div
         className={`${dictionaryStatus && statusMapped !== 'error' ? 'block' : 'hidden'}`}
       >
         <Dialog
-          title={t('Dialog.Title')}
+          title={dictionaryName ?? t('Dialog.TitleFallback')}
           infoBar={{
             status: STATUS_MAP[dictionaryStatus?.status || 'Success'],
             message: t(

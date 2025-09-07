@@ -15,6 +15,9 @@ import {
 } from '@/api/generated';
 import { OUTPUT_FORMAT } from '@/lib/constants';
 import { useFormStore } from '@/store/formStore';
+import { ErrorInfobar } from './ErrorInfobar';
+import { WarningInfobar } from './WarningInfobar';
+import { getFileNameFromUrl } from '@/lib/downloadUtils';
 
 export const Step2 = () => {
   const t = useTranslations('Home.FormSection.Step2');
@@ -23,11 +26,13 @@ export const Step2 = () => {
   const formUrl = useFormStore((state) => state.url);
   const sspDictionary = useFormStore((state) => state.sspDictionary);
   const fileError = useFormStore((state) => state.fileError);
+  const urlError = useFormStore((state) => state.urlError);
   const typeOfConversion = useFormStore((state) => state.typeOfConversion);
+  const dictionaryStatus = useFormStore((state) => state.dictionaryStatus);
 
   const formFile = files.length === 1 ? files[0] : undefined;
 
-  const [conversionError, setConversionError] = useState<string | null>(null);
+  const [conversionError, setConversionError] = useState<string>();
 
   const setDictionaryStatus = useFormStore(
     (state) => state.setDictionaryStatus,
@@ -35,6 +40,10 @@ export const Step2 = () => {
   const setConversionResponse = useFormStore(
     (state) => state.setConversionResponse,
   );
+  const setDictionaryName = useFormStore((state) => state.setDictionaryName);
+
+  const showWarningBar = useFormStore((state) => state.showWarningBar);
+  const setShowWarningBar = useFormStore((state) => state.setShowWarningBar);
 
   const convertFileMutation = useConvertFile();
   const convertSspDictMutation = useConvertSSPFromIRI();
@@ -43,7 +52,8 @@ export const Step2 = () => {
     typeOfConversion === 'dict' ? convertSspDictMutation : convertFileMutation;
 
   const handleConvert = () => {
-    setConversionError(null);
+    setShowWarningBar(false);
+    setConversionError(undefined);
 
     const formData = new FormData();
 
@@ -66,18 +76,21 @@ export const Step2 = () => {
           return;
         }
         formData.append('file', formFile);
+        setDictionaryName(formFile.name.split('.')[0]);
         break;
       case 'url':
         if (!formUrl) {
           return;
         }
         formData.append('fileUrl', formUrl);
+        setDictionaryName(getFileNameFromUrl(formUrl));
         break;
       case 'dict':
         if (!sspDictionary) {
           return;
         }
         formData.append('iri', sspDictionary.iri);
+        setDictionaryName(sspDictionary.label);
         break;
     }
 
@@ -115,43 +128,37 @@ export const Step2 = () => {
 
   useEffect(() => {
     if (formUrl || formFile || sspDictionary) {
-      setConversionError(null);
+      setConversionError(undefined);
+      if (dictionaryStatus) {
+        setShowWarningBar(true);
+      }
     }
   }, [formUrl, formFile, sspDictionary]);
 
   const hasError = !!conversionError || !!fileError;
-  const isDisabled = !formUrl && (!formFile || !!fileError) && !sspDictionary;
+
+  const isDisabled =
+    (!formUrl && (!formFile || !!fileError) && !sspDictionary) ||
+    convertMutation.isPending;
 
   return (
     <GovWizardItem
       color={hasError ? 'error' : 'primary'}
       collapsible
-      isExpanded={files.length > 0 || !!formUrl || !!sspDictionary}
+      isExpanded={
+        files.length > 0 || (!!formUrl && !urlError) || !!sspDictionary
+      }
     >
       <span slot="prefix">2</span>
       <span slot="headline">{t('Headline')}</span>
       <span slot="annotation">{t('Annotation')}</span>
       <div className="space-y-5">
-        <div className={`${hasError ? 'block' : 'hidden'}`}>
-          <GovInfobar color="error" type="subtle">
-            <GovIcon name="exclamation-circle-fill" slot="icon" />
-            <p className="text-lg">
-              {fileError || conversionError || t('ConversionUknownError')}
-              {conversionError && (
-                <>
-                  {' '}
-                  <a
-                    href="https://github.com/datagov-cz/ismd-org/issues/new?template=bug_report.yml"
-                    target="_blank"
-                    className="underline"
-                  >
-                    {t('ConversionErrorLinkText')}
-                  </a>
-                </>
-              )}
-            </p>
-          </GovInfobar>
-        </div>
+        <ErrorInfobar
+          isHidden={!hasError}
+          fileError={fileError}
+          conversionError={conversionError}
+        />
+        <WarningInfobar isHidden={!showWarningBar} />
         <GovButton
           color="primary"
           size="l"
