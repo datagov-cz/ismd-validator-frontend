@@ -1,10 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  GovButton,
-  GovIcon,
-  GovInfobar,
-  GovWizardItem,
-} from '@gov-design-system-ce/react';
+import { GovButton, GovWizardItem } from '@gov-design-system-ce/react';
 import { AxiosError } from 'axios';
 import { useTranslations } from 'next-intl';
 
@@ -14,10 +9,11 @@ import {
   useConvertSSPFromIRI,
 } from '@/api/generated';
 import { OUTPUT_FORMAT } from '@/lib/constants';
+import { getFileNameFromUrl } from '@/lib/downloadUtils';
 import { useFormStore } from '@/store/formStore';
+
 import { ErrorInfobar } from './ErrorInfobar';
 import { WarningInfobar } from './WarningInfobar';
-import { getFileNameFromUrl } from '@/lib/downloadUtils';
 
 export const Step2 = () => {
   const t = useTranslations('Home.FormSection.Step2');
@@ -133,7 +129,7 @@ export const Step2 = () => {
         setShowWarningBar(true);
       }
     }
-  }, [formUrl, formFile, sspDictionary]);
+  }, [formUrl, formFile, sspDictionary, dictionaryStatus]);
 
   const hasError = !!conversionError || !!fileError;
 
