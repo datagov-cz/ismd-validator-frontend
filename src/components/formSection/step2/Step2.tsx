@@ -151,7 +151,9 @@ export const Step2 = () => {
     >
       <span slot="prefix">2</span>
       <span slot="headline">{t('Headline')}</span>
-      <span slot="annotation">{t('Annotation')}</span>
+      <span slot="annotation" className="text-left">
+        {t('Annotation')}
+      </span>
       <div className="space-y-5">
         <ErrorInfobar
           isHidden={!hasError}

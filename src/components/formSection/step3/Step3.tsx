@@ -29,7 +29,9 @@ export const Step3 = () => {
       <span slot="headline">
         {t(`Headline.${dictionaryStatus?.status ?? 'Success'}`)}
       </span>
-      <span slot="annotation">{t('Annotation')}</span>
+      <span slot="annotation" className="text-left">
+        {t('Annotation')}
+      </span>
       <div
         className={`${dictionaryStatus && statusMapped !== 'error' ? 'block' : 'hidden'}`}
       >
