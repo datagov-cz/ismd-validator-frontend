@@ -60,7 +60,12 @@ export const Dialog = ({
                 {validationResults.severityGroups.map(
                   ({ count, description, severity }) => (
                     <tr key={Math.random()}>
-                      <td>{count}</td>
+                      <td>
+                        {count}{' '}
+                        {count && count > 1
+                          ? t('InfoTable.AffectedConceptUnitMultiple')
+                          : t('InfoTable.AffectedConceptUnit')}
+                      </td>
                       <td>{description}</td>
                       <td>{severity}</td>
                     </tr>

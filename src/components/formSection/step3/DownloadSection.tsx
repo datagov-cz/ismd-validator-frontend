@@ -9,7 +9,7 @@ import { OUTPUT_FORMAT } from '@/lib/constants';
 import { getDownloadSectionTranslationKey } from '@/lib/contentUtils';
 import {
   fetchFileFromUrl,
-  getFilenameAndExtension,
+  getFileExtension,
   getMimeType,
   handleDownload,
   handleReportDownload,
@@ -30,29 +30,16 @@ export const DownloadSection = ({ status }: Props) => {
   const basePath = `Home.FormSection.Step3.Dialog.DownloadSection.${sectionKey}`;
 
   const conversionResponse = useFormStore((state) => state.conversionResponse);
-  const file = useFormStore((state) => state.files[0]);
   const url = useFormStore((state) => state.url);
-  const sspDictionary = useFormStore((state) => state.sspDictionary);
-  const typeOfConversion = useFormStore((state) => state.typeOfConversion);
+  const dictionaryName = useFormStore((state) => state.dictionaryName);
 
   const downloadDetailedValidationReportMutation =
     useDownloadDetailedValidationReportCSV();
   const downloadCatalogRecordMutation = useDownloadCatalogRecordJSON();
 
-  const getBaseFilename = () => {
-    if (typeOfConversion === 'file' && file?.name) {
-      return file.name.split('.')[0];
-    }
-    if (typeOfConversion === 'dict' && sspDictionary?.label) {
-      return sspDictionary.label;
-    }
-    return 'slovnik';
-  };
-
-  const baseFilename = getBaseFilename();
   const dictionaryFileExtension =
     OUTPUT_FORMAT === 'json' ? 'jsonld' : OUTPUT_FORMAT;
-  const dictionaryFilename = `${baseFilename}.${dictionaryFileExtension}`;
+  const dictionaryFilename = `${dictionaryName}.${dictionaryFileExtension}`;
 
   const isSuccessWarning = sectionKey === 'Success-Warning';
 
@@ -73,14 +60,14 @@ export const DownloadSection = ({ status }: Props) => {
     }
 
     if (url) {
-      const { filename, extension } = getFilenameAndExtension(url);
+      const extension = getFileExtension(url);
 
       const data = await fetchFileFromUrl(url);
       if (!data) return;
 
       handleDownload({
         data,
-        filename: `${filename}.${extension}`,
+        filename: `${dictionaryName}.${extension}`,
         mimeType: getMimeType(extension),
       });
     }
@@ -93,7 +80,7 @@ export const DownloadSection = ({ status }: Props) => {
       data: conversionResponse.validationReport,
       key: 'detailedReport',
       mutation: downloadDetailedValidationReportMutation,
-      filename: baseFilename + '-report.csv',
+      filename: dictionaryName + '-report.csv',
       mimeType: 'text/csv',
     });
   };
@@ -105,7 +92,7 @@ export const DownloadSection = ({ status }: Props) => {
       data: conversionResponse.catalogReport,
       key: 'catalogRecord',
       mutation: downloadCatalogRecordMutation,
-      filename: baseFilename + '-záznam.jsonld',
+      filename: dictionaryName + '-záznam.jsonld',
       mimeType: getMimeType('jsonld'),
     });
   };

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   GovFormControl,
   GovFormGroup,
@@ -11,21 +10,23 @@ import { isValidUrl } from '@/lib/validationUtils';
 import { useFormStore } from '@/store/formStore';
 
 export const UrlForm = () => {
-  const [error, setError] = useState<string>();
+  const urlError = useFormStore((state) => state.urlError);
+
+  const setUrlError = useFormStore((state) => state.setUrlError);
 
   const t = useTranslations('Home.FormSection.Step1');
 
   const setUrl = useFormStore((state) => state.setUrl);
 
   const handleSetUrl = (value: string) => {
-    setError(undefined);
+    setUrlError(undefined);
 
     if (value.trim() === '') {
       setUrl(undefined);
       return;
     }
     if (!isValidUrl(value)) {
-      setError('Invalid URL');
+      setUrlError(t('UrlForm.UrlError'));
       return;
     }
     setUrl(value);
@@ -33,20 +34,23 @@ export const UrlForm = () => {
 
   return (
     <GovFormControl className="w-full">
-      <GovFormLabel slot="top" size="m">
+      <GovFormLabel slot="top" size="xl" legend>
         Zadejte URL
       </GovFormLabel>
       <GovFormGroup>
         <GovFormInput
+          id="url-input"
           placeholder="https://www.priklad.cz/data.ttl"
           inputType="url"
           size="m"
           onGovInput={(e) => handleSetUrl(e.detail.value)}
-          invalid={!!error}
+          invalid={!!urlError}
         />
       </GovFormGroup>
-      <div className={`text-error mt-1 pl-5 ${error ? 'block' : 'hidden'}`}>
-        {t('UrlForm.UrlError')}
+      <div
+        className={`text-error text-sm pt-1 pl-5 ${urlError ? 'block' : 'hidden'}`}
+      >
+        {urlError}
       </div>
     </GovFormControl>
   );

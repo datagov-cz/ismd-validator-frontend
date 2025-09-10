@@ -106,3 +106,7 @@ html[data-theme='light'] {
     @apply text-left py-2 pr-6 min-w-[180px] max-w-[130px] align-top;
   }
 }
+
+.gov-theme-switch button:focus-visible {
+  outline: 0;
+}

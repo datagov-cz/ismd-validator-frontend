@@ -19,6 +19,15 @@ export const SearchForm = () => {
     label: dictionary.nazev_slovniku.value,
   }));
 
+  const handleSelectChange = (
+    option: { value: string; label: string } | null,
+  ) => {
+    setSspDictionary({
+      label: option?.label ?? '',
+      iri: option?.value ?? '',
+    });
+  };
+
   return (
     <GovFormControl className="w-full">
       <GovFormGroup>
@@ -26,12 +35,7 @@ export const SearchForm = () => {
           className="h-10 w-full rounded-lg"
           options={dictionariesMapped}
           placeholder={t('DictForm.SelectDictPlaceholder')}
-          onChange={(option) =>
-            setSspDictionary({
-              label: option?.label ?? '',
-              iri: option?.value ?? '',
-            })
-          }
+          onChange={handleSelectChange}
           styles={{
             control: (provided) => ({
               ...provided,

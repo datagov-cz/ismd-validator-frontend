@@ -17,21 +17,26 @@ export const Step1 = () => {
   const t = useTranslations('Home.FormSection.Step1');
 
   const typeOfConversion = useFormStore((state) => state.typeOfConversion);
+
   const setTypeOfConversion = useFormStore(
     (state) => state.setTypeOfConversion,
   );
+  const resetForms = useFormStore((state) => state.resetForms);
 
   return (
     <GovWizardItem color="primary" collapsible isExpanded>
       <span slot="prefix">1</span>
       <span slot="headline">{t('Headline')}</span>
-      <span slot="annotation">{t('Annotation')}</span>
+      <span slot="annotation" className="text-left">
+        {t('Annotation')}
+      </span>
       <div className="text-dark-primary max-w-[808px] transition-colors duration-300">
         <GovFormRadioGroup
           value={typeOfConversion}
-          onGovChange={(val) =>
-            setTypeOfConversion(val.detail.value as ConversionType)
-          }
+          onGovChange={(val) => {
+            setTypeOfConversion(val.detail.value as ConversionType);
+            resetForms();
+          }}
         >
           <div className="w-full">
             <GovFormRadio value="file">

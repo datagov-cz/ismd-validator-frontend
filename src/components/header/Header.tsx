@@ -34,7 +34,10 @@ export const Header = () => {
             </ul>
           </nav>
           <ul className="flex gap-x-4">
-            <GovThemeSwitch />
+            <GovThemeSwitch
+              defaultChecked={false}
+              className="outline-0 focus-visible:outline-0"
+            />
             <GovButton
               size="m"
               type="outlined"
