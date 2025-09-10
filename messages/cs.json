@@ -10,7 +10,11 @@
         "Link2": "Navrhnout vylepšení"
       }
     },
-    "MenuButtonAria": "Otevřít navigaci"
+    "MenuButtonAria": "Otevřít navigaci",
+    "ThemeSwitchAria": {
+      "ToDark": "Přepnout na tmavý mód",
+      "ToLight": "Přepnout na světlý mód"
+    }
   },
   "Footer": {
     "LinkColumn": {
