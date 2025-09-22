@@ -6,6 +6,9 @@ on:
     workflows: [Build Docker on Main, Build Docker on Dev]
     types: [completed]
     branches: [main, dev]
+  # Receive completion signal from the infrastructure repo
+  repository_dispatch:
+    types: [infra-deploy-complete]
   
   # Manual trigger with environment and version selection
   workflow_dispatch:
@@ -120,7 +123,7 @@ jobs:
           echo "Environment: ${ENVIRONMENT}"
           echo "Image tag: ${IMAGE_TAG}"
           echo "Repository: ${REPO_NAME}"
-          echo "Ref: ${REF}"
+          echo "ref=${REF}" >> $GITHUB_OUTPUT
           echo "Workflow Run ID: ${WORKFLOW_RUN_ID}"
           
           # Set outputs for later steps
@@ -129,7 +132,22 @@ jobs:
           echo "repo_name=${REPO_NAME}" >> $GITHUB_OUTPUT
           echo "workflow_run_id=${WORKFLOW_RUN_ID}" >> $GITHUB_OUTPUT
           echo "ref=${REF}" >> $GITHUB_OUTPUT
-      
+
+  # Finalize the GitHub Deployment when infra reports completion
+  finalize-deployment:
+    name: Finalize Deployment Status
+    runs-on: ubuntu-latest
+    if: github.event_name == 'repository_dispatch' && github.event.action == 'infra-deploy-complete'
+    steps:
+      - name: Update Deployment Status (final)
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: ${{ github.token }}
+          deployment-id: ${{ github.event.client_payload.deployment_id }}
+          state: ${{ github.event.client_payload.state }}
+          description: Deployment completed in infrastructure repository
+          log-url: ${{ github.event.client_payload.infra_run_url }}
+
   # Deploy to dev environment
   deploy-to-dev:
     name: Deploy to Dev
