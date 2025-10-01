@@ -1,0 +1,109 @@
+name: Close Stale Deployments
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Deployment environment to clean up"
+        type: choice
+        required: true
+        options: [DEV, TEST, PROD]
+        default: DEV
+      target_state:
+        description: "State to set for stale deployments"
+        type: choice
+        required: true
+        options: [inactive, success, failure]
+        default: inactive
+      only_if_in_progress:
+        description: "Only close deployments currently pending/in_progress/queued"
+        type: boolean
+        required: false
+        default: true
+      max_count:
+        description: "Maximum number of deployments to update (safety limit)"
+        type: number
+        required: false
+        default: 50
+      dry_run:
+        description: "List what would be updated without making changes"
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  close-stale:
+    name: Close Stale Deployments
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close deployments via API
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const envName = core.getInput('environment', { required: true });
+            const targetState = core.getInput('target_state', { required: true });
+            const onlyIfInProgress = core.getBooleanInput('only_if_in_progress');
+            const maxCount = parseInt(core.getInput('max_count') || '50', 10);
+            const dryRun = core.getBooleanInput('dry_run');
+
+            core.info(`Environment: ${envName}`);
+            core.info(`Target state: ${targetState}`);
+            core.info(`Only if in progress: ${onlyIfInProgress}`);
+            core.info(`Max to update: ${maxCount}`);
+            core.info(`Dry run: ${dryRun}`);
+
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            // Collect deployments for the environment (paginate)
+            const deployments = [];
+            let page = 1;
+            const per_page = 100;
+            while (true) {
+              const { data } = await github.rest.repos.listDeployments({ owner, repo, environment: envName, per_page, page });
+              if (!data || data.length === 0) break;
+              deployments.push(...data);
+              page += 1;
+            }
+
+            core.info(`Found ${deployments.length} deployments for environment ${envName}`);
+
+            const IN_PROGRESS_STATES = ['pending', 'in_progress', 'queued'];
+
+            let updated = 0;
+            for (const d of deployments) {
+              if (updated >= maxCount) {
+                core.info(`Reached max_count=${maxCount}. Stopping.`);
+                break;
+              }
+
+              const deployment_id = d.id;
+              const statusesResp = await github.rest.repos.listDeploymentStatuses({ owner, repo, deployment_id, per_page: 1 });
+              const latest = (statusesResp.data && statusesResp.data.length > 0) ? statusesResp.data[0] : null;
+              const latestState = latest?.state || 'none';
+
+              const isInProgress = IN_PROGRESS_STATES.includes(latestState);
+              if (onlyIfInProgress && !isInProgress) {
+                core.info(`#${deployment_id}: skip (latest state=${latestState})`);
+                continue;
+              }
+
+              core.info(`#${deployment_id}: would set state => ${targetState} (latest=${latestState})`);
+
+              if (!dryRun) {
+                await github.rest.repos.createDeploymentStatus({
+                  owner,
+                  repo,
+                  deployment_id,
+                  state: targetState,
+                  description: `Marked stale by maintenance workflow (was: ${latestState})`,
+                });
+                updated += 1;
+              }
+            }
+
+            core.info(dryRun ? 'Dry run complete.' : `Updated ${updated} deployments.`);
