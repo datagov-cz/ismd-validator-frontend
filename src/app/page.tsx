@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
 import { GovBanner, GovButton, GovIcon } from '@gov-design-system-ce/react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useTranslations } from 'next-intl';
+import { useEffect } from 'react';
 
 import { FaqSection } from '@/components/faq/FaqSection';
 import { FormSection } from '@/components/formSection/FormSection';
