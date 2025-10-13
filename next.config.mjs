@@ -3,7 +3,7 @@ import createNextIntlPlugin from 'next-intl/plugin';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   publicRuntimeConfig: {
-    backendUrl: process.env.NEXT_PUBLIC_BE_URL || 'http://localhost:8080',
+    backendUrl: process.env.NEXT_PUBLIC_BE_URL || 'localhost:8080',
   },
 };
 
