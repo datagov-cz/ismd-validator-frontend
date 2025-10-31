@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
 import { GovButton, GovWizardItem } from '@gov-design-system-ce/react';
 import { AxiosError } from 'axios';
 import { useTranslations } from 'next-intl';
+import { useEffect, useRef, useState } from 'react';
 
 import {
   ConversionResponseDto,
@@ -29,6 +29,7 @@ export const Step2 = () => {
   const formFile = files.length === 1 ? files[0] : undefined;
 
   const [conversionError, setConversionError] = useState<string>();
+  const hasValidatedRef = useRef(false);
 
   const setDictionaryStatus = useFormStore(
     (state) => state.setDictionaryStatus,
@@ -114,6 +115,7 @@ export const Step2 = () => {
             message: 'File converted successfully',
           });
           setConversionResponse(data);
+          hasValidatedRef.current = true;
         } else {
           console.error('Unexpected data format', data);
           setConversionError(t('ConversionUknownError'));
@@ -125,11 +127,11 @@ export const Step2 = () => {
   useEffect(() => {
     if (formUrl || formFile || sspDictionary) {
       setConversionError(undefined);
-      if (dictionaryStatus) {
+      if (hasValidatedRef.current) {
         setShowWarningBar(true);
       }
     }
-  }, [formUrl, formFile, sspDictionary, dictionaryStatus]);
+  }, [formUrl, formFile, sspDictionary, setConversionError, setShowWarningBar]);
 
   const hasError = !!conversionError || !!fileError;
 
