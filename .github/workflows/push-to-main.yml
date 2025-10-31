@@ -20,7 +20,7 @@ jobs:
       should_build: ${{ steps.determine-version.outputs.should_build }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       
@@ -59,13 +59,13 @@ jobs:
       
   # Sync dev with main after Docker build
   sync-dev:
-    needs: build-docker
+    needs: [create-tag, build-docker]
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0  # Get full history
       
