@@ -1,7 +1,7 @@
+import { useEffect, useRef, useState } from 'react';
 import { GovButton, GovWizardItem } from '@gov-design-system-ce/react';
 import { AxiosError } from 'axios';
 import { useTranslations } from 'next-intl';
-import { useEffect, useRef, useState } from 'react';
 
 import {
   ConversionResponseDto,
@@ -24,7 +24,7 @@ export const Step2 = () => {
   const fileError = useFormStore((state) => state.fileError);
   const urlError = useFormStore((state) => state.urlError);
   const typeOfConversion = useFormStore((state) => state.typeOfConversion);
-  const dictionaryStatus = useFormStore((state) => state.dictionaryStatus);
+  // dictionaryStatus is not used in this component
 
   const formFile = files.length === 1 ? files[0] : undefined;
 
