@@ -53,6 +53,7 @@ jobs:
         with:
           # For workflow_run, check out the exact commit that built the image; otherwise use the current SHA
           ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
+          fetch-depth: 0  # Fetch all history including tags
       
       - name: Determine environment and version
         id: determine_params
@@ -62,17 +63,26 @@ jobs:
             ENVIRONMENT="${{ github.event.inputs.environment }}"
             ENVIRONMENT="${ENVIRONMENT^^}" # Convert to uppercase
             
-            # If version is specified, use it; otherwise derive tag with short SHA for DEV/TEST
+            # If version is specified, use it
             if [ -n "${{ github.event.inputs.version }}" ]; then
               IMAGE_TAG="${{ github.event.inputs.version }}"
             else
-              PKG_VERSION=$(node -p "require('./package.json').version")
-              SHORT_SHA=${GITHUB_SHA:0:7}
-              if [ "$ENVIRONMENT" = "DEV" ] || [ "$ENVIRONMENT" = "TEST" ]; then
-                IMAGE_TAG="${PKG_VERSION}-${SHORT_SHA}"
+              # Otherwise get version from latest Git tag (same as build workflow)
+              TAG=$(git describe --tags --abbrev=0 --match "v[0-9]*" 2>/dev/null || echo "")
+              if [ -z "$TAG" ]; then
+                BASE_VERSION="0.1.0"
+                echo "No tags found, using default version: $BASE_VERSION"
               else
-                IMAGE_TAG="$PKG_VERSION"
+                BASE_VERSION=$(echo "$TAG" | sed 's/^v//')
+                echo "Found tag: $TAG, using version: $BASE_VERSION"
               fi
+              IMAGE_TAG="$BASE_VERSION"
+            fi
+            
+            # For manual DEV, append short SHA only when no explicit version was provided
+            if [ "$ENVIRONMENT" = "DEV" ] && [ -z "${{ github.event.inputs.version }}" ]; then
+              SHORT_SHA=${GITHUB_SHA:0:7}
+              IMAGE_TAG="${IMAGE_TAG}-${SHORT_SHA}"
             fi
           else
             # For automated triggers (workflow_run), determine environment from branch
@@ -82,13 +92,21 @@ jobs:
               ENVIRONMENT="DEV"
             fi
             
-            # Derive tag from package.json and head SHA (for DEV and TEST)
-            PKG_VERSION=$(node -p "require('./package.json').version")
-            SHORT_SHA=$(echo "${{ github.event.workflow_run.head_sha }}" | cut -c1-7)
-            if [ "$ENVIRONMENT" = "DEV" ] || [ "$ENVIRONMENT" = "TEST" ]; then
-              IMAGE_TAG="${PKG_VERSION}-${SHORT_SHA}"
+            # Get version from latest Git tag (same as build workflow)
+            TAG=$(git describe --tags --abbrev=0 --match "v[0-9]*" 2>/dev/null || echo "")
+            if [ -z "$TAG" ]; then
+              BASE_VERSION="0.1.0"
+              echo "No tags found, using default version: $BASE_VERSION"
             else
-              IMAGE_TAG="$PKG_VERSION"
+              BASE_VERSION=$(echo "$TAG" | sed 's/^v//')
+              echo "Found tag: $TAG, using version: $BASE_VERSION"
+            fi
+            IMAGE_TAG="$BASE_VERSION"
+            
+            # For dev branch, append the short SHA
+            if [ "${{ github.event.workflow_run.head_branch }}" == "dev" ]; then
+              SHORT_SHA=$(echo "${{ github.event.workflow_run.head_sha }}" | cut -c1-7)
+              IMAGE_TAG="${IMAGE_TAG}-${SHORT_SHA}"
             fi
           fi
           
@@ -107,10 +125,9 @@ jobs:
           fi
           
           # Set the correct repository name based on environment
+          # Only dev images have environment suffix, test/prod use base image name
           if [ "${ENVIRONMENT}" == "DEV" ]; then
             REPO_NAME="ismd-validator-frontend-dev"
-          elif [ "${ENVIRONMENT}" == "TEST" ]; then
-            REPO_NAME="ismd-validator-frontend-test"
           else
             REPO_NAME="ismd-validator-frontend"
           fi
