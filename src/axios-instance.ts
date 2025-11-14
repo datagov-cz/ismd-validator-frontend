@@ -10,23 +10,15 @@ AXIOS_INSTANCE.interceptors.request.use((config) => {
     const protocol = window.location.protocol;
     const currentHost = window.location.hostname;
     
-    // Check if user is accessing via public IP address (IPv4 or IPv6, excludes private ranges)
-    const isIpv4 = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(currentHost);
-    const isPrivateIpv4 = /^(?:10|127|172\.(?:1[6-9]|2[0-9]|3[01])|192\.168)\./.test(currentHost);
-    const isIpv6 = /^(?:[0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}$/.test(currentHost);
-    const isPrivateIpv6 = /^(?:fe80:|::1$|fc00:|fd00:)/.test(currentHost); // Link-local, loopback, ULA
-    
-    const isPublicIp = ((isIpv4 && !isPrivateIpv4) || (isIpv6 && !isPrivateIpv6)) && 
-                       currentHost !== 'localhost';
-    
+    // Always use the same host for backend as frontend to ensure protocol/cert consistency
+    // Only exception is localhost (for local development with separate backend)
     let backendHost = config.baseURL;
     
-    // If frontend accessed via public IP, use IP for backend; otherwise use configured domain
-    if (isPublicIp) {
-      // User accessed via public IP - use same IP for backend (shares App Gateway)
+    if (currentHost !== 'localhost' && currentHost !== '127.0.0.1') {
+      // User accessed via App Gateway (IP or domain) - use same host for backend
       backendHost = currentHost;
     }
-    // else: use the configured hostname from env var (domain or localhost)
+    // else: use the configured hostname from env var (for localhost development)
     
     // Build final URL with protocol
     if (backendHost.startsWith('http://') || backendHost.startsWith('https://')) {
