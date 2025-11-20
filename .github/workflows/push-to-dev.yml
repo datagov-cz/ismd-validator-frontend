@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -17,6 +18,7 @@ jobs:
 
   build-docker:
     needs: run-tests
+    if: always() && needs.run-tests.result == 'success'
     uses: ./.github/workflows/reusable-docker-build.yml
     with:
       branch: dev
