@@ -12,19 +12,43 @@ AXIOS_INSTANCE.interceptors.request.use((config) => {
     
     // Always use the same host for backend as frontend to ensure protocol/cert consistency
     // Only exception is localhost (for local development with separate backend)
-    let backendHost = config.baseURL;
+    // Logic updated: Preserve the PATH from the configured baseURL if present
+    let backendPath = '';
+    
+    // Extract path from original baseURL if possible
+    if (config.baseURL) {
+      try {
+        // Check if it's a full URL
+        if (config.baseURL.startsWith('http')) {
+           const url = new URL(config.baseURL);
+           backendPath = url.pathname; 
+        } else if (config.baseURL.startsWith('/')) {
+           // It's already a relative path
+           backendPath = config.baseURL;
+        }
+      } catch {
+        // Ignore parsing errors
+      }
+    }
+    
+    // Clean up path: remove trailing slash if not root, ensure leading slash
+    if (backendPath === '/') backendPath = '';
+    if (backendPath && !backendPath.startsWith('/')) backendPath = '/' + backendPath;
+    // Remove potential double slash if backendPath starts with / and we append
+    
+    let backendHost = '';
     
     if (currentHost !== 'localhost' && currentHost !== '127.0.0.1') {
-      // User accessed via App Gateway (IP or domain) - use same host for backend
+      // User accessed via App Gateway (IP or domain) - use current host + preserved path
       backendHost = currentHost;
-    }
-    // else: use the configured hostname from env var (for localhost development)
-    
-    // Build final URL with protocol
-    if (backendHost.startsWith('http://') || backendHost.startsWith('https://')) {
-      config.baseURL = backendHost.replace(/^https?:\/\//, `${protocol}//`);
+      
+      // Build final URL with protocol
+      // Note: window.location.hostname does NOT include port. App Gateway uses standard ports.
+      config.baseURL = `${protocol}//${backendHost}${backendPath}`;
+      
     } else {
-      config.baseURL = `${protocol}//${backendHost}`;
+      // Localhost development - keep original config
+      // No change needed to config.baseURL
     }
   }
   return config;
