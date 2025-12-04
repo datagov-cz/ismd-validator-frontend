@@ -45,6 +45,11 @@ export default async function RootLayout({
     <html lang={locale}>
       <NextIntlClientProvider>
         <body>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.GOV_DS_CONFIG = { iconsPath: '/validujeme/assets/icons' };`,
+            }}
+          />
           <Providers environmentVariables={variables}>
             <Header />
             {children}
