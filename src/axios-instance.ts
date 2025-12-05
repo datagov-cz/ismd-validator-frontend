@@ -10,29 +10,45 @@ AXIOS_INSTANCE.interceptors.request.use((config) => {
     const protocol = window.location.protocol;
     const currentHost = window.location.hostname;
     
-    // Check if user is accessing via public IP address (IPv4 or IPv6, excludes private ranges)
-    const isIpv4 = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(currentHost);
-    const isPrivateIpv4 = /^(?:10|127|172\.(?:1[6-9]|2[0-9]|3[01])|192\.168)\./.test(currentHost);
-    const isIpv6 = /^(?:[0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}$/.test(currentHost);
-    const isPrivateIpv6 = /^(?:fe80:|::1$|fc00:|fd00:)/.test(currentHost); // Link-local, loopback, ULA
+    // Always use the same host for backend as frontend to ensure protocol/cert consistency
+    // Only exception is localhost (for local development with separate backend)
+    // Logic updated: Preserve the PATH from the configured baseURL if present
+    let backendPath = '';
     
-    const isPublicIp = ((isIpv4 && !isPrivateIpv4) || (isIpv6 && !isPrivateIpv6)) && 
-                       currentHost !== 'localhost';
-    
-    let backendHost = config.baseURL;
-    
-    // If frontend accessed via public IP, use IP for backend; otherwise use configured domain
-    if (isPublicIp) {
-      // User accessed via public IP - use same IP for backend (shares App Gateway)
-      backendHost = currentHost;
+    // Extract path from original baseURL if possible
+    if (config.baseURL) {
+      try {
+        // Check if it's a full URL
+        if (config.baseURL.startsWith('http')) {
+           const url = new URL(config.baseURL);
+           backendPath = url.pathname; 
+        } else if (config.baseURL.startsWith('/')) {
+           // It's already a relative path
+           backendPath = config.baseURL;
+        }
+      } catch {
+        // Ignore parsing errors
+      }
     }
-    // else: use the configured hostname from env var (domain or localhost)
     
-    // Build final URL with protocol
-    if (backendHost.startsWith('http://') || backendHost.startsWith('https://')) {
-      config.baseURL = backendHost.replace(/^https?:\/\//, `${protocol}//`);
+    // Clean up path: remove trailing slash if not root, ensure leading slash
+    if (backendPath === '/') backendPath = '';
+    if (backendPath && !backendPath.startsWith('/')) backendPath = '/' + backendPath;
+    // Remove potential double slash if backendPath starts with / and we append
+    
+    let backendHost = '';
+    
+    if (currentHost !== 'localhost' && currentHost !== '127.0.0.1') {
+      // User accessed via App Gateway (IP or domain) - use current host + preserved path
+      backendHost = currentHost;
+      
+      // Build final URL with protocol
+      // Note: window.location.hostname does NOT include port. App Gateway uses standard ports.
+      config.baseURL = `${protocol}//${backendHost}${backendPath}`;
+      
     } else {
-      config.baseURL = `${protocol}//${backendHost}`;
+      // Localhost development - keep original config
+      // No change needed to config.baseURL
     }
   }
   return config;
