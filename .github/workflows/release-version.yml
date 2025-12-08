@@ -92,6 +92,29 @@ jobs:
           # Only push if tests pass
           git push origin ${{ steps.create-branch.outputs.branch_name }}
 
+      - name: Generate Changelog
+        id: changelog
+        run: |
+          echo "Generating changelog..."
+          # Get the list of commits between main and HEAD
+          CHANGELOG=$(git log origin/main..HEAD --pretty=format:"- %s (%h)" --no-merges)
+          
+          # Handle empty changelog
+          if [ -z "$CHANGELOG" ]; then
+            CHANGELOG="No specific changes found."
+          fi
+          
+          # Escape newlines for use in GITHUB_OUTPUT/Env vars if needed, 
+          # but here we can just write it to a file or use a delimiter for env var
+          
+          # Write to a file for easier reading
+          echo "$CHANGELOG" > changelog.txt
+          
+          # Read into env var using delimiter to handle newlines
+          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+          cat changelog.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: Create Pull Request
         env:
           GH_TOKEN: ${{ github.token }}
@@ -107,6 +130,9 @@ jobs:
               --body "# Release v${{ steps.new-version.outputs.version }}
               
               This PR merges changes from dev into main for release v${{ steps.new-version.outputs.version }}.
+              
+              ## Changes in this Release
+              ${{ env.CHANGELOG }}
               
               ## What happens after merge:
               1. Git tag \`v${{ steps.new-version.outputs.version }}\` will be created automatically
@@ -128,6 +154,9 @@ jobs:
               --body "# Release v${{ steps.new-version.outputs.version }}
               
               This PR merges changes from dev into main for release v${{ steps.new-version.outputs.version }}.
+              
+              ## Changes in this Release
+              ${{ env.CHANGELOG }}
               
               ## What happens after merge:
               1. Git tag \`v${{ steps.new-version.outputs.version }}\` will be created automatically
