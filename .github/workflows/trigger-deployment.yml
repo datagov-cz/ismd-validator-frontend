@@ -46,7 +46,7 @@ jobs:
       pr_url: ${{ steps.resolve_pr.outputs.pr_url }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6.0.1
         with:
           # For workflow_run, check out the exact commit that built the image; otherwise use the current SHA
           ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
@@ -246,7 +246,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6.0.1
       
       - name: Create GitHub Deployment
         id: create_deployment
@@ -323,7 +323,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6.0.1
       
       - name: Create GitHub Deployment
         id: create_deployment
@@ -400,7 +400,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6.0.1
       
       - name: Create GitHub Deployment
         id: create_deployment
