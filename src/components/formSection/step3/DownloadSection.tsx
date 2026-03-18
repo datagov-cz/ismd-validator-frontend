@@ -128,27 +128,6 @@ export const DownloadSection = ({ status }: Props) => {
         }}
         onClick={handleValidationReportDownload}
       />
-      {isSuccessWarning && (
-        <DownloadItemRow
-          title={t(`${basePath}.Row3.Title`)}
-          tooltips={[
-            {
-              title: t(`${basePath}.Row3.Tooltips.Title1`),
-              description: t(`${basePath}.Row3.Tooltips.Description1`),
-            },
-            {
-              title: t(`${basePath}.Row3.Tooltips.Title2`),
-              description: t(`${basePath}.Row3.Tooltips.Description2`),
-            },
-          ]}
-          govButton={{
-            text: t(`${basePath}.Row3.ButtonText`),
-            type: 'outlined',
-            disabled: downloadCatalogRecordMutation.isPending,
-          }}
-          onClick={handleIncompleteCatalogRecordDownload}
-        />
-      )}
     </section>
   );
 };
