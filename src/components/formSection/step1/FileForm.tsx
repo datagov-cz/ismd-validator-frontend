@@ -9,6 +9,7 @@ import {
 import { useTranslations } from 'next-intl';
 
 import { useFormStore } from '@/store/formStore';
+import { ALLOWED_FILE_SIZE } from '@/lib/constants';
 
 export const FileForm = () => {
   const t = useTranslations('Home.FormSection.Step1.FileForm');
@@ -55,6 +56,7 @@ export const FileForm = () => {
           onGovAddFile={handleFileAdd}
           onGovRemoveFile={handleFileRemove}
           multiple={false}
+          maxFileSize={ALLOWED_FILE_SIZE}
         >
           <span>{t('Placeholder')}</span>
           <p>
