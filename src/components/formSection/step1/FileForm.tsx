@@ -8,8 +8,8 @@ import {
 } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
-import { useFormStore } from '@/store/formStore';
 import { ALLOWED_FILE_SIZE } from '@/lib/constants';
+import { useFormStore } from '@/store/formStore';
 
 export const FileForm = () => {
   const t = useTranslations('Home.FormSection.Step1.FileForm');
