@@ -1,9 +1,6 @@
 import { useTranslations } from 'next-intl';
 
-import {
-  useDownloadCatalogRecordJSON,
-  useDownloadDetailedValidationReportCSV,
-} from '@/api/generated';
+import { useDownloadDetailedValidationReportCSV } from '@/api/generated';
 import { DictProcessInfoStatusType } from '@/lib/appTypes';
 import { OUTPUT_FORMAT } from '@/lib/constants';
 import { getDownloadSectionTranslationKey } from '@/lib/contentUtils';
@@ -35,7 +32,6 @@ export const DownloadSection = ({ status }: Props) => {
 
   const downloadDetailedValidationReportMutation =
     useDownloadDetailedValidationReportCSV();
-  const downloadCatalogRecordMutation = useDownloadCatalogRecordJSON();
 
   const dictionaryFileExtension =
     OUTPUT_FORMAT === 'json' ? 'jsonld' : OUTPUT_FORMAT;
@@ -82,18 +78,6 @@ export const DownloadSection = ({ status }: Props) => {
       mutation: downloadDetailedValidationReportMutation,
       filename: dictionaryName + '-report.csv',
       mimeType: 'text/csv',
-    });
-  };
-
-  const handleIncompleteCatalogRecordDownload = () => {
-    if (!conversionResponse) return;
-
-    handleReportDownload({
-      data: conversionResponse.catalogReport,
-      key: 'catalogRecord',
-      mutation: downloadCatalogRecordMutation,
-      filename: dictionaryName + '-záznam.jsonld',
-      mimeType: getMimeType('jsonld'),
     });
   };
 
