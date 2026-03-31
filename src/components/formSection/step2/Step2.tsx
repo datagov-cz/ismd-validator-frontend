@@ -56,11 +56,6 @@ export const Step2 = () => {
 
     formData.append('output', OUTPUT_FORMAT);
 
-    const includeCatalogRecord = process.env.NEXT_PUBLIC_INCLUDE_CATALOG_REPORT;
-    if (includeCatalogRecord === 'true') {
-      formData.append('includeCatalogRecord', 'true');
-    }
-
     const includeDetailedReport =
       process.env.NEXT_PUBLIC_INCLUDE_DETAILED_REPORT;
     if (includeDetailedReport === 'true') {
@@ -109,6 +104,11 @@ export const Step2 = () => {
             data.validationResults?.severityGroups?.find(
               (group) => group.severity?.toLowerCase() !== 'informace',
             );
+          if (data.catalogReport?.název?.cs || data.catalogReport?.název?.en) {
+            setDictionaryName(
+              data.catalogReport?.název?.cs || data.catalogReport?.název?.en,
+            );
+          }
 
           setDictionaryStatus({
             status: allValidationsInformative ? 'Warning' : 'Success',
