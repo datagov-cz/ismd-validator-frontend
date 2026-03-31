@@ -8,6 +8,7 @@ import {
 } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
+import { ALLOWED_FILE_SIZE } from '@/lib/constants';
 import { useFormStore } from '@/store/formStore';
 
 export const FileForm = () => {
@@ -55,6 +56,7 @@ export const FileForm = () => {
           onGovAddFile={handleFileAdd}
           onGovRemoveFile={handleFileRemove}
           multiple={false}
+          maxFileSize={ALLOWED_FILE_SIZE}
         >
           <span>{t('Placeholder')}</span>
           <p>
