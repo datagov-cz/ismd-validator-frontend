@@ -56,11 +56,6 @@ export const Step2 = () => {
 
     formData.append('output', OUTPUT_FORMAT);
 
-    const includeCatalogRecord = process.env.NEXT_PUBLIC_INCLUDE_CATALOG_REPORT;
-    if (includeCatalogRecord === 'true') {
-      formData.append('includeCatalogRecord', 'true');
-    }
-
     const includeDetailedReport =
       process.env.NEXT_PUBLIC_INCLUDE_DETAILED_REPORT;
     if (includeDetailedReport === 'true') {
