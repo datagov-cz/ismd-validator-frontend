@@ -15,15 +15,16 @@ export const Step3 = () => {
   );
   const dictionaryName = useFormStore((state) => state.dictionaryName);
 
-  const statusMapped = dictionaryStatus
-    ? STATUS_MAP[dictionaryStatus.status]
-    : 'primary';
+  const isSuccess = dictionaryStatus?.status === 'Success';
+  const statusKey = isSuccess ? 'Success' : 'Error';
+  const mappedStatus = dictionaryStatus ? STATUS_MAP[statusKey] : 'primary';
+  const isExpanded = !!dictionaryStatus;
 
   return (
     <GovWizardItem
-      color={statusMapped}
-      isExpanded={!!dictionaryStatus}
-      collapsible
+      color={mappedStatus}
+      isExpanded={isExpanded}
+      collapsible={isExpanded}
     >
       <span slot="prefix">3</span>
       <span slot="headline">
@@ -32,22 +33,18 @@ export const Step3 = () => {
       <span slot="annotation" className="text-left">
         {t('Annotation')}
       </span>
-      <div
-        className={`${dictionaryStatus && statusMapped !== 'error' ? 'block' : 'hidden'}`}
-      >
+      {dictionaryStatus && (
         <Dialog
           title={dictionaryName ?? t('Dialog.TitleFallback')}
           infoBar={{
-            status: STATUS_MAP[dictionaryStatus?.status || 'Success'],
-            message: t(
-              `Dialog.Message.${dictionaryStatus?.status || 'Success'}`,
-            ),
+            status: STATUS_MAP[statusKey],
+            message: t(`Dialog.Message.${statusKey}`),
           }}
-          validationResults={validationResults || null}
+          validationResults={validationResults ?? null}
         >
-          <DownloadSection status={dictionaryStatus?.status || 'Success'} />
+          <DownloadSection status={statusKey} />
         </Dialog>
-      </div>
+      )}
     </GovWizardItem>
   );
 };
