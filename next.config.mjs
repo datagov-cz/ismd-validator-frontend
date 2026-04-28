@@ -13,13 +13,13 @@ const nextConfig = {
       { source: '/api', destination: `${beUrl}/api` },
       { source: '/api/:path*', destination: `${beUrl}/api/:path*` },
 
-      // Swagger UI — served from the backend, proxied through the frontend.
+      // OpenAPI spec — served at the springdoc default path.
       { source: '/v3/api-docs', destination: `${beUrl}/v3/api-docs` },
       { source: '/v3/api-docs/:path*', destination: `${beUrl}/v3/api-docs/:path*` },
-      { source: '/swagger-ui', destination: `${beUrl}/swagger-ui/index.html` },
+
+      // Swagger UI assets — proxied to the backend's springdoc-served /swagger-ui/ tree.
+      // The user-facing URL is /api-docs (a Next.js page that embeds this in an iframe).
       { source: '/swagger-ui/:path*', destination: `${beUrl}/swagger-ui/:path*` },
-      { source: '/api-docs', destination: `${beUrl}/api-docs` },
-      { source: '/api-docs/:path*', destination: `${beUrl}/api-docs/:path*` },
     ];
   },
 };
