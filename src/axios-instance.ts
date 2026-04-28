@@ -1,9 +1,12 @@
 import Axios, { AxiosRequestConfig } from 'axios';
 
-// All requests go through the Next.js BFF: relative paths under the app's basePath
-// are rewritten server-side (next.config.mjs) to the internal backend ingress.
+// All requests go through the Next.js BFF route handler at /api/backend/*,
+// which reads BE_URL at request time and proxies to the internal backend
+// ingress. The browser never sees BE_URL.
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/validujeme';
+
 export const AXIOS_INSTANCE = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_PATH || '/validujeme',
+  baseURL: `${basePath}/api/backend`,
 });
 
 export const axiosInstance = <T>(
