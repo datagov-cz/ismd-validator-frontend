@@ -1,0 +1,32 @@
+# ==============================================
+# ISMD Validator Frontend - Docker Compose
+# ==============================================
+# Standalone use:
+#   docker compose up                                      # pull dev image from GHCR
+#   docker compose -f docker-compose.yml \
+#                  -f docker-compose.build.yml up --build  # build from local source
+#
+# Aggregated use:
+#   See ../infrastructure/docker-compose.frontends.yml
+# ==============================================
+
+services:
+  ismd-validator-frontend:
+    image: ${VALIDATOR_FRONTEND_IMAGE:-ghcr.io/datagov-cz/ismd-validator-frontend-dev:latest}
+    container_name: ismd-validator-frontend
+    pull_policy: ${VALIDATOR_FRONTEND_PULL_POLICY:-missing}
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      # Server-side BFF target. Inside the docker network, reach validator BE
+      # by its service name on the container's internal port (8080), not 8082.
+      - BE_URL=${VALIDATOR_BE_URL:-http://ismd-validator-backend:8080/validujeme}
+    ports:
+      - "3000:3000"
+    networks:
+      - ismd-network
+    restart: unless-stopped
+
+networks:
+  ismd-network:
+    name: ismd-network
+    driver: bridge

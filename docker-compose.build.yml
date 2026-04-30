@@ -1,0 +1,11 @@
+# Build override for validator frontend.
+# Usage: docker compose -f docker-compose.yml -f docker-compose.build.yml up --build
+
+services:
+  ismd-validator-frontend:
+    image: ismd-validator-frontend:local
+    pull_policy: never
+    build:
+      context: .
+      args:
+        NODE_ENV: ${NODE_ENV:-development}
