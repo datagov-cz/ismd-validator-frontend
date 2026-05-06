@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import { GovButton, GovIcon } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
+import { usePathname } from 'next/navigation';
 
+import { isGatedPath } from '@/lib/site-status';
 import { ThemeSwitch } from '@/components/shared/ThemeSwitch';
 
 import { NavItems } from './NavItems';
@@ -11,9 +13,26 @@ import { NavItems } from './NavItems';
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const t = useTranslations('Header');
+  const pathname = usePathname();
 
   const handleToggleMenu = () => setIsMenuOpen((prev) => !prev);
   const handleCloseMenu = () => setIsMenuOpen(false);
+
+  if (isGatedPath(pathname)) {
+    return (
+      <header className="bg-white py-3 z-50">
+        <section className="mx-auto max-w-desktop px-5 flex items-center">
+          <a
+            href="./"
+            className="h-12 no-underline flex items-center text-blue-primary font-medium gap-2"
+          >
+            <GovIcon name="logo-lion" slot="icon-start" className="!size-10" />
+            {t('LogoTitle')}
+          </a>
+        </section>
+      </header>
+    );
+  }
 
   return (
     <>
