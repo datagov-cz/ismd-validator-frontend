@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import { GovButton, GovIcon } from '@gov-design-system-ce/react';
-import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
-import { isGatedPath } from '@/lib/site-status';
 import { ThemeSwitch } from '@/components/shared/ThemeSwitch';
+import { isGatedPath } from '@/lib/site-status';
 
 import { NavItems } from './NavItems';
 
