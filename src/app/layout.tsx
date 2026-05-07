@@ -7,12 +7,14 @@ import '../styles/globals.css';
 
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale } from 'next-intl/server';
 
 import type { EnvironmentVariables } from '@/components/contexts/Environment';
 import { Footer } from '@/components/footer/Footer';
 import { Header } from '@/components/header/Header';
+import { GATED_REQUEST_HEADER } from '@/lib/site-status';
 
 import Providers from './providers';
 
@@ -26,7 +28,7 @@ const loadEnvVariables = () => {
   // define any variables to be loaded on the node server to be passed to the client
   return {
     environment: process.env.environment ?? 'development',
-  }
+  };
 };
 
 export default async function RootLayout({
@@ -35,11 +37,13 @@ export default async function RootLayout({
   children: ReactNode;
 }>) {
   const locale = await getLocale();
-  
+  const requestHeaders = await headers();
+  const isGated = requestHeaders.get(GATED_REQUEST_HEADER) === '1';
+
   const variables: EnvironmentVariables = {
     ...loadEnvVariables(),
-  }
-  
+  };
+
   return (
     <html lang={locale}>
       <head>
@@ -56,10 +60,10 @@ export default async function RootLayout({
             }}
           />
           <Providers environmentVariables={variables}>
-            <Header />
+            <Header isGated={isGated} />
             {children}
           </Providers>
-          <Footer />
+          <Footer isGated={isGated} />
         </body>
       </NextIntlClientProvider>
     </html>
