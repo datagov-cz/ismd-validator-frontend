@@ -1,4 +1,14 @@
 {
+  "ComingSoon": {
+    "Title": "Připravujeme",
+    "Description": "Validátor pro kontrolu a převod slovníků v rámci Informačního systému modelování dat právě připravujeme. O spuštění systému budeme informovat.",
+    "Acknowledgement": "Děkujeme za trpělivost."
+  },
+  "Maintenance": {
+    "Title": "Probíhá údržba",
+    "Description": "Aplikace je dočasně nedostupná z důvodu plánované údržby. Pracujeme na obnovení provozu.",
+    "Acknowledgement": "Děkujeme za pochopení."
+  },
   "Header": {
     "LogoTitle": "Informační systém pro modelování dat",
     "Nav": {
