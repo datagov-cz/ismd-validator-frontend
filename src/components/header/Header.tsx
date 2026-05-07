@@ -10,7 +10,11 @@ import { isGatedPath } from '@/lib/site-status';
 
 import { NavItems } from './NavItems';
 
-export const Header = () => {
+interface Props {
+  isGated?: boolean;
+}
+
+export const Header = ({ isGated: isGatedProp }: Props = {}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const t = useTranslations('Header');
   const pathname = usePathname();
@@ -18,7 +22,9 @@ export const Header = () => {
   const handleToggleMenu = () => setIsMenuOpen((prev) => !prev);
   const handleCloseMenu = () => setIsMenuOpen(false);
 
-  if (isGatedPath(pathname)) {
+  const isGated = isGatedProp ?? isGatedPath(pathname);
+
+  if (isGated) {
     return (
       <header className="bg-white py-3 z-50">
         <section className="mx-auto max-w-desktop px-5 flex items-center">
