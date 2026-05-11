@@ -1,9 +1,6 @@
 import { useTranslations } from 'next-intl';
 
-import {
-  useDownloadCatalogRecordJSON,
-  useDownloadDetailedValidationReportCSV,
-} from '@/api/generated';
+import { useDownloadDetailedValidationReportCSV } from '@/api/generated';
 import { DictProcessInfoStatusType } from '@/lib/appTypes';
 import { OUTPUT_FORMAT } from '@/lib/constants';
 import { getDownloadSectionTranslationKey } from '@/lib/contentUtils';
@@ -35,7 +32,6 @@ export const DownloadSection = ({ status }: Props) => {
 
   const downloadDetailedValidationReportMutation =
     useDownloadDetailedValidationReportCSV();
-  const downloadCatalogRecordMutation = useDownloadCatalogRecordJSON();
 
   const dictionaryFileExtension =
     OUTPUT_FORMAT === 'json' ? 'jsonld' : OUTPUT_FORMAT;
@@ -85,18 +81,6 @@ export const DownloadSection = ({ status }: Props) => {
     });
   };
 
-  const handleIncompleteCatalogRecordDownload = () => {
-    if (!conversionResponse) return;
-
-    handleReportDownload({
-      data: conversionResponse.catalogReport,
-      key: 'catalogRecord',
-      mutation: downloadCatalogRecordMutation,
-      filename: dictionaryName + '-záznam.jsonld',
-      mimeType: getMimeType('jsonld'),
-    });
-  };
-
   return (
     <section className="space-y-6">
       <DownloadItemRow
@@ -128,27 +112,6 @@ export const DownloadSection = ({ status }: Props) => {
         }}
         onClick={handleValidationReportDownload}
       />
-      {isSuccessWarning && (
-        <DownloadItemRow
-          title={t(`${basePath}.Row3.Title`)}
-          tooltips={[
-            {
-              title: t(`${basePath}.Row3.Tooltips.Title1`),
-              description: t(`${basePath}.Row3.Tooltips.Description1`),
-            },
-            {
-              title: t(`${basePath}.Row3.Tooltips.Title2`),
-              description: t(`${basePath}.Row3.Tooltips.Description2`),
-            },
-          ]}
-          govButton={{
-            text: t(`${basePath}.Row3.ButtonText`),
-            type: 'outlined',
-            disabled: downloadCatalogRecordMutation.isPending,
-          }}
-          onClick={handleIncompleteCatalogRecordDownload}
-        />
-      )}
     </section>
   );
 };

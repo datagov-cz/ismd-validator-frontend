@@ -27,7 +27,6 @@ export const metadata: Metadata = {
 const loadEnvVariables = () => {
   // define any variables to be loaded on the node server to be passed to the client
   return {
-    NEXT_PUBLIC_BE_URL: process.env.NEXT_PUBLIC_BE_URL ?? undefined,
     environment: process.env.environment ?? 'development',
   };
 };
@@ -47,6 +46,12 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
+      <head>
+        {/* Explicit manifest link — basePath /validujeme must be included.
+            Next.js app/manifest.ts auto-generates the link without the basePath (known bug),
+            so we serve the file from public/validujeme/ and link it manually instead. */}
+        <link rel="manifest" href="/validujeme/manifest.json" />
+      </head>
       <NextIntlClientProvider>
         <body>
           <script
