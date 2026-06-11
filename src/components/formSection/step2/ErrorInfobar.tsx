@@ -28,7 +28,9 @@ export const ErrorInfobar = ({
                 target="_blank"
                 className="underline"
               >
-                {t('ConversionErrorLinkText')}
+                {fileError || conversionError
+                  ? t('ErrorLinkText')
+                  : t('ConversionErrorLinkText')}
               </a>
             </>
           )}

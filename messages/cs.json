@@ -91,6 +91,7 @@
         "Button": "Zkontrolovat a převést",
         "ConversionUknownError": "Během převodu došlo k chybě: zaslaný vstup není podporovaný. Pokud problém přetrvává a máte pocit, že je problém na naší straně,",
         "ConversionErrorLinkText": "nahlašte nám prosím chybu.",
+        "ErrorLinkText": "Pokud problém přetrvává a myslíte si, že je chyba na naší straně, nahlašte nám prosím chybu.",
         "WarningBeforeNextConversion": "Stisknutím tlačítka přijdete o výsledek kontroly a převodu níže."
       },
       "Step3": {
