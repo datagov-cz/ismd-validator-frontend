@@ -6,6 +6,9 @@ services:
     image: ismd-validator-frontend:local
     pull_policy: never
     build:
-      context: .
+      # Default `.` works when running from this directory directly.
+      # When composed from ismd-infrastructure via `-f`, set VALIDATOR_FRONTEND_PATH
+      # to the path of this repo (e.g. ../ismd-validator-frontend).
+      context: ${VALIDATOR_FRONTEND_PATH:-.}
       args:
         NODE_ENV: ${NODE_ENV:-development}
