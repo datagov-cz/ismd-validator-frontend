@@ -4,6 +4,17 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const nextConfig = {
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || '/validujeme',
 
+  experimental: {
+    // Next 14: the instrumentation.ts hook is still experimental (stable/default
+    // in 15). Required for src/instrumentation.ts register() to run.
+    instrumentationHook: true,
+    // Keep the Azure Monitor OpenTelemetry distro out of the webpack bundle. Its
+    // auto-instrumentation hooks Node's module loader (require-in-the-middle),
+    // which only works when required from node_modules at runtime, not bundled.
+    // Next 14 name; promoted to top-level serverExternalPackages in 15.
+    serverComponentsExternalPackages: ['@azure/monitor-opentelemetry'],
+  },
+
   async rewrites() {
     return [
       // Swagger / OpenAPI paths route through /api/backend so the proxy can
