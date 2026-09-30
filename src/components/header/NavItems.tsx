@@ -11,7 +11,9 @@ export const NavItems = () => {
   return (
     <>
       <NavItem href="">{t('Nav.Link1')}</NavItem>
-      <NavItem href="">{t('Nav.Link2')}</NavItem>
+      <NavItem href="/validujeme/swagger-ui/index.html">
+        {t('Nav.Link2')}
+      </NavItem>
       <GovDropdown
         position="left"
         onGovChange={(e) => setIsDropdownOpen(e.detail.open)}
