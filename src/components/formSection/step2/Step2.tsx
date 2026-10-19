@@ -10,6 +10,7 @@ import {
 } from '@/api/generated';
 import { OUTPUT_FORMAT } from '@/lib/constants';
 import { getFileNameFromUrl } from '@/lib/downloadUtils';
+import { getDictionaryStatus } from '@/lib/validationUtils';
 import { useFormStore } from '@/store/formStore';
 
 import { ErrorInfobar } from './ErrorInfobar';
@@ -100,10 +101,6 @@ export const Step2 = () => {
       },
       onSuccess: (data) => {
         if (typeof data === 'object' && data !== null) {
-          const allValidationsInformative =
-            data.validationResults?.severityGroups?.find(
-              (group) => group.severity?.toLowerCase() !== 'informace',
-            );
           if (data.catalogReport?.název?.cs || data.catalogReport?.název?.en) {
             setDictionaryName(
               data.catalogReport?.název?.cs || data.catalogReport?.název?.en,
@@ -111,7 +108,7 @@ export const Step2 = () => {
           }
 
           setDictionaryStatus({
-            status: allValidationsInformative ? 'Warning' : 'Success',
+            status: getDictionaryStatus(data.validationResults),
             message: 'File converted successfully',
           });
           setConversionResponse(data);

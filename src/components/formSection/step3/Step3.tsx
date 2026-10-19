@@ -15,8 +15,7 @@ export const Step3 = () => {
   );
   const dictionaryName = useFormStore((state) => state.dictionaryName);
 
-  const isSuccess = dictionaryStatus?.status === 'Success';
-  const statusKey = isSuccess ? 'Success' : 'Error';
+  const statusKey = dictionaryStatus?.status ?? 'Success';
   const mappedStatus = dictionaryStatus ? STATUS_MAP[statusKey] : 'primary';
   const isExpanded = !!dictionaryStatus;
 
@@ -42,7 +41,7 @@ export const Step3 = () => {
           }}
           validationResults={validationResults ?? null}
         >
-          <DownloadSection status={statusKey} />
+          <DownloadSection status={dictionaryStatus.status} />
         </Dialog>
       )}
     </GovWizardItem>
