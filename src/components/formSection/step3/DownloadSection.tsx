@@ -40,6 +40,8 @@ export const DownloadSection = ({ status }: Props) => {
   const isSuccessWarning = sectionKey === 'Success-Warning';
 
   const handleDictDownload = async () => {
+    if (status === 'Error') return;
+
     if (conversionResponse?.output) {
       const dictionaryData = prepareDictionaryData(
         conversionResponse.output,
