@@ -1,5 +1,9 @@
 name: Trigger Deployment
 
+concurrency:
+  group: deploy-validator-frontend-${{ github.event.workflow_run.head_branch || github.event.inputs.environment }}
+  cancel-in-progress: false
+
 on:
   # Triggered when a new image is published
   workflow_run:
@@ -44,7 +48,7 @@ jobs:
       ref: ${{ steps.determine_params.outputs.ref }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6
         with:
           # For workflow_run, check out the exact commit that built the image; otherwise use the current SHA
           ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
@@ -176,7 +180,7 @@ jobs:
     needs: determine-params
     steps:
       - name: Login to GHCR
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -214,7 +218,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6
       
       - name: Create GitHub Deployment
         id: create_deployment
@@ -291,7 +295,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6
       
       - name: Create GitHub Deployment
         id: create_deployment
@@ -368,7 +372,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v6
       
       - name: Create GitHub Deployment
         id: create_deployment

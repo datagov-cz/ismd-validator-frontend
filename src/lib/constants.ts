@@ -9,6 +9,8 @@ export const STATUS_MAP: Record<
   Error: 'error',
 };
 
+export const ALLOWED_FILE_SIZE = 10485760;
+
 export const OUTPUT_FORMAT: OutputFormatType =
   (process.env.NEXT_PUBLIC_CONVERT_FORMAT as OutputFormatType) ?? 'json';
 
