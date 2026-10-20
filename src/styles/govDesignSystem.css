@@ -1,7 +1,7 @@
 /* Variables. */
 @import '@gov-design-system-ce/styles/tokens.css';
 /* General settings. */
-/* @import '@gov-design-system-ce/styles/styles.css'; */
+@import '@gov-design-system-ce/styles/styles.css';
 /* Styles for basic layout and containers. */
 @import '@gov-design-system-ce/styles/layout.css';
 /* Styles of individual components. */
@@ -54,9 +54,112 @@ gov-dropdown li .gov-button[expanded='1'] .element,
   justify-content: start;
 }
 
-gov-wizard-item,
-.gov-wizard-item {
-  background-color: transparent;
+/*
+ * @gov-design-system-ce/react 4.7.1 renders the wizard color as data-color,
+ * while @gov-design-system-ce/styles 4.7.1 still targets the color attribute.
+ * Keep this compatibility layer until both packages use the same attribute.
+ */
+.gov-wizard-item[data-color='primary'] [slot='headline'],
+.gov-wizard-item[data-color='primary'] .gov-wizard-item__chevron {
+  color: var(--color, var(--text-status-info));
+}
+
+.gov-wizard-item[data-color='primary'] .gov-wizard-item__prefix {
+  background: var(--indicator-background, var(--background-primary-subtle));
+  color: var(--color, var(--text-status-info));
+}
+
+.gov-wizard-item[data-color='neutral'] [slot='headline'],
+.gov-wizard-item[data-color='neutral'] .gov-wizard-item__chevron {
+  color: var(--color, var(--text-primary));
+}
+
+.gov-wizard-item[data-color='neutral'] .gov-wizard-item__prefix {
+  background: var(--indicator-background, var(--background-neutral-subtle));
+  color: var(--color, var(--text-primary));
+}
+
+.gov-wizard-item[data-color='error'] [slot='headline'],
+.gov-wizard-item[data-color='error'] .gov-wizard-item__chevron {
+  color: var(--color, var(--text-status-error));
+}
+
+.gov-wizard-item[data-color='error'] .gov-wizard-item__prefix {
+  background: var(
+    --indicator-background,
+    var(--background-status-error-subtle)
+  );
+  color: var(--color, var(--text-status-error));
+}
+
+.gov-wizard-item[data-color='success'] [slot='headline'],
+.gov-wizard-item[data-color='success'] .gov-wizard-item__chevron {
+  color: var(--color, var(--text-status-success));
+}
+
+.gov-wizard-item[data-color='success'] .gov-wizard-item__prefix {
+  background: var(
+    --indicator-background,
+    var(--background-status-success-subtle)
+  );
+  color: var(--color, var(--text-status-success));
+}
+
+.gov-wizard-item[data-color='warning'] [slot='headline'],
+.gov-wizard-item[data-color='warning'] .gov-wizard-item__chevron {
+  color: var(--color, var(--text-status-warning));
+}
+
+.gov-wizard-item[data-color='warning'] .gov-wizard-item__prefix {
+  background: var(
+    --indicator-background,
+    var(--background-status-warning-subtle)
+  );
+  color: var(--color, var(--text-status-warning));
+}
+
+/*
+ * The React 4.7.1 file component has the same attribute mismatch as the
+ * wizard: it emits data-expanded/data-invalid, while the styles target the
+ * Web Component attributes expanded/invalid.
+ */
+.gov-form-file[data-expanded='true'] {
+  width: 100%;
+}
+
+.gov-form-file[data-expanded='true'] .gov-form-file__area {
+  position: relative;
+  width: 100%;
+  padding: var(--spacing-xl);
+  border: var(--border-width, 0.0625rem) dashed
+    var(--form-border-color, var(--border-subtle));
+  border-radius: var(--border-radius, var(--corner-radius-s));
+  background-color: var(--background-block-primary);
+  text-align: center;
+  transition: background-color 150ms ease-in-out;
+  will-change: background-color;
+}
+
+@media not all and (pointer: coarse) {
+  .gov-form-file[data-expanded='true'] .gov-form-file__area:hover,
+  .gov-form-file[data-expanded='true'] .gov-form-file__area.highlight {
+    background-color: var(--button-outlined-primary-hover);
+  }
+}
+
+.gov-form-file[data-expanded='true'] .gov-form-file__attachments {
+  margin-top: calc(var(--spacing-xs) * 2);
+}
+
+.gov-form-file[data-expanded='true'][data-invalid='true'] .gov-form-file__area {
+  border-color: var(--form-state-border-error, var(--status-error));
+}
+
+.gov-form-file[data-expanded='true'][data-disabled='true']
+  .gov-form-file__area {
+  pointer-events: none;
+  color: var(--form-state-label-disabled, var(--text-disabled));
+  border-color: var(--form-state-border-disabled, var(--border-subtlest));
 }
 
 .gov-tooltip span {
