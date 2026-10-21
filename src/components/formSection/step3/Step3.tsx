@@ -24,14 +24,12 @@ export const Step3 = () => {
       color={statusMapped}
       isExpanded={!!dictionaryStatus}
       collapsible
+      prefix="3"
+      headline={
+        <span>{t(`Headline.${dictionaryStatus?.status ?? 'Success'}`)}</span>
+      }
+      annotation={<span className="text-left">{t('Annotation')}</span>}
     >
-      <span slot="prefix">3</span>
-      <span slot="headline">
-        {t(`Headline.${dictionaryStatus?.status ?? 'Success'}`)}
-      </span>
-      <span slot="annotation" className="text-left">
-        {t('Annotation')}
-      </span>
       <div
         className={`${dictionaryStatus && statusMapped !== 'error' ? 'block' : 'hidden'}`}
       >

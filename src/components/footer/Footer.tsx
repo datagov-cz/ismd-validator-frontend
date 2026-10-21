@@ -1,8 +1,9 @@
 'use client';
 
-import { GovButton, GovIcon, GovLink } from '@gov-design-system-ce/react';
+import { GovButton, GovLink } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
+import { GovIcon } from '@/components/shared/GovIcon';
 import { scrollTop } from '@/lib/windowUtils';
 
 import { FooterColumn } from './FooterColumn';
@@ -20,22 +21,25 @@ export const Footer = ({ isGated = false }: Props) => {
         <section className="max-w-desktop px-5 mx-auto space-y-12">
           <div className="space-y-4">
             <h5 className="font-medium text-xl">{t('ContactColumn.Title')}</h5>
-            <GovLink href={`mailto:${t('ContactColumn.Email')}`} size="s">
-              <GovIcon slot="icon-start" name="envelope" />
+            <GovLink
+              href={`mailto:${t('ContactColumn.Email')}`}
+              size="s"
+              iconStart={<GovIcon name="envelope" />}
+            >
               {t('ContactColumn.Email')}
             </GovLink>
           </div>
           <div className="space-y-4">
             <h6 className="text-lg font-medium">{t('ThanksSection.Title')}</h6>
             <p className="text-sm">{t('ThanksSection.Text')}</p>
-            <ul className="flex gap-y-4 gap-x-6 flex-wrap">
-              <li>
+            <ul className="flex gap-y-4 gap-x-6 flex-wrap pl-0!">
+              <li className="before:content-none!">
                 <GovIcon name="logo-eu" />
               </li>
-              <li>
+              <li className="before:content-none!">
                 <GovIcon name="logo-npo" />
               </li>
-              <li>
+              <li className="before:content-none!">
                 <GovIcon name="logo-dia" />
               </li>
             </ul>
@@ -59,24 +63,25 @@ export const Footer = ({ isGated = false }: Props) => {
     <footer className="bg-blue py-12 text-white mt-auto">
       <section className="max-w-desktop px-5 mx-auto space-y-12">
         <div className="flex justify-between">
-          <ul className="flex justify-between w-full flex-wrap flex-col md:flex-row gap-y-10 md:pr-28">
+          <ul className="flex justify-between w-full flex-wrap flex-col md:flex-row gap-y-10 md:pr-28 pl-0!">
             <FooterColumn title={t('LinkColumn.Title')}>
-              <ul className="space-y-3">
-                <li>
-                  <GovLink href="#" size="s">
+              <ul className="space-y-3 pl-0!">
+                <li className="before:content-none!">
+                  <GovLink href="#" size="s" className="[&_span]:text-link!">
                     {t('LinkColumn.Link1')}
                   </GovLink>
                 </li>
-                <li>
-                  <GovLink href="#" size="s">
+                <li className="before:content-none!">
+                  <GovLink href="#" size="s" className="[&_span]:text-link!">
                     {t('LinkColumn.Link2')}
                   </GovLink>
                 </li>
-                <li>
+                <li className="before:content-none!">
                   <GovLink
                     href="https://github.com/datagov-cz/ISMD_org"
                     external
                     size="s"
+                    className="[&_span]:text-link!"
                   >
                     {t('LinkColumn.Link3')}
                   </GovLink>
@@ -84,62 +89,41 @@ export const Footer = ({ isGated = false }: Props) => {
               </ul>
             </FooterColumn>
             <FooterColumn title={t('ContactColumn.Title')}>
-              <GovLink href={`mailto:${t('ContactColumn.Email')}`} size="s">
-                <GovIcon slot="icon-start" name="envelope" />
+              <GovLink
+                href={`mailto:${t('ContactColumn.Email')}`}
+                size="s"
+                iconStart={<GovIcon name="envelope" />}
+                className="[&_span]:text-link!"
+              >
                 {t('ContactColumn.Email')}
               </GovLink>
             </FooterColumn>
           </ul>
           <GovButton
-            slot="icon-start"
-            name="arrow-up"
             aria-label={t('BackToTopAria')}
             type="solid"
             size="m"
             className="bg-white cursor-pointer"
-            onGovClick={scrollTop}
-          >
-            <GovIcon name="arrow-up" />
-          </GovButton>
+            onClick={scrollTop}
+            iconStart={<GovIcon name="arrow-up" color="primary" />}
+          ></GovButton>
         </div>
         <div className="space-y-4">
           <h6 className="text-lg font-medium">{t('ThanksSection.Title')}</h6>
           <p className="text-sm">{t('ThanksSection.Text')}</p>
-          <ul className="flex gap-y-4 gap-x-6 flex-wrap">
-            <li>
+          <ul className="flex gap-y-4 gap-x-6 flex-wrap pl-0! pt-4">
+            <li className="before:content-none!">
               <GovIcon name="logo-eu" />
             </li>
-            <li>
+            <li className="before:content-none!">
               <GovIcon name="logo-npo" />
             </li>
-            <li>
+            <li className="before:content-none!">
               <GovIcon name="logo-dia" />
             </li>
           </ul>
         </div>
         <div className="space-y-4">
-          <ul className="flex gap-x-8 gap-y-3 flex-wrap">
-            <li>
-              <GovLink href="#" size="s">
-                Link
-              </GovLink>
-            </li>
-            <li>
-              <GovLink href="#" size="s">
-                Link
-              </GovLink>
-            </li>
-            <li>
-              <GovLink href="#" size="s">
-                Link
-              </GovLink>
-            </li>
-            <li>
-              <GovLink href="#" size="s">
-                Link
-              </GovLink>
-            </li>
-          </ul>
           <hr className="!border-t-footer-separator" />
           <div className="flex justify-between flex-wrap gap-y-4 gap-x-8 text-secondary text-xs">
             <p>{t('FooterCopySection.Copyright')}</p>

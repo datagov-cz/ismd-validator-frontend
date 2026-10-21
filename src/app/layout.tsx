@@ -14,6 +14,7 @@ import { getLocale } from 'next-intl/server';
 import type { EnvironmentVariables } from '@/components/contexts/Environment';
 import { Footer } from '@/components/footer/Footer';
 import { Header } from '@/components/header/Header';
+import { GovDesignSystemInitializer } from '@/components/shared/GovDesignSystemInitializer';
 import { GATED_REQUEST_HEADER } from '@/lib/site-status';
 
 import Providers from './providers';
@@ -59,6 +60,7 @@ export default async function RootLayout({
               __html: `window.GOV_DS_CONFIG = { iconsPath: '/validujeme/assets/icons' };`,
             }}
           />
+          <GovDesignSystemInitializer />
           <Providers environmentVariables={variables}>
             <Header isGated={isGated} />
             {children}
