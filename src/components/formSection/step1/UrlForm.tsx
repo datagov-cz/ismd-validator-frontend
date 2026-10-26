@@ -33,17 +33,21 @@ export const UrlForm = () => {
   };
 
   return (
-    <GovFormControl className="w-full">
-      <GovFormLabel slot="top" size="xl" legend>
-        Zadejte URL
-      </GovFormLabel>
+    <GovFormControl
+      className="w-full"
+      top={
+        <GovFormLabel size="xl" legend>
+          Zadejte URL
+        </GovFormLabel>
+      }
+    >
       <GovFormGroup>
         <GovFormInput
           id="url-input"
           placeholder="https://www.priklad.cz/data.ttl"
-          inputType="url"
+          type="url"
           size="m"
-          onGovInput={(e) => handleSetUrl(e.detail.value)}
+          onInput={(e) => handleSetUrl(e.currentTarget.value)}
           invalid={!!urlError}
         />
       </GovFormGroup>

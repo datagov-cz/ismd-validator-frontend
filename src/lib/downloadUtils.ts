@@ -1,5 +1,5 @@
 import {
-  useDownloadCatalogRecordJSON,
+  DetailedValidationReportDto,
   useDownloadDetailedValidationReportCSV,
 } from '@/api/generated';
 
@@ -14,7 +14,10 @@ export const handleDownload = ({
   filename,
   mimeType,
 }: DownloadItemRowProps) => {
-  if (!data) return;
+  if (data == null) {
+    console.error(`No data available for download: ${filename}`);
+    return;
+  }
 
   const content =
     typeof data === 'string' ? data : JSON.stringify(data, null, 2);
@@ -28,7 +31,8 @@ export const handleDownload = ({
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  // Give the browser time to start consuming the object URL before releasing it.
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
 
 export const fetchFileFromUrl = async (url: string): Promise<string | null> => {
@@ -100,34 +104,29 @@ export const prepareDictionaryData = (
 };
 
 interface HandleReportDownloadParams {
-  data: unknown;
-  key: string;
-  mutation:
-    | ReturnType<typeof useDownloadCatalogRecordJSON>
-    | ReturnType<typeof useDownloadDetailedValidationReportCSV>;
+  data?: DetailedValidationReportDto;
+  mutation: ReturnType<typeof useDownloadDetailedValidationReportCSV>;
   filename: string;
   mimeType: string;
 }
 
 export const handleReportDownload = ({
   data,
-  key,
   mutation,
   filename,
   mimeType,
 }: HandleReportDownloadParams) => {
-  const formData = new FormData();
-  formData.append(
-    key,
-    new Blob([JSON.stringify(data)], { type: 'application/json' }),
-  );
+  if (!data) return;
 
-  mutation.mutate(formData, {
-    onSuccess: (downloaded) => {
-      handleDownload({ data: downloaded, filename, mimeType });
+  mutation.mutate(
+    { data: { detailedReport: data }, params: { filename } },
+    {
+      onSuccess: (downloaded) => {
+        handleDownload({ data: downloaded, filename, mimeType });
+      },
+      onError: (error) => {
+        console.error(`Error downloading ${filename}:`, error);
+      },
     },
-    onError: (error) => {
-      console.error(`Error downloading ${filename}:`, error);
-    },
-  });
+  );
 };

@@ -22,27 +22,29 @@ export const Step3 = () => {
   return (
     <GovWizardItem
       color={mappedStatus}
-      isExpanded={isExpanded}
       collapsible={isExpanded}
+      isExpanded={!!dictionaryStatus}
+      prefix="3"
+      headline={
+        <span>{t(`Headline.${dictionaryStatus?.status ?? 'Success'}`)}</span>
+      }
+      annotation={<span className="text-left">{t('Annotation')}</span>}
     >
-      <span slot="prefix">3</span>
-      <span slot="headline">
-        {t(`Headline.${dictionaryStatus?.status ?? 'Success'}`)}
-      </span>
-      <span slot="annotation" className="text-left">
-        {t('Annotation')}
-      </span>
       {dictionaryStatus && (
-        <Dialog
-          title={dictionaryName ?? t('Dialog.TitleFallback')}
-          infoBar={{
-            status: STATUS_MAP[statusKey],
-            message: t(`Dialog.Message.${statusKey}`),
-          }}
-          validationResults={validationResults ?? null}
+        <div
+          className={`${dictionaryStatus && mappedStatus !== 'error' ? 'block' : 'hidden'}`}
         >
-          <DownloadSection status={dictionaryStatus.status} />
-        </Dialog>
+          <Dialog
+            title={dictionaryName ?? t('Dialog.TitleFallback')}
+            infoBar={{
+              status: STATUS_MAP[statusKey],
+              message: t(`Dialog.Message.${statusKey}`),
+            }}
+            validationResults={validationResults ?? null}
+          >
+            <DownloadSection status={dictionaryStatus.status} />
+          </Dialog>
+        </div>
       )}
     </GovWizardItem>
   );

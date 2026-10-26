@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { GovBanner, GovButton, GovIcon } from '@gov-design-system-ce/react';
+import { GovBanner, GovButton } from '@gov-design-system-ce/react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useTranslations } from 'next-intl';
@@ -9,6 +9,7 @@ import { useTranslations } from 'next-intl';
 import { FaqSection } from '@/components/faq/FaqSection';
 import { FormSection } from '@/components/formSection/FormSection';
 import { InfoSection } from '@/components/infoSection/InfoSection';
+import { GovIcon } from '@/components/shared/GovIcon';
 import { SSP_FETCH_URL } from '@/lib/constants';
 import {
   SparqlResponse,
@@ -50,12 +51,20 @@ export default function Home() {
   return (
     <div className="w-full max-w-desktop mx-auto px-3 py-6">
       <div className="space-y-12">
-        <GovBanner size="m" background="simple" foreground="logo">
-          <h3 slot="headline">{t('Banner.Headline')}</h3>
+        <GovBanner
+          size="m"
+          background="simple"
+          className="px-12!"
+          foreground="icon"
+          headline={<h3>{t('Banner.Headline')}</h3>}
+          icon={<GovIcon name="logo-lion-white" />}
+          button={
+            <GovButton color="secondary" size="l" type="solid">
+              {t('Banner.Button')}
+            </GovButton>
+          }
+        >
           <p>{t('Banner.Description')}</p>
-          <GovButton color="secondary" size="l" type="solid" slot="button">
-            {t('Banner.Button')}
-          </GovButton>
         </GovBanner>
         <section className="relative flex items-center p-4 w-full bg-blue-subtle gap-x-3 text-blue-primary transition-colors duration-300">
           <GovIcon name="lightbulb-fill" slot="icon" />

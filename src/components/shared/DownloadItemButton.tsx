@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
-import { GovIcon } from '@gov-design-system-ce/react';
+
+import { GovIcon } from './GovIcon';
 
 interface Props {
   onClick: () => void;
