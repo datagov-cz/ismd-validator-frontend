@@ -40,6 +40,8 @@ export const DownloadSection = ({ status }: Props) => {
   const isSuccessWarning = sectionKey === 'Success-Warning';
 
   const handleDictDownload = async () => {
+    if (status === 'Error') return;
+
     if (conversionResponse?.output) {
       const dictionaryData = prepareDictionaryData(
         conversionResponse.output,
@@ -49,10 +51,17 @@ export const DownloadSection = ({ status }: Props) => {
         handleDownload({
           data: dictionaryData,
           filename: dictionaryFilename,
-          mimeType: getMimeType('jsonld'),
+          mimeType: getMimeType(dictionaryFileExtension),
         });
       }
       return;
+    }
+
+    if (conversionResponse) {
+      console.error(
+        'Conversion response does not contain downloadable output',
+        conversionResponse,
+      );
     }
 
     if (url) {
@@ -74,7 +83,6 @@ export const DownloadSection = ({ status }: Props) => {
 
     handleReportDownload({
       data: conversionResponse.validationReport,
-      key: 'detailedReport',
       mutation: downloadDetailedValidationReportMutation,
       filename: dictionaryName + '-report.csv',
       mimeType: 'text/csv',

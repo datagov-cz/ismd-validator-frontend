@@ -7,8 +7,7 @@ interface Props {
 
 export const FaqItem = ({ label, answer }: Props) => {
   return (
-    <GovAccordionItem>
-      <h3 slot="label">{label}</h3>
+    <GovAccordionItem label={<h3>{label}</h3>}>
       <p>{answer}</p>
     </GovAccordionItem>
   );
