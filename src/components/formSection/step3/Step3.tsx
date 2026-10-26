@@ -23,7 +23,7 @@ export const Step3 = () => {
     <GovWizardItem
       color={mappedStatus}
       collapsible={isExpanded}
-      isExpanded={!!dictionaryStatus}
+      isExpanded={isExpanded}
       prefix="3"
       headline={
         <span>{t(`Headline.${dictionaryStatus?.status ?? 'Success'}`)}</span>
@@ -31,20 +31,16 @@ export const Step3 = () => {
       annotation={<span className="text-left">{t('Annotation')}</span>}
     >
       {dictionaryStatus && (
-        <div
-          className={`${dictionaryStatus && mappedStatus !== 'error' ? 'block' : 'hidden'}`}
+        <Dialog
+          title={dictionaryName ?? t('Dialog.TitleFallback')}
+          infoBar={{
+            status: STATUS_MAP[statusKey],
+            message: t(`Dialog.Message.${statusKey}`),
+          }}
+          validationResults={validationResults ?? null}
         >
-          <Dialog
-            title={dictionaryName ?? t('Dialog.TitleFallback')}
-            infoBar={{
-              status: STATUS_MAP[statusKey],
-              message: t(`Dialog.Message.${statusKey}`),
-            }}
-            validationResults={validationResults ?? null}
-          >
-            <DownloadSection status={dictionaryStatus.status} />
-          </Dialog>
-        </div>
+          <DownloadSection status={dictionaryStatus.status} />
+        </Dialog>
       )}
     </GovWizardItem>
   );

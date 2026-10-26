@@ -81,10 +81,7 @@ export const Step2 = () => {
       const data = response.data;
 
       if (data) {
-        const allValidationsInformative =
-          data.validationResults?.severityGroups?.find(
-            (group) => group.severity?.toLowerCase() !== 'informace',
-          );
+        const dictionaryStatus = getDictionaryStatus(data.validationResults);
         const ontologyNames = data.validationReport?.ontology?.name;
         const ontologyName =
           ontologyNames?.cs ||
@@ -96,7 +93,7 @@ export const Step2 = () => {
         }
 
         setDictionaryStatus({
-          status: allValidationsInformative ? 'Warning' : 'Success',
+          status: dictionaryStatus,
           message: response.message || 'File converted successfully',
         });
         setConversionResponse(data);
@@ -150,38 +147,6 @@ export const Step2 = () => {
         break;
     }
 
-    convertMutation.mutate(formData, {
-      onError: (error) => {
-        const axiosError = error as AxiosError<ConversionResponseDto>;
-        const errorMessage =
-          axiosError.response?.data?.errorMessage || t('ConversionUknownError');
-        console.error('Error converting file:', errorMessage);
-        setConversionError(errorMessage);
-        setDictionaryStatus({
-          status: 'Error',
-          message: errorMessage,
-        });
-      },
-      onSuccess: (data) => {
-        if (typeof data === 'object' && data !== null) {
-          if (data.catalogReport?.název?.cs || data.catalogReport?.název?.en) {
-            setDictionaryName(
-              data.catalogReport?.název?.cs || data.catalogReport?.název?.en,
-            );
-          }
-
-          setDictionaryStatus({
-            status: getDictionaryStatus(data.validationResults),
-            message: 'File converted successfully',
-          });
-          setConversionResponse(data);
-          hasValidatedRef.current = true;
-        } else {
-          console.error('Unexpected data format', data);
-          setConversionError(t('ConversionUknownError'));
-        }
-      },
-    });
   };
 
   useEffect(() => {
