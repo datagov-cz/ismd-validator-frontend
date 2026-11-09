@@ -1,6 +1,7 @@
-import { GovIcon, GovTooltip } from '@gov-design-system-ce/react';
+import { GovTooltip } from '@gov-design-system-ce/react';
 
 import { DownloadItemButton } from '@/components/shared/DownloadItemButton';
+import { GovIcon } from '@/components/shared/GovIcon';
 
 type TooltipType = {
   title: string;
@@ -41,16 +42,14 @@ export const DownloadItemRow = ({
       </div>
       <div className="flex flex-col gap-y-2">
         {tooltips.map((tooltip) => (
-          <GovTooltip
-            key={tooltip.title}
-            size="m"
-            color="primary"
-            position="top"
-            message={tooltip.description}
-            className="max-w-max border-b-0! rounded-md hover:bg-blue-primary/10 transition-colors duration-200"
-          >
-            <GovIcon name="info-circle-fill" />
-            <span className="pr-2">{tooltip.title}</span>
+          <GovTooltip key={tooltip.title} placement="top">
+            <GovTooltip.Trigger className="max-w-max border-b-0! rounded-md hover:bg-blue-primary/10 transition-colors duration-200 flex items-center gap-x-2">
+              <GovIcon name="info-circle-fill" />
+              <span className="pr-2">{tooltip.title}</span>
+            </GovTooltip.Trigger>
+            <GovTooltip.Content size="m" color="primary">
+              {tooltip.description}
+            </GovTooltip.Content>
           </GovTooltip>
         ))}
       </div>

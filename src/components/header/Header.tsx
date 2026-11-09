@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { GovButton, GovIcon } from '@gov-design-system-ce/react';
+import { GovButton } from '@gov-design-system-ce/react';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
+import { GovIcon } from '@/components/shared/GovIcon';
 import { ThemeSwitch } from '@/components/shared/ThemeSwitch';
 import { isGatedPath } from '@/lib/site-status';
 
@@ -46,7 +47,7 @@ export const Header = ({ isGated: isGatedProp }: Props = {}) => {
         <section className="mx-auto max-w-desktop px-5 flex justify-between items-center gap-x-4">
           <a
             href="./"
-            className="h-12 no-underline flex items-center text-blue-primary font-medium gap-2"
+            className="h-12 no-underline! flex items-center text-blue-primary font-medium gap-2"
           >
             <GovIcon name="logo-lion" slot="icon-start" className="!size-10" />
             {t('LogoTitle')}
@@ -64,10 +65,9 @@ export const Header = ({ isGated: isGatedProp }: Props = {}) => {
               aria-label={t('MenuButtonAria')}
               color="primary"
               className="desktop:!hidden"
-              onGovClick={handleToggleMenu}
-            >
-              <GovIcon slot="icon-start" name="list" />
-            </GovButton>
+              onClick={handleToggleMenu}
+              iconStart={<GovIcon name="list" />}
+            ></GovButton>
           </ul>
         </section>
       </header>
@@ -85,7 +85,7 @@ export const Header = ({ isGated: isGatedProp }: Props = {}) => {
         } desktop:hidden`}
       >
         <nav>
-          <ul className="flex flex-col p-4 gap-3">
+          <ul className="flex flex-col p-4 gap-3 list-none!">
             <NavItems />
           </ul>
         </nav>

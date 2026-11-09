@@ -7,7 +7,7 @@ interface Props {
 
 export const FooterColumn = ({ title, children }: Props) => {
   return (
-    <li className="space-y-4">
+    <li className="space-y-4 before:content-none!">
       <h5 className="font-medium text-xl">{title}</h5>
       {children}
     </li>

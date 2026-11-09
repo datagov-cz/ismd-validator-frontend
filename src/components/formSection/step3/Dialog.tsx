@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
-import { GovIcon, GovInfobar } from '@gov-design-system-ce/react';
+import { GovInfobar } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
 import { ValidationResultsDto } from '@/api/generated';
+import { GovIcon } from '@/components/shared/GovIcon';
 
 interface InfoBarProps {
   status: 'success' | 'warning' | 'error';
@@ -37,8 +38,11 @@ export const Dialog = ({
         <h3 className="text-xl lg:text-2xl text-dark-primary">{title}</h3>
       </div>
       <div className="flex flex-col gap-y-6 px-4 lg:px-8 py-6">
-        <GovInfobar color={infoBar.status} type="subtle">
-          <GovIcon name={iconName} slot="icon" />
+        <GovInfobar
+          color={infoBar.status}
+          type="subtle"
+          icon={<GovIcon name={iconName} />}
+        >
           <p className="text-lg">{infoBar.message}</p>
         </GovInfobar>
 

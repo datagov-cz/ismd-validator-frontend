@@ -1,9 +1,10 @@
 'use client';
 
-import { GovIcon } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
 import { useTheme } from '@/components/contexts/ThemeProvider';
+
+import { GovIcon } from './GovIcon';
 
 export const ThemeSwitch = () => {
   const { theme, setTheme } = useTheme();

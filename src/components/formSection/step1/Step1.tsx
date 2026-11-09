@@ -1,7 +1,7 @@
 import {
+  GovFormGroup,
   GovFormLabel,
   GovFormRadio,
-  GovFormRadioGroup,
   GovWizardItem,
 } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
@@ -24,39 +24,59 @@ export const Step1 = () => {
   const resetForms = useFormStore((state) => state.resetForms);
 
   return (
-    <GovWizardItem color="primary" collapsible isExpanded>
-      <span slot="prefix">1</span>
-      <span slot="headline">{t('Headline')}</span>
-      <span slot="annotation" className="text-left">
-        {t('Annotation')}
-      </span>
+    <GovWizardItem
+      color="primary"
+      collapsible
+      isExpanded
+      prefix="1"
+      headline={<span>{t('Headline')}</span>}
+      annotation={<span className="text-left">{t('Annotation')}</span>}
+    >
       <div className="text-dark-primary max-w-[808px] transition-colors duration-300">
-        <GovFormRadioGroup
-          value={typeOfConversion}
-          onGovChange={(val) => {
-            setTypeOfConversion(val.detail.value as ConversionType);
-            resetForms();
-          }}
-        >
+        <GovFormGroup orientation="vertical">
           <div className="w-full">
-            <GovFormRadio value="file">
-              <GovFormLabel slot="label">{t('FileForm.Label')}</GovFormLabel>
+            <GovFormRadio
+              name="conversion-type"
+              value="file"
+              checked={typeOfConversion === 'file'}
+              onChange={() => {
+                setTypeOfConversion('file' as ConversionType);
+                resetForms();
+              }}
+            >
+              <GovFormLabel>{t('FileForm.Label')}</GovFormLabel>
             </GovFormRadio>
             {typeOfConversion === 'file' && <FileForm />}
           </div>
           <div className="w-full">
-            <GovFormRadio value="url">
-              <GovFormLabel slot="label">{t('UrlForm.Label')}</GovFormLabel>
+            <GovFormRadio
+              name="conversion-type"
+              value="url"
+              checked={typeOfConversion === 'url'}
+              onChange={() => {
+                setTypeOfConversion('url' as ConversionType);
+                resetForms();
+              }}
+            >
+              <GovFormLabel>{t('UrlForm.Label')}</GovFormLabel>
             </GovFormRadio>
             {typeOfConversion === 'url' && <UrlForm />}
           </div>
           <div className="w-full">
-            <GovFormRadio value="dict">
-              <GovFormLabel slot="label">{t('DictForm.Label')}</GovFormLabel>
+            <GovFormRadio
+              name="conversion-type"
+              value="dict"
+              checked={typeOfConversion === 'dict'}
+              onChange={() => {
+                setTypeOfConversion('dict' as ConversionType);
+                resetForms();
+              }}
+            >
+              <GovFormLabel>{t('DictForm.Label')}</GovFormLabel>
             </GovFormRadio>
             {typeOfConversion === 'dict' && <SearchForm />}
           </div>
-        </GovFormRadioGroup>
+        </GovFormGroup>
       </div>
     </GovWizardItem>
   );

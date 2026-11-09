@@ -23,5 +23,15 @@
         ]
       }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["src/api/generated.ts"],
+      "rules": {
+        "no-redeclare": "off",
+        "@typescript-eslint/no-redeclare": "off",
+        "simple-import-sort/imports": "off"
+      }
+    }
+  ]
 }
