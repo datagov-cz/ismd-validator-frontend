@@ -2,7 +2,8 @@ import { ReactNode } from 'react';
 import { GovInfobar } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
-import { ValidationResultsDto } from '@/api/generated';
+import { ConformanceIssueDto, ValidationResultsDto } from '@/api/generated';
+import { ConformanceIssueList } from '@/components/shared/ConformanceIssueList';
 import { GovIcon } from '@/components/shared/GovIcon';
 
 interface InfoBarProps {
@@ -14,6 +15,7 @@ interface Props {
   title: string;
   infoBar: InfoBarProps;
   validationResults: ValidationResultsDto | null;
+  conformanceIssues: ConformanceIssueDto[];
   children: ReactNode;
 }
 
@@ -21,6 +23,7 @@ export const Dialog = ({
   title,
   infoBar,
   validationResults,
+  conformanceIssues,
   children,
 }: Props) => {
   const t = useTranslations('Home.FormSection.Step3.Dialog');
@@ -79,6 +82,17 @@ export const Dialog = ({
               </tbody>
             </table>
           </div>
+        )}
+        {conformanceIssues.length > 0 && (
+          <section className="space-y-2">
+            <h4 className="text-lg font-bold">
+              {t('ConformanceIssues.Title', {
+                count: conformanceIssues.length,
+              })}
+            </h4>
+            <p>{t('ConformanceIssues.Description')}</p>
+            <ConformanceIssueList issues={conformanceIssues} />
+          </section>
         )}
         {children}
       </div>

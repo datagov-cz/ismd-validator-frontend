@@ -48,9 +48,9 @@ export interface ValidationResult {
   resultPathUri?: string;
   value?: string;
   nkdResource?: NkdResource;
-  focusNodeName?: string;
-  warning?: boolean;
   info?: boolean;
+  warning?: boolean;
+  focusNodeName?: string;
   error?: boolean;
 }
 
@@ -78,6 +78,8 @@ export const ApiResponseDtoConversionResponseDtoErrorCode = {
   RDF_FORMAT_INVALID: 'RDF_FORMAT_INVALID',
   FILE_PARSE_FAILED: 'FILE_PARSE_FAILED',
   EXCEL_READ_FAILED: 'EXCEL_READ_FAILED',
+  VOCABULARY_NAME_MISSING: 'VOCABULARY_NAME_MISSING',
+  VOCABULARY_OFN_NONCONFORMANT: 'VOCABULARY_OFN_NONCONFORMANT',
   CONVERSION_FAILED: 'CONVERSION_FAILED',
   EXPORT_FAILED: 'EXPORT_FAILED',
   VALIDATION_FAILED: 'VALIDATION_FAILED',
@@ -101,11 +103,19 @@ export interface ConceptValidationDto {
   violations?: ConceptValidationDtoViolations;
 }
 
+export interface ConformanceIssueDto {
+  kind?: string;
+  conceptIri?: string;
+  location?: string;
+  message?: string;
+}
+
 export interface ConversionResponseDto {
   output?: string;
   validationResults?: ValidationResultsDto;
   validationReport?: DetailedValidationReportDto;
   ontologyData?: string;
+  conformanceIssues?: ConformanceIssueDto[];
 }
 
 export type DetailedValidationReportDtoValidation = {
@@ -144,6 +154,10 @@ export interface ValidationResultsDto {
   severityGroups?: SeverityGroupDto[];
 }
 
+export interface DetailedReportCsvRequestDto {
+  detailedReport?: DetailedValidationReportDto;
+}
+
 export type ValidateRdfBody = {
   file: Blob;
 };
@@ -166,10 +180,6 @@ export type ConvertFileBody = {
 
 export type DownloadDetailedValidationReportCSVParams = {
   filename?: string;
-};
-
-export type DownloadDetailedValidationReportCSVBody = {
-  detailedReport: DetailedValidationReportDto;
 };
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
@@ -524,7 +534,7 @@ export const useConvertFile = <TError = unknown, TContext = unknown>(
  * @summary Stažení validační zprávy.
  */
 export const downloadDetailedValidationReportCSV = (
-  downloadDetailedValidationReportCSVBody: DownloadDetailedValidationReportCSVBody,
+  detailedReportCsvRequestDto: DetailedReportCsvRequestDto,
   params?: DownloadDetailedValidationReportCSVParams,
   options?: SecondParameter<typeof axiosInstance>,
   signal?: AbortSignal,
@@ -534,7 +544,7 @@ export const downloadDetailedValidationReportCSV = (
       url: `/api/converter/convert/detailed-report/csv`,
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      data: downloadDetailedValidationReportCSVBody,
+      data: detailedReportCsvRequestDto,
       params,
       signal,
     },
@@ -550,7 +560,7 @@ export const getDownloadDetailedValidationReportCSVMutationOptions = <
     Awaited<ReturnType<typeof downloadDetailedValidationReportCSV>>,
     TError,
     {
-      data: DownloadDetailedValidationReportCSVBody;
+      data: DetailedReportCsvRequestDto;
       params?: DownloadDetailedValidationReportCSVParams;
     },
     TContext
@@ -560,7 +570,7 @@ export const getDownloadDetailedValidationReportCSVMutationOptions = <
   Awaited<ReturnType<typeof downloadDetailedValidationReportCSV>>,
   TError,
   {
-    data: DownloadDetailedValidationReportCSVBody;
+    data: DetailedReportCsvRequestDto;
     params?: DownloadDetailedValidationReportCSVParams;
   },
   TContext
@@ -577,7 +587,7 @@ export const getDownloadDetailedValidationReportCSVMutationOptions = <
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof downloadDetailedValidationReportCSV>>,
     {
-      data: DownloadDetailedValidationReportCSVBody;
+      data: DetailedReportCsvRequestDto;
       params?: DownloadDetailedValidationReportCSVParams;
     }
   > = (props) => {
@@ -593,7 +603,7 @@ export type DownloadDetailedValidationReportCSVMutationResult = NonNullable<
   Awaited<ReturnType<typeof downloadDetailedValidationReportCSV>>
 >;
 export type DownloadDetailedValidationReportCSVMutationBody =
-  DownloadDetailedValidationReportCSVBody;
+  DetailedReportCsvRequestDto;
 export type DownloadDetailedValidationReportCSVMutationError = unknown;
 
 /**
@@ -608,7 +618,7 @@ export const useDownloadDetailedValidationReportCSV = <
       Awaited<ReturnType<typeof downloadDetailedValidationReportCSV>>,
       TError,
       {
-        data: DownloadDetailedValidationReportCSVBody;
+        data: DetailedReportCsvRequestDto;
         params?: DownloadDetailedValidationReportCSVParams;
       },
       TContext
@@ -620,7 +630,7 @@ export const useDownloadDetailedValidationReportCSV = <
   Awaited<ReturnType<typeof downloadDetailedValidationReportCSV>>,
   TError,
   {
-    data: DownloadDetailedValidationReportCSVBody;
+    data: DetailedReportCsvRequestDto;
     params?: DownloadDetailedValidationReportCSVParams;
   },
   TContext

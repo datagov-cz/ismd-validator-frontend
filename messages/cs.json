@@ -96,7 +96,8 @@
         "ConversionUknownError": "Během převodu došlo k chybě: zaslaný vstup není podporovaný. Pokud problém přetrvává a máte pocit, že je problém na naší straně,",
         "ConversionErrorLinkText": "nahlašte nám prosím chybu.",
         "ErrorLinkText": "Pokud problém přetrvává a myslíte si, že je chyba na naší straně, nahlašte nám prosím chybu.",
-        "WarningBeforeNextConversion": "Stisknutím tlačítka přijdete o výsledek kontroly a převodu níže."
+        "WarningBeforeNextConversion": "Stisknutím tlačítka přijdete o výsledek kontroly a převodu níže.",
+        "ConformanceFailureIntro": "Slovník je potřeba opravit v těchto bodech:"
       },
       "Step3": {
         "Headline": {
@@ -166,6 +167,10 @@
                 "ButtonText": "Stáhnout výpis z kontroly"
               }
             }
+          },
+          "ConformanceIssues": {
+            "Title": "Co převod vynechal ({count})",
+            "Description": "Tyto části slovníku nesplňují standard OFN Slovníky, proto nejsou ve výstupu. Opravte je ve zdrojovém souboru, pokud je ve výstupu potřebujete."
           }
         }
       }
@@ -207,6 +212,20 @@
         "Question": "Co když slovník neprojde kontrolou?",
         "Answer": "Více informací najdete na stránce"
       }
+    }
+  },
+  "ConformanceIssues": {
+    "Table": {
+      "Kind": "Typ",
+      "Subject": "Týká se",
+      "Message": "Popis"
+    },
+    "Kind": {
+      "VOCABULARY_INVALID": "Chyba slovníku",
+      "CONCEPT_EXCLUDED": "Vyřazený pojem",
+      "REFERENCE_REMOVED": "Odstraněný odkaz",
+      "VALUE_DROPPED": "Vynechaná hodnota",
+      "EXTERNAL_CONCEPT": "Externí pojem"
     }
   }
 }

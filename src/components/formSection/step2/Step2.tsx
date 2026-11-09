@@ -4,9 +4,18 @@ import { useMutation } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 import { useTranslations } from 'next-intl';
 
-import { ApiResponseDtoConversionResponseDto } from '@/api/generated';
+import {
+  ApiResponseDtoConversionResponseDto,
+  ConformanceIssueDto,
+  ConversionResponseDto,
+} from '@/api/generated';
 import { axiosInstance } from '@/axios-instance';
 import { OUTPUT_FORMAT } from '@/lib/constants';
+import {
+  getErrorBodyMessage,
+  getOfnConformanceFailure,
+  getReportWithErrors,
+} from '@/lib/conversionErrors';
 import { getFileNameFromUrl } from '@/lib/downloadUtils';
 import { useFormStore } from '@/store/formStore';
 
@@ -17,6 +26,11 @@ type ConversionApiError = AxiosError<ApiResponseDtoConversionResponseDto>;
 type ConversionRequest = {
   endpoint: '/api/converter/convert' | '/api/converter/ssp/convert';
   formData: FormData;
+};
+
+const getOntologyName = (data: ConversionResponseDto) => {
+  const names = data.validationReport?.ontology?.name;
+  return names?.cs || names?.en || Object.values(names ?? {}).find(Boolean);
 };
 
 export const Step2 = () => {
@@ -32,6 +46,8 @@ export const Step2 = () => {
   const formFile = files.length === 1 ? files[0] : undefined;
 
   const [conversionError, setConversionError] = useState<string>();
+  const [conformanceFailureIssues, setConformanceFailureIssues] =
+    useState<ConformanceIssueDto[]>();
   const hasValidatedRef = useRef(false);
 
   const setDictionaryStatus = useFormStore(
@@ -61,15 +77,34 @@ export const Step2 = () => {
   const handleConvert = () => {
     setShowWarningBar(false);
     setConversionError(undefined);
+    setConformanceFailureIssues(undefined);
 
     const includeDetailedReport =
       process.env.NEXT_PUBLIC_INCLUDE_DETAILED_REPORT === 'true';
 
     const onError = (error: ConversionApiError) => {
+      // Converted, but the report has errors: show the report, without a dictionary to download.
+      const reportWithErrors = getReportWithErrors(error);
+      if (reportWithErrors) {
+        const ontologyName = getOntologyName(reportWithErrors.data);
+        if (ontologyName) {
+          setDictionaryName(ontologyName);
+        }
+        setConversionResponse(reportWithErrors.data);
+        setDictionaryStatus({
+          status: 'Error',
+          message: reportWithErrors.message,
+        });
+        hasValidatedRef.current = true;
+        return;
+      }
+
       const errorMessage =
-        error.response?.data?.message || t('ConversionUknownError');
+        getErrorBodyMessage(error) || t('ConversionUknownError');
       console.error('Error converting file:', errorMessage);
+      setConversionResponse(null);
       setConversionError(errorMessage);
+      setConformanceFailureIssues(getOfnConformanceFailure(error)?.issues);
       setDictionaryStatus({
         status: 'Error',
         message: errorMessage,
@@ -84,11 +119,7 @@ export const Step2 = () => {
           data.validationResults?.severityGroups?.find(
             (group) => group.severity?.toLowerCase() !== 'informace',
           );
-        const ontologyNames = data.validationReport?.ontology?.name;
-        const ontologyName =
-          ontologyNames?.cs ||
-          ontologyNames?.en ||
-          Object.values(ontologyNames ?? {}).find(Boolean);
+        const ontologyName = getOntologyName(data);
 
         if (ontologyName) {
           setDictionaryName(ontologyName);
@@ -153,6 +184,7 @@ export const Step2 = () => {
   useEffect(() => {
     if (formUrl || formFile || sspDictionary) {
       setConversionError(undefined);
+      setConformanceFailureIssues(undefined);
       if (hasValidatedRef.current) {
         setShowWarningBar(true);
       }
@@ -181,6 +213,7 @@ export const Step2 = () => {
           isHidden={!hasError}
           fileError={fileError}
           conversionError={conversionError}
+          issues={conformanceFailureIssues}
         />
         <WarningInfobar isHidden={!showWarningBar} />
         <GovButton

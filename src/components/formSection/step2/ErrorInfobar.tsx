@@ -1,18 +1,23 @@
 import { GovInfobar } from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
+import { ConformanceIssueDto } from '@/api/generated';
+import { ConformanceIssueList } from '@/components/shared/ConformanceIssueList';
 import { GovIcon } from '@/components/shared/GovIcon';
 
 interface Props {
   isHidden: boolean;
   fileError?: string;
   conversionError?: string;
+  /** What to correct when the vocabulary itself is not OFN. */
+  issues?: ConformanceIssueDto[];
 }
 
 export const ErrorInfobar = ({
   isHidden,
   fileError,
   conversionError,
+  issues,
 }: Props) => {
   const t = useTranslations('Home.FormSection.Step2');
 
@@ -40,6 +45,12 @@ export const ErrorInfobar = ({
             </>
           )}
         </p>
+        {!fileError && issues && issues.length > 0 && (
+          <div className="mt-4 space-y-2">
+            <p>{t('ConformanceFailureIntro')}</p>
+            <ConformanceIssueList issues={issues} />
+          </div>
+        )}
       </GovInfobar>
     </div>
   );

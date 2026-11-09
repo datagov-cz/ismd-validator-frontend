@@ -10,14 +10,16 @@ import { DownloadSection } from './DownloadSection';
 export const Step3 = () => {
   const t = useTranslations('Home.FormSection.Step3');
   const dictionaryStatus = useFormStore((state) => state.dictionaryStatus);
-  const validationResults = useFormStore(
-    (state) => state.conversionResponse?.validationResults,
-  );
+  const conversionResponse = useFormStore((state) => state.conversionResponse);
+  const validationResults = conversionResponse?.validationResults;
   const dictionaryName = useFormStore((state) => state.dictionaryName);
 
   const statusMapped = dictionaryStatus
     ? STATUS_MAP[dictionaryStatus.status]
     : 'primary';
+  // An error with a response is a report with errors (shown); without one the conversion failed (step 2).
+  const showDialog =
+    !!dictionaryStatus && (statusMapped !== 'error' || !!conversionResponse);
 
   return (
     <GovWizardItem
@@ -30,9 +32,7 @@ export const Step3 = () => {
       }
       annotation={<span className="text-left">{t('Annotation')}</span>}
     >
-      <div
-        className={`${dictionaryStatus && statusMapped !== 'error' ? 'block' : 'hidden'}`}
-      >
+      <div className={showDialog ? 'block' : 'hidden'}>
         <Dialog
           title={dictionaryName ?? t('Dialog.TitleFallback')}
           infoBar={{
@@ -42,6 +42,7 @@ export const Step3 = () => {
             ),
           }}
           validationResults={validationResults || null}
+          conformanceIssues={conversionResponse?.conformanceIssues ?? []}
         >
           <DownloadSection status={dictionaryStatus?.status || 'Success'} />
         </Dialog>
