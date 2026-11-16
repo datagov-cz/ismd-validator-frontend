@@ -1,9 +1,16 @@
 import { ReactNode } from 'react';
-import { GovInfobar } from '@gov-design-system-ce/react';
+import {
+  GovAccordion,
+  GovAccordionItem,
+  GovChip,
+  GovInfobar,
+} from '@gov-design-system-ce/react';
 import { useTranslations } from 'next-intl';
 
 import { ValidationResultsDto } from '@/api/generated';
+import { ConformanceIssueDto } from '@/api/generated';
 import { GovIcon } from '@/components/shared/GovIcon';
+import { OfnIssuesList } from '@/components/shared/OfnIssuesList';
 
 interface InfoBarProps {
   status: 'success' | 'warning' | 'error';
@@ -14,6 +21,7 @@ interface Props {
   title: string;
   infoBar: InfoBarProps;
   validationResults: ValidationResultsDto | null;
+  conformanceIssues?: ConformanceIssueDto[];
   children: ReactNode;
 }
 
@@ -21,6 +29,7 @@ export const Dialog = ({
   title,
   infoBar,
   validationResults,
+  conformanceIssues,
   children,
 }: Props) => {
   const t = useTranslations('Home.FormSection.Step3.Dialog');
@@ -79,6 +88,34 @@ export const Dialog = ({
               </tbody>
             </table>
           </div>
+        )}
+        {!!conformanceIssues?.length && (
+          <GovAccordion className="w-full bg-blue-subtle/70 rounded-2xl">
+            <GovAccordionItem
+              label={<h3>{t('ConformanceIssuesTitle')}</h3>}
+              toggleIcon={
+                <GovIcon
+                  name="chevron-down"
+                  className="ofn-accordion-chevron"
+                />
+              }
+              annotation={
+                <p className="text-left">{t('ConformanceIssuesAnnotation')}</p>
+              }
+              suffix={
+                <GovChip color="warning" size="xs" type="solid">
+                  {t('ConformanceIssuesCount', {
+                    count: conformanceIssues.length,
+                  })}
+                </GovChip>
+              }
+            >
+              <div className="space-y-4 pb-4 pt-2">
+                <p>{t('ConformanceIssuesDescription')}</p>
+                <OfnIssuesList issues={conformanceIssues} />
+              </div>
+            </GovAccordionItem>
+          </GovAccordion>
         )}
         {children}
       </div>

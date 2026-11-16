@@ -8,6 +8,10 @@ import { ApiResponseDtoConversionResponseDto } from '@/api/generated';
 import { axiosInstance } from '@/axios-instance';
 import { OUTPUT_FORMAT } from '@/lib/constants';
 import { getFileNameFromUrl } from '@/lib/downloadUtils';
+import {
+  getOfnConformanceFailure,
+  OfnConformanceFailure,
+} from '@/lib/ofnConformance';
 import { useFormStore } from '@/store/formStore';
 
 import { ErrorInfobar } from './ErrorInfobar';
@@ -32,6 +36,7 @@ export const Step2 = () => {
   const formFile = files.length === 1 ? files[0] : undefined;
 
   const [conversionError, setConversionError] = useState<string>();
+  const [ofnFailure, setOfnFailure] = useState<OfnConformanceFailure>();
   const hasValidatedRef = useRef(false);
 
   const setDictionaryStatus = useFormStore(
@@ -61,14 +66,19 @@ export const Step2 = () => {
   const handleConvert = () => {
     setShowWarningBar(false);
     setConversionError(undefined);
+    setOfnFailure(undefined);
 
     const includeDetailedReport =
       process.env.NEXT_PUBLIC_INCLUDE_DETAILED_REPORT === 'true';
 
     const onError = (error: ConversionApiError) => {
+      const conformanceFailure = getOfnConformanceFailure(error);
       const errorMessage =
-        error.response?.data?.message || t('ConversionUknownError');
+        conformanceFailure?.message ||
+        error.response?.data?.message ||
+        t('ConversionUknownError');
       console.error('Error converting file:', errorMessage);
+      setOfnFailure(conformanceFailure);
       setConversionError(errorMessage);
       setDictionaryStatus({
         status: 'Error',
@@ -153,6 +163,7 @@ export const Step2 = () => {
   useEffect(() => {
     if (formUrl || formFile || sspDictionary) {
       setConversionError(undefined);
+      setOfnFailure(undefined);
       if (hasValidatedRef.current) {
         setShowWarningBar(true);
       }
@@ -181,6 +192,7 @@ export const Step2 = () => {
           isHidden={!hasError}
           fileError={fileError}
           conversionError={conversionError}
+          ofnFailure={ofnFailure}
         />
         <WarningInfobar isHidden={!showWarningBar} />
         <GovButton
