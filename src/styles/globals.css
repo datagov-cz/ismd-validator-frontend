@@ -96,6 +96,15 @@ html[data-theme='light'] {
   color-scheme: light;
 }
 
+.gov-accordion-item details[open] .ofn-accordion-chevron {
+  transform: rotate(180deg);
+  transition: transform 0.2s ease;
+}
+
+.gov-accordion-item .ofn-accordion-chevron {
+  transition: transform 0.2s ease;
+}
+
 @layer {
   table {
     @apply border-collapse;

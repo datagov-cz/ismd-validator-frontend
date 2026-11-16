@@ -30,7 +30,8 @@ type SSPDictionaryStoreType = {
 };
 
 type SSPDictionaryStoreActions = {
-  setDictionaries: (dictionaries: DictionaryResponse[]) => void;
+  // eslint-disable-next-line no-unused-vars
+  setDictionaries: (_dictionaries: DictionaryResponse[]) => void;
 };
 
 const initialState: SSPDictionaryStoreType = {

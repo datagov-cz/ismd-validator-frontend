@@ -94,6 +94,7 @@
         "Annotation": "Klikněte na tlačítko \"Zkontrolovat a převést\" a počkejte, až systém kontrolu a převod dokončí.",
         "Button": "Zkontrolovat a převést",
         "ConversionUknownError": "Během převodu došlo k chybě: zaslaný vstup není podporovaný. Pokud problém přetrvává a máte pocit, že je problém na naší straně,",
+        "OfnIssuesTitle": "Převod byl zastaven, protože slovník nesplňuje OFN. Opravte uvedené problémy a zkuste to znovu.",
         "ConversionErrorLinkText": "nahlašte nám prosím chybu.",
         "ErrorLinkText": "Pokud problém přetrvává a myslíte si, že je chyba na naší straně, nahlašte nám prosím chybu.",
         "WarningBeforeNextConversion": "Stisknutím tlačítka přijdete o výsledek kontroly a převodu níže."
@@ -112,6 +113,10 @@
             "Warning": "Ve slovníku byly nalezeny přípustné chyby. Slovník si ale přesto můžete stáhnout.",
             "Error": "Ve slovníku byly nalezeny závažné chyby. Upravte slovník a zkuste kontrolu znovu."
           },
+          "ConformanceIssuesTitle": "Části slovníku vynechané z výstupu",
+          "ConformanceIssuesAnnotation": "Rozbalte seznam a zobrazte důvody vynechání.",
+          "ConformanceIssuesCount": "Vynecháno: {count}",
+          "ConformanceIssuesDescription": "Převod byl úspěšný, ale následující části slovníku nebyly zahrnuty do výstupu. Zkontrolujte důvod u každé položky.",
           "InfoTable": {
             "AffectedConcepts": "Zjištění se týká",
             "FindingDescription": "Popis zjištění",
@@ -207,6 +212,15 @@
         "Question": "Co když slovník neprojde kontrolou?",
         "Answer": "Více informací najdete na stránce"
       }
+    }
+  },
+  "OfnConformance": {
+    "Kinds": {
+      "VALUE_DROPPED": "Vynechaná hodnota",
+      "CONCEPT_EXCLUDED": "Vynechaný pojem",
+      "REFERENCE_REMOVED": "Odstraněný odkaz",
+      "EXTERNAL_CONCEPT": "Externí pojem",
+      "VOCABULARY_INVALID": "Nesoulad slovníku s OFN"
     }
   }
 }

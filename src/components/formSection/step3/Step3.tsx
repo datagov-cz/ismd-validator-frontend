@@ -13,6 +13,9 @@ export const Step3 = () => {
   const validationResults = useFormStore(
     (state) => state.conversionResponse?.validationResults,
   );
+  const conformanceIssues = useFormStore(
+    (state) => state.conversionResponse?.conformanceIssues,
+  );
   const dictionaryName = useFormStore((state) => state.dictionaryName);
 
   const statusMapped = dictionaryStatus
@@ -42,6 +45,7 @@ export const Step3 = () => {
             ),
           }}
           validationResults={validationResults || null}
+          conformanceIssues={conformanceIssues}
         >
           <DownloadSection status={dictionaryStatus?.status || 'Success'} />
         </Dialog>
