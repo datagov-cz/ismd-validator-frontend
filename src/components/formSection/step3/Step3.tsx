@@ -13,35 +13,43 @@ export const Step3 = () => {
   const validationResults = useFormStore(
     (state) => state.conversionResponse?.validationResults,
   );
+  const conformanceIssues = useFormStore(
+    (state) => state.conversionResponse?.conformanceIssues,
+  );
   const dictionaryName = useFormStore((state) => state.dictionaryName);
 
-  const statusKey = dictionaryStatus?.status ?? 'Success';
-  const mappedStatus = dictionaryStatus ? STATUS_MAP[statusKey] : 'primary';
-  const isExpanded = !!dictionaryStatus;
+  const statusMapped = dictionaryStatus
+    ? STATUS_MAP[dictionaryStatus.status]
+    : 'primary';
 
   return (
     <GovWizardItem
-      color={mappedStatus}
-      collapsible={isExpanded}
-      isExpanded={isExpanded}
+      color={statusMapped}
+      isExpanded={!!dictionaryStatus}
+      collapsible
       prefix="3"
       headline={
         <span>{t(`Headline.${dictionaryStatus?.status ?? 'Success'}`)}</span>
       }
       annotation={<span className="text-left">{t('Annotation')}</span>}
     >
-      {dictionaryStatus && (
+      <div
+        className={`${dictionaryStatus && statusMapped !== 'error' ? 'block' : 'hidden'}`}
+      >
         <Dialog
           title={dictionaryName ?? t('Dialog.TitleFallback')}
           infoBar={{
-            status: STATUS_MAP[statusKey],
-            message: t(`Dialog.Message.${statusKey}`),
+            status: STATUS_MAP[dictionaryStatus?.status || 'Success'],
+            message: t(
+              `Dialog.Message.${dictionaryStatus?.status || 'Success'}`,
+            ),
           }}
-          validationResults={validationResults ?? null}
+          validationResults={validationResults || null}
+          conformanceIssues={conformanceIssues}
         >
-          <DownloadSection status={dictionaryStatus.status} />
+          <DownloadSection status={dictionaryStatus?.status || 'Success'} />
         </Dialog>
-      )}
+      </div>
     </GovWizardItem>
   );
 };

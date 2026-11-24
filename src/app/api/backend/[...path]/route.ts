@@ -31,7 +31,7 @@ async function handler(
     return new NextResponse('BE_URL not configured', { status: 500 });
   }
 
-  const targetUrl = `${BE_URL.replace(/\/$/, '')}/${joined}${req.nextUrl.search}`;
+  const targetUrl = `${BE_URL}/${joined}${req.nextUrl.search}`;
 
   const headers = new Headers();
   const contentType = req.headers.get('Content-Type');
@@ -43,20 +43,13 @@ async function handler(
     headers.set('Accept', accept);
   }
 
-  let response: Response;
-  try {
-    response = await fetch(targetUrl, {
-      method: req.method,
-      headers,
-      body:
-        req.method !== 'GET' && req.method !== 'HEAD' ? req.body : undefined,
-      // @ts-expect-error - duplex is required for streaming request bodies
-      duplex: 'half',
-    });
-  } catch (error) {
-    console.error(`Backend request failed: ${BE_URL}/${joined}`, error);
-    return new NextResponse('Backend unavailable', { status: 502 });
-  }
+  const response = await fetch(targetUrl, {
+    method: req.method,
+    headers,
+    body: req.method !== 'GET' && req.method !== 'HEAD' ? req.body : undefined,
+    // @ts-expect-error - duplex is required for streaming request bodies
+    duplex: 'half',
+  });
 
   const responseHeaders = new Headers();
   response.headers.forEach((value, key) => {
